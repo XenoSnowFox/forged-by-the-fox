@@ -1,0 +1,12 @@
+# Folders
+.gradle
+.idea
+.classpath
+.factorypath
+.project
+.settings
+deploy/
+target/
+build/
+node_modules/
+src/main/resources/webroot/
