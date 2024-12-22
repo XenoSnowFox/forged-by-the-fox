@@ -1,0 +1,350 @@
+plugins {
+	id 'application'
+	id 'java-library'
+	id 'checkstyle'
+	id 'jacoco' // Code coverage
+	id 'info.solidsoft.pitest' version '1.9.11' // Mutation Testing
+	id "com.github.johnrengelman.shadow" version "7.1.2" // Uber-JAR builder
+	id 'io.miret.etienne.sass' version '1.4.2' // SASS Compiler
+	id 'com.diffplug.spotless' version "6.25.0" // Code formatting
+	id 'com.adarshr.test-logger' version '4.0.0' // Test Logger
+	id "com.github.node-gradle.node" version "7.0.2" // Node
+}
+
+group = 'com.xenosnowfox'
+version = '0.0.0'
+mainClassName = 'com.xenosnowfox.forgedbythefox.Application'
+
+sourceCompatibility = JavaVersion.VERSION_21
+targetCompatibility = JavaVersion.VERSION_21
+
+repositories {
+	mavenCentral()
+	maven {
+		url = "https://s3-us-west-2.amazonaws.com/dynamodb-local/release"
+	}
+}
+
+dependencies {
+	// AWS SDK and Bill of Materials
+	implementation platform('software.amazon.awssdk:bom:2.27.2')
+	implementation 'software.amazon.awssdk:dynamodb' // AWS DynamoDB Client
+	implementation 'software.amazon.awssdk:dynamodb-enhanced'
+	testImplementation 'com.amazonaws:DynamoDBLocal:1.+' // DynamoDB Server for testing
+
+	// spark + swagger
+	implementation 'com.sparkjava:spark-core:2.9.4'
+	implementation 'com.amazonaws.serverless:aws-serverless-java-container-spark:1.9.4'
+
+	// commonmark
+	implementation 'org.commonmark:commonmark:0.22.0'
+	implementation 'org.commonmark:commonmark-ext-gfm-tables:0.22.0'
+	implementation 'org.commonmark:commonmark-ext-heading-anchor:0.22.0'
+	implementation 'org.commonmark:commonmark-ext-yaml-front-matter:0.22.0'
+
+	// thymeleaf
+	// see: https://www.thymeleaf.org/index.html
+	implementation 'org.thymeleaf:thymeleaf:3.1.2.RELEASE'
+	testImplementation 'org.thymeleaf.testing:thymeleaf-testing:3.1.2.RELEASE'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.0'
+
+	// Encryption
+//	implementation 'at.favre.lib:bcrypt:0.9.0'
+
+	// Jackson Data Modules
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.1'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.14.1'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.1'
+	implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.14.1'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.1'
+
+	// Vendor Dependencies
+	implementation 'com.bugsnag:bugsnag:3.7.1'
+	implementation 'commons-validator:commons-validator:1.7'
+	implementation 'org.apache.commons:commons-text:1.10.0'
+	implementation 'com.github.rjeschke:txtmark:0.13'
+
+	// project lombok
+	compileOnly 'org.projectlombok:lombok:1.18.34'
+	annotationProcessor 'org.projectlombok:lombok:1.18.34'
+
+	// Testing Dependencies
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
+	testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.1'
+
+	// project lombok testing
+	testCompileOnly 'org.projectlombok:lombok:1.18.34'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
+}
+
+/**
+ * Helper method for running GIT commands.
+ */
+def execGit(String[] arguments) {
+	exec {
+		executable "git"
+		args arguments
+	}
+}
+
+/**
+ * Helper method for running docker commands.
+ */
+def execDocker(String[] arguments) {
+	exec {
+		executable "docker"
+		args arguments
+	}
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+spotless {
+	java {
+		importOrder()
+		removeUnusedImports()
+		palantirJavaFormat()
+		formatAnnotations()
+	}
+}
+
+compileJava {
+	dependsOn 'spotlessApply'
+//	dependsOn 'compileSass'
+//	dependsOn 'yarnBuild'
+}
+
+// Output to build/libs/lambda-forged-by-the-fox.jar
+shadowJar {
+	archiveBaseName.set('lambda')
+	archiveClassifier.set('forged-by-the-fox')
+	archiveVersion.set('')
+}
+
+task copyRuntimeDependencies(type: Copy) {
+	from configurations.runtimeClasspath
+	into 'build/dependency'
+}
+build.dependsOn copyRuntimeDependencies
+
+
+//task copyStaticAssets(type: Copy) {
+//	from 'src/main/webroot'
+//	into 'src/main/resources/webroot'
+//}
+//compileJava.dependsOn copyStaticAssets
+
+jacoco {
+	toolVersion = "0.8.12"
+}
+
+test {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+task copyNativeDeps(type: Copy) {
+	mkdir "build/libs"
+	from(configurations.testRuntimeClasspath) {
+		include '*.dll'
+		include '*.dylib'
+		include '*.so'
+	}
+	into 'build/libs'
+}
+
+test {
+	dependsOn copyNativeDeps
+	systemProperty "java.library.path", 'build/libs'
+}
+
+sass {
+	version = '1.26.10'
+	directory = file ("${rootDir}/.gradle/sass")
+	baseUrl = 'https://github.com/sass/dart-sass/releases/download'
+}
+
+compileSass {
+	// Directory where to output generated CSS:
+	outputDir = project.file ("${projectDir}/src/main/resources/webroot/css/")
+
+	// Source directory containing sass to compile:
+	sourceDir = project.file ("${projectDir}/src/main/sass")
+
+	// Adds a directory to sass load path (default is empty):
+	// loadPath project.file ('sass-lib')
+	// loadPath project.file ('/var/lib/compass')
+
+	// Set the output style:
+	// Possible values are "expanded" and "compressed", default is "expanded".
+	style = compressed
+
+	// Don’t emit a @charset for CSS with non-ASCII chars (default to emit):
+	noCharset ()
+
+	// When an error occurs, do not emit a stylesheet describing it:
+	// (Default to emit)
+	noErrorCss ()
+
+	// Watch sass files in sourceDir for changes
+	// watch ()
+
+	// Source map style:
+	//  - file: output source map in a separate file (default)
+	//  - embed: embed source map in CSS
+	//  - none: do not emit source map.
+	sourceMap = file
+
+	// How to link source maps to source files [relative (default) or absolute]:
+	sourceMapUrls = relative
+}
+
+task yarnBuild(type: YarnTask) {
+	dependsOn 'yarn'
+	args = ['build']
+}
+
+node {
+	// Whether to download and install a specific Node.js version or not
+	// If false, it will use the globally installed Node.js
+	// If true, it will download node using above parameters
+	// Note that npm is bundled with Node.js
+	download = true
+
+	// Version of node to download and install (only used if download is true)
+	// It will be unpacked in the workDir
+	version = "18.17.1"
+
+	// Base URL for fetching node distributions
+	// Only used if download is true
+	// Change it if you want to use a mirror
+	// Or set to null if you want to add the repository on your own.
+	distBaseUrl = "https://nodejs.org/dist"
+
+	// The npm command executed by the npmInstall task
+	// By default it is install but it can be changed to ci
+	npmInstallCommand = "install"
+
+	// The directory where Node.js is unpacked (when download is true)
+	workDir = file("${project.projectDir}/.gradle/nodejs")
+
+	// The directory where npm is installed (when a specific version is defined)
+	npmWorkDir = file("${project.projectDir}/.gradle/npm")
+
+	// The directory where yarn is installed (when a Yarn task is used)
+	yarnWorkDir = file("${project.projectDir}/.gradle/yarn")
+}
+
+processResources {
+	mustRunAfter "compileSass"
+	mustRunAfter "copyStaticAssets"
+	filesMatching('**/*.properties') {
+		filter { it.replace("\${project.name}", 'Forged by the Fox') }
+		filter { it.replace("\${project.version}", "${project.property('version')}") }
+		filter { it.replace("\${project.artifact}", 'forged-by-the-fox') }
+		filter { it.replace("\${project.group}", "${project.property('group')}") }
+	}
+}
+
+task bumpVersion {
+	doLast {
+
+		println "Bumping version number..."
+
+		def date = new Date()
+		def calendar = Calendar.getInstance()
+		calendar.setTime(date)
+		int currentYear = calendar.get(Calendar.YEAR)
+		int currentMonth = calendar.get(Calendar.MONTH) + 1
+
+
+		String previousVersion = version
+		def (a, b, c) = version.tokenize('.')
+		int buildYear = a.toInteger()
+		int buildMonth = b.toInteger()
+		int buildNumber = c.toInteger()
+
+		if (buildYear == currentYear && buildMonth == currentMonth) {
+			buildNumber++
+		} else {
+			buildYear = currentYear
+			buildMonth = currentMonth
+			buildNumber = 1
+		}
+
+		println "$previousVersion -> $buildYear.$buildMonth.$buildNumber"
+
+		// update the version number in the build file
+		def updated = buildFile.getText()
+		updated = updated.replaceFirst("version = '$version'", "version = '$buildYear.$buildMonth.$buildNumber'")
+		buildFile.setText(updated)
+	}
+}
+
+task gitTag {
+	doLast {
+		String cmd = "git tag $version"
+		println cmd.execute().text.trim()
+	}
+}
+
+task printVersion {
+	doLast {
+		println version
+	}
+}
+
+task buildImage {
+	group = "docker"
+	dependsOn 'shadowJar'
+	dependsOn 'copyRuntimeDependencies'
+	doLast {
+		execDocker("build", "-t", "xenosnowfox/forged-by-the-fox", ".")
+	}
+}
+
+task runImage {
+	group = "docker"
+	dependsOn 'buildImage'
+	doLast {
+		execDocker("run", "-p", "9000:8080", "xenosnowfox/forged-by-the-fox")
+	}
+}
+
+
+task localstack {
+	group = "localstack"
+	doLast {
+		final String workingDir = project.buildDir.toString() + "/../"
+
+		execDocker(
+				"run"
+				, "--rm"
+				, "--detach"
+				, "-p", "4566:4566"
+				, "-p", "4571:4571"
+				, "-p", "8080:8080"
+				, "-v", "$workingDir/.localstack/bin:/docker-entrypoint-initaws.d"
+				, "--env-file", "./.localstack/.env"
+				, "--name", "forged-by-the-fox-localstack"
+				, "localstack/localstack"
+		)
+	}
+}
+
+task killLocalstack {
+	group = "localstack"
+	doLast {
+		execDocker("container", "kill", "forged-by-the-fox-localstack")
+	}
+}
+
+task restartLocalstack {
+	group = "localstack"
+	dependsOn 'killLocalstack'
+	dependsOn 'localstack'
+}
