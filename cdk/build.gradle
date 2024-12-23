@@ -1,0 +1,56 @@
+plugins {
+	id "java"
+	id "application"
+	id "com.github.johnrengelman.shadow" version "7.1.2" // Uber-JAR builder
+}
+
+application {
+	mainClassName "com.xenosnowfox.forgedbythefox.Application"
+}
+
+dependencies {
+	// AWS CDK Modules
+	implementation "software.amazon.awscdk:aws-cdk-lib:2.164.1"
+
+	implementation 'com.github.spullara.mustache.java:compiler:0.9.7'
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+	implementation 'io.github.json-snapshot:json-snapshot:1.0.17'
+	implementation 'commons-codec:commons-codec:1.11'
+
+	// Prevent using feature log4j below 2.16.0 which can contain CVE-2021-44228
+	// See step 3 in https://blog.gradle.org/log4j-vulnerability
+	constraints {
+		implementation("org.apache.logging.log4j:log4j-core") {
+			version {
+				strictly("[2.16, 3[")
+				prefer("2.16.0")
+			}
+			because("CVE-2021-44228: Log4j vulnerable to remote code execution")
+		}
+	}
+}
+
+shadowJar {
+	archiveBaseName.set('forged-by-the-fox')
+	archiveClassifier.set('cdk')
+	archiveVersion.set('')
+}
+
+test {
+	useJUnitPlatform()
+
+	// Use this flag to show output from running the test
+	// testLogging.showStandardStreams = true
+}
+
+// This task removes the generated Cloudformation template snapshot during the build process,
+// which allows the snapshot to be generated and committed with pull requests without failing builds outright.
+task removeSnapshot(type: Delete) {
+	delete './src/test/java/com/xenosnowfox/forgedbythefox/ApplicationTest.snap'
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+test.dependsOn removeSnapshot

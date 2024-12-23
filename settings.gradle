@@ -1,0 +1,4 @@
+rootProject.name = "Forged by the Fox"
+
+// Lambda Functions
+include "cdk"
