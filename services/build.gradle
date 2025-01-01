@@ -1,0 +1,22 @@
+plugins {
+	id "java-library"
+}
+
+jar {
+	enabled = false
+}
+
+subprojects {
+	apply plugin: "java-library"
+
+	project.buildDir(new File(rootProject.projectDir, "build/modules/services-" + project.name))
+
+	dependencies {
+		api project(":library:models")
+
+		// AWS SDK and Bill of Materials
+		implementation platform("software.amazon.awssdk:bom:2.29.43")
+		implementation 'software.amazon.awssdk:dynamodb'
+		implementation 'software.amazon.awssdk:dynamodb-enhanced'
+	}
+}
