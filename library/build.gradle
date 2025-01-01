@@ -1,0 +1,14 @@
+plugins {
+	id "java-library"
+}
+
+jar {
+	enabled = false
+}
+
+subprojects {
+	apply plugin: "java-library"
+
+	project.buildDir(new File(rootProject.projectDir, "build/modules/library-" + project.name))
+
+}
