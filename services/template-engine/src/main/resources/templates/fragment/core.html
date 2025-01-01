@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <!-- Standard Meta -->
+    <th:block th:fragment="meta">
+        <meta charset="utf-8" />
+        <meta name="robots" content="noindex, noimageai, noai" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+    </th:block>
+
+    <!-- Stylesheets -->
+    <th:block th:fragment="stylesheets">
+        <link rel="stylesheet" th:href="${'/styles/reset.css'}">
+        <link rel="stylesheet" th:href="${'/styles/theme.css'}">
+        <link rel="stylesheet" th:href="${'/styles/layout.css'}">
+    </th:block>
+
+</body>
+</html>
