@@ -1,0 +1,8 @@
+
+dependencies {
+	implementation project(":services:account-management")
+	implementation project(":services:identity-management")
+	implementation project(":services:session-management")
+
+	implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+}
