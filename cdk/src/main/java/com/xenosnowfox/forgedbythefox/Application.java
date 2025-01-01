@@ -15,18 +15,15 @@ import software.amazon.awscdk.App;
  */
 public class Application {
 
-  /**
-   * Entry point of the CDK CLI.
-   *
-   * @param args Not used
-   * @throws IOException can be thrown from ApiStack as it read and build Lambda package
-   */
-  public static void main(final String[] args) throws IOException {
-    final App app = new App();
-    Application.synth(app);
-    app.synth();
-  }
-
-  private static void synth(final App app) throws IOException {
-  }
+    /**
+     * Entry point of the CDK CLI.
+     *
+     * @param args Not used
+     * @throws IOException can be thrown from ApiStack as it read and build Lambda package
+     */
+    public static void main(final String[] args) throws IOException {
+        final App app = new App();
+        StackBuilder.withScope(app).build();
+        app.synth();
+    }
 }
