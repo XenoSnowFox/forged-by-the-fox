@@ -5,6 +5,7 @@
 .factorypath
 .project
 .settings
+cdk.out/
 deploy/
 target/
 build/
