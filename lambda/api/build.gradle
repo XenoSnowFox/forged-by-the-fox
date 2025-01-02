@@ -1,7 +1,5 @@
 
 dependencies {
 	implementation project(":services:account-management")
-	implementation project(":services:character-management")
 	implementation project(":services:session-management")
-	implementation project(":services:template-engine")
 }

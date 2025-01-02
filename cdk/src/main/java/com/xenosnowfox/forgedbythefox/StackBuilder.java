@@ -12,6 +12,8 @@ import software.amazon.awscdk.RemovalPolicy;
 import software.amazon.awscdk.SecretValue;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
+import software.amazon.awscdk.services.apigateway.AwsIntegration;
+import software.amazon.awscdk.services.apigateway.IntegrationOptions;
 import software.amazon.awscdk.services.apigateway.IntegrationResponse;
 import software.amazon.awscdk.services.apigateway.LambdaIntegration;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
@@ -21,14 +23,23 @@ import software.amazon.awscdk.services.apigateway.StageOptions;
 import software.amazon.awscdk.services.dynamodb.Attribute;
 import software.amazon.awscdk.services.dynamodb.AttributeType;
 import software.amazon.awscdk.services.dynamodb.BillingMode;
+import software.amazon.awscdk.services.dynamodb.GlobalSecondaryIndexProps;
+import software.amazon.awscdk.services.dynamodb.ProjectionType;
 import software.amazon.awscdk.services.dynamodb.Table;
 import software.amazon.awscdk.services.iam.Effect;
 import software.amazon.awscdk.services.iam.Policy;
+import software.amazon.awscdk.services.iam.PolicyDocument;
 import software.amazon.awscdk.services.iam.PolicyStatement;
+import software.amazon.awscdk.services.iam.Role;
+import software.amazon.awscdk.services.iam.ServicePrincipal;
 import software.amazon.awscdk.services.lambda.Code;
 import software.amazon.awscdk.services.lambda.Function;
 import software.amazon.awscdk.services.lambda.Runtime;
 import software.amazon.awscdk.services.logs.RetentionDays;
+import software.amazon.awscdk.services.s3.Bucket;
+import software.amazon.awscdk.services.s3.BucketAccessControl;
+import software.amazon.awscdk.services.s3.deployment.BucketDeployment;
+import software.amazon.awscdk.services.s3.deployment.Source;
 import software.amazon.awscdk.services.secretsmanager.Secret;
 
 @Accessors(chain = true)
@@ -69,24 +80,34 @@ public class StackBuilder extends Stack {
                 .secretObjectValue(Map.of("ApiKey", BLANK_SECRET_VALUE))
                 .build();
 
+        Attribute partitionKeyAttribute = Attribute.builder()
+                .name("partition-key")
+                .type(AttributeType.STRING)
+                .build();
+        Attribute sortKeyAttribute =
+                Attribute.builder().name("sort-key").type(AttributeType.STRING).build();
+        Attribute accountIdentifierAttribute = Attribute.builder()
+                .name("account-identifier")
+                .type(AttributeType.STRING)
+                .build();
         Table table = Table.Builder.create(stack, "Database")
                 .billingMode(BillingMode.PAY_PER_REQUEST)
                 .removalPolicy(RemovalPolicy.RETAIN)
                 .pointInTimeRecovery(true)
-                .partitionKey(Attribute.builder()
-                        .name("partition-key")
-                        .type(AttributeType.STRING)
-                        .build())
-                .sortKey(Attribute.builder()
-                        .name("sort-key")
-                        .type(AttributeType.STRING)
-                        .build())
+                .partitionKey(partitionKeyAttribute)
+                .sortKey(sortKeyAttribute)
                 .tableName("forged-by-the-fox")
                 .timeToLiveAttribute("ttl")
                 .build();
+        table.addGlobalSecondaryIndex(GlobalSecondaryIndexProps.builder()
+                .indexName("documents-by-account")
+                .partitionKey(accountIdentifierAttribute)
+                .sortKey(sortKeyAttribute)
+                .projectionType(ProjectionType.ALL)
+                .build());
         Policy databaseReadWritePolicy = Policy.Builder.create(stack, "DatabaseReadWritePolicy")
                 .statements(List.of(PolicyStatement.Builder.create()
-                        .resources(List.of(table.getTableArn()))
+                        .resources(List.of(table.getTableArn(), table.getTableArn() + "/*"))
                         .effect(Effect.ALLOW)
                         .actions(List.of(
                                 "dynamodb:BatchGetItem",
@@ -110,6 +131,7 @@ public class StackBuilder extends Stack {
                 .timeout(Duration.minutes(5))
                 .logRetention(RetentionDays.ONE_WEEK)
                 .build();
+        homepageLambdaFunction.getRole().attachInlinePolicy(databaseReadWritePolicy);
 
         Function authenticationFunction = Function.Builder.create(stack, "AuthenticationLambda")
                 .runtime(Runtime.JAVA_21)
@@ -129,7 +151,7 @@ public class StackBuilder extends Stack {
                 bugsnagApiCredentialsSecret.getSecretName());
 
         final StageOptions stageOptions = StageOptions.builder()
-                .stageName("production")
+                .stageName("forged-by-the-fox")
                 .variables(stageVariables)
                 .build();
 
@@ -144,7 +166,7 @@ public class StackBuilder extends Stack {
         apiGateway
                 .getRoot()
                 .addMethod(
-                        "GET",
+                        "ANY",
                         LambdaIntegration.Builder.create(homepageLambdaFunction)
                                 .proxy(true)
                                 .integrationResponses(List.of(IntegrationResponse.builder()
@@ -173,6 +195,90 @@ public class StackBuilder extends Stack {
                                         .statusCode("200")
                                         .build()))
                                 .build());
+
+        // Set up S3 bucket for storing static resources
+        final Bucket bucket = Bucket.Builder.create(stack, "static-resources-s3-bucket")
+                .bucketName("forged-by-the-fox-static-resources")
+                .publicReadAccess(false)
+                .accessControl(BucketAccessControl.PRIVATE)
+                .removalPolicy(RemovalPolicy.DESTROY)
+                .autoDeleteObjects(true)
+                .build();
+        Role role = Role.Builder.create(stack, "forged-by-the-fox-static-resources-s3-bucket-api-gateway-role")
+                .assumedBy(ServicePrincipal.fromStaticServicePrincipleName("apigateway.amazonaws.com"))
+                .inlinePolicies(Map.of(
+                        "s3read",
+                        PolicyDocument.Builder.create()
+                                .statements(List.of(PolicyStatement.Builder.create()
+                                        .actions(List.of("s3:GetObject"))
+                                        .effect(Effect.ALLOW)
+                                        .resources(List.of("*"))
+                                        .build()))
+                                .build()))
+                .build();
+
+        apiGateway
+                .getRoot()
+                .addResource("fonts")
+                .addResource("{object}")
+                .addMethod(
+                        "GET",
+                        AwsIntegration.Builder.create()
+                                .service("s3")
+                                .integrationHttpMethod("GET")
+                                .path("forged-by-the-fox-static-resources/fonts/{object}")
+                                .options(IntegrationOptions.builder()
+                                        .requestParameters(
+                                                Map.of("integration.request.path.object", "method.request.path.object"))
+                                        .integrationResponses(List.of(IntegrationResponse.builder()
+                                                .statusCode("200")
+                                                .build()))
+                                        .credentialsRole(role)
+                                        .build())
+                                .build(),
+                        MethodOptions.builder()
+                                .requestParameters(Map.of("method.request.path.object", true))
+                                .methodResponses(List.of(MethodResponse.builder()
+                                        .statusCode("200")
+                                        .build()))
+                                .build());
+
+        apiGateway
+                .getRoot()
+                .addResource("styles")
+                .addResource("{object}")
+                .addMethod(
+                        "GET",
+                        AwsIntegration.Builder.create()
+                                .service("s3")
+                                .integrationHttpMethod("GET")
+                                .path("forged-by-the-fox-static-resources/styles/{object}")
+                                .options(IntegrationOptions.builder()
+                                        .requestParameters(
+                                                Map.of("integration.request.path.object", "method.request.path.object"))
+                                        .integrationResponses(List.of(IntegrationResponse.builder()
+                                                .statusCode("200")
+                                                .responseParameters(Map.of(
+                                                        "method.response.header.Content-Type",
+                                                        "integration.response.header.Content-Type"))
+                                                .build()))
+                                        .credentialsRole(role)
+                                        .build())
+                                .build(),
+                        MethodOptions.builder()
+                                .requestParameters(Map.of("method.request.path.object", true))
+                                .methodResponses(List.of(MethodResponse.builder()
+                                        .statusCode("200")
+                                        .responseParameters(Map.of("method.response.header.Content-Type", true))
+                                        .build()))
+                                .build());
+
+        // Upload fonts to S3 bucket
+        BucketDeployment.Builder.create(stack, "forged-by-the-fox-static-resources-deployment")
+                .sources(List.of(Source.asset("./build/modules/static-resources")))
+                .destinationBucket(bucket)
+                .prune(true)
+                .build();
 
         return stack;
     }

@@ -29,7 +29,7 @@ public class SessionSchema {
         attributeBuilder
                 .name("partition-key")
                 .tags(StaticAttributeTags.primaryPartitionKey())
-                .getter(session -> "SESSION:" + session.identifier().toString())
+                .getter(session -> "SESSION:" + session.identifier().value())
                 .setter((builder, value) -> builder.identifier(new SessionIdentifier(value.split(":")[1])));
     }
 
@@ -44,7 +44,7 @@ public class SessionSchema {
     void accountIdentifierMutator(ImmutableAttribute.Builder<Session, Session.Builder, String> attributeBuilder) {
         attributeBuilder
                 .name("account-identifier")
-                .getter(identity -> identity.accountIdentifier().toString())
+                .getter(identity -> identity.accountIdentifier().value())
                 .setter((builder, value) -> builder.accountIdentifier(new AccountIdentifier(value)));
     }
 

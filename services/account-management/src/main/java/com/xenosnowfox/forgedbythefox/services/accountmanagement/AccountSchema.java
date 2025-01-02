@@ -29,9 +29,9 @@ public class AccountSchema {
         attributeBuilder
                 .name("partition-key")
                 .tags(StaticAttributeTags.primaryPartitionKey())
-                .getter(identity -> "account:" + identity.identifier().toString())
+                .getter(identity -> "ACCOUNT:" + identity.identifier().toString())
                 .setter((builder, identity) -> builder.identifier(AccountIdentifier.builder()
-                        .value(identity.split("account:")[1])
+                        .value(identity.split("ACCOUNT:")[1])
                         .build()));
     }
 

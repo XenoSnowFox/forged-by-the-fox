@@ -4,9 +4,62 @@
     <title>Forged by the Fox</title>
     <th:block th:replace="~{fragment/core :: meta}" />
     <th:block th:replace="~{fragment/core :: stylesheets}" />
+
+    <style>
+        body {
+            padding-left: 30vw;
+        }
+
+        body > header {
+            position: fixed;
+            left: 0;
+            width: 30vw;
+            top:0;
+            bottom:0;
+            text-transform: lowercase;
+            padding: 2rem;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: end;
+
+
+            background: var(--fbtf-palette-gray-regular);
+            color: var(--fbtf-palette-tan-dark);
+
+        }
+
+        body > header > h1 {
+            line-height: 60%;
+            font-size: 4rem;
+            font-family: sixtyfour-regular;
+        }
+
+        h1 > small {
+            display: block;
+            font-size: 0.63em;
+        }
+
+        a {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--fbtf-palette-gray-dark);
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+
+        a:hover {
+            background: var(--fbtf-palette-gray-regular);
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Forged By The Fox</h1>
-    <a href="./auth">Sign In To Continue</a>
+    <header>
+        <h1>Forged <small>By The Fox</small></h1>
+    </header>
+    <h2>Welcome.</h2>
+    <p><a th:href="${ctx.url.resolve('/auth')}">Sign In To Continue</a></p>
 </body>
 </html>

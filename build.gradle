@@ -121,6 +121,6 @@ compileSass {
 
 task copyFonts(type: Copy) {
 	from 'font'
-	into 'build/modules/static-resources/font'
+	into 'build/modules/static-resources/fonts'
 }
 compileJava.dependsOn copyFonts

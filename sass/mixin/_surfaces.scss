@@ -1,0 +1,38 @@
+
+@mixin apply {
+    background: var(--fbtf-surface-color-default);
+    color: var(--fbtf-on-surface-color-default);
+    fill: var(--fbtf-on-surface-color-default);
+}
+
+@mixin background {
+    --fbtf-surface-color-default: var(--fbtf-palette-tan-light);
+    --fbtf-surface-color-hover: var(--fbtf-palette-tan-light);
+    --fbtf-surface-color-muted: var(--fbtf-palette-tan-light);
+    --fbtf-on-surface-color-default:  var(--fbtf-palette-gray-dark);
+    --fbtf-on-surface-color-hover: var(--fbtf-palette-gray-dark);
+    --fbtf-on-surface-color-muted:  var(--fbtf-palette-gray-dark);
+    --fbtf-on-surface-accent-default:  var(--fbtf-palette-tan-dark);
+    --fbtf-on-surface-accent-muted:  var(--fbtf-palette-tan-dark);
+    --fbtf-on-surface-accent-hover:  var(--fbtf-palette-tan-dark);
+    --fbtf-on-surface-border-default:  var(--fbtf-palette-tan-dark);
+    --fbtf-on-surface-border-hover:  var(--fbtf-palette-tan-dark);
+    --fbtf-on-surface-border-active:  var(--fbtf-palette-tan-dark);
+    @include apply;
+}
+
+@mixin article {
+    --fbtf-surface-color-default: var(--fbtf-palette-white);
+    --fbtf-surface-color-hover: var(--fbtf-palette-gray10);
+    --fbtf-surface-color-muted: var(--fbtf-palette-gray20);
+    --fbtf-on-surface-color-default:  var(--fbtf-palette-gray60);
+    --fbtf-on-surface-color-hover: var(--fbtf-palette-black);
+    --fbtf-on-surface-color-muted:  var(--fbtf-palette-gray50);
+    --fbtf-on-surface-accent-default:  var(--fbtf-palette-blue40);
+    --fbtf-on-surface-accent-muted:  var(--fbtf-palette-blue20);
+    --fbtf-on-surface-accent-hover:  var(--fbtf-palette-blue60);
+    --fbtf-on-surface-border-default:  var(--fbtf-palette-gray20);
+    --fbtf-on-surface-border-hover:  var(--fbtf-palette-black);
+    --fbtf-on-surface-border-active:  var(--fbtf-palette-blue40);
+    @include apply;
+}

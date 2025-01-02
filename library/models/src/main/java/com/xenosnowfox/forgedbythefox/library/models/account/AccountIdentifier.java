@@ -6,6 +6,16 @@ import lombok.NonNull;
 
 @Builder(builderClassName = "Builder")
 public record AccountIdentifier(@NonNull String value) {
+
+    public static AccountIdentifier fromUrn(final String withUrn) {
+        final String[] parts = withUrn.split("ACCOUNT:", 2);
+        if (parts.length != 2 || !parts[0].isBlank() || parts[1].isBlank()) {
+            throw new IllegalArgumentException();
+        }
+
+        return new AccountIdentifier(parts[1].trim());
+    }
+
     public AccountIdentifier {
         value = value.trim();
         if (value.isBlank()) {
@@ -16,6 +26,10 @@ public record AccountIdentifier(@NonNull String value) {
     @Override
     public String toString() {
         return value;
+    }
+
+    public String toUrn() {
+        return "ACCOUNT:" + this.value;
     }
 
     public static AccountIdentifier random() {

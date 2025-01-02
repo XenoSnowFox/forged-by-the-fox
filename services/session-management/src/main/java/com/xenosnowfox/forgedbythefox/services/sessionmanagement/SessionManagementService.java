@@ -7,22 +7,26 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import lombok.Builder;
 import lombok.NonNull;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Expression;
+import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.model.PutItemEnhancedRequest;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.ConditionalCheckFailedException;
 
-@Builder(builderClassName = "Builder")
-public record SessionManagementService() {
+public class SessionManagementService {
+
+    private final DynamoDbEnhancedClient enhancedClient;
+    private final DynamoDbTable<Session> table;
+
+    public SessionManagementService() {
+        this.enhancedClient = DynamoDbEnhancedClient.create();
+        this.table = enhancedClient.table("forged-by-the-fox", SessionSchema.getTableSchema());
+    }
 
     public Optional<Session> create(@NonNull final CreateSessionRequest withRequest) {
-
-        DynamoDbEnhancedClient enhancedClient = DynamoDbEnhancedClient.create();
-        DynamoDbTable<Session> table = enhancedClient.table("forged-by-the-fox", SessionSchema.getTableSchema());
 
         final AtomicInteger retries = new AtomicInteger(0);
         while (retries.incrementAndGet() <= 5) {
@@ -66,5 +70,13 @@ public record SessionManagementService() {
         final CreateSessionRequest.Builder builder = CreateSessionRequest.builder();
         withMutator.accept(builder);
         return this.create(builder.build());
+    }
+
+    public Session retrieve(@NonNull final SessionIdentifier withIdentifier) {
+        final Key key = Key.builder()
+                .partitionValue("SESSION:" + withIdentifier.value())
+                .sortValue("session")
+                .build();
+        return table.getItem(key);
     }
 }

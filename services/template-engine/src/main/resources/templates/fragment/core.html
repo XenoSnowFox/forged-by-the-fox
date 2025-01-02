@@ -10,9 +10,9 @@
 
     <!-- Stylesheets -->
     <th:block th:fragment="stylesheets">
-        <link rel="stylesheet" th:href="${'/styles/reset.css'}">
-        <link rel="stylesheet" th:href="${'/styles/theme.css'}">
-        <link rel="stylesheet" th:href="${'/styles/layout.css'}">
+        <link rel="stylesheet" th:href="${ctx.url.resolve('/styles/reset.css')}">
+        <link rel="stylesheet" th:href="${ctx.url.resolve('/styles/theme.css')}">
+        <link rel="stylesheet" th:href="${ctx.url.resolve('/styles/layout.css')}">
     </th:block>
 
 </body>

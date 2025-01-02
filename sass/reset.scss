@@ -1,0 +1,246 @@
+@use "./mixin/surfaces" as surfaces;
+
+@font-face {
+   font-family: quantico-regular;
+   src: url(../fonts/quantico-regular.ttf);
+}
+
+@font-face {
+   font-family: quantico-italic;
+   src: url(../fonts/quantico-italic.ttf);
+}
+
+@font-face {
+   font-family: quantico-bold;
+   src: url(../fonts/quantico-bold.ttf);
+}
+
+@font-face {
+   font-family: sixtyfour-regular;
+   src: url(../fonts/sixtyfour-regular.ttf);
+}
+
+:root {
+    // HORIZONTAL SPACING
+    // Between Cards: Cards are self contained blocks.
+    --fbtf-spacing-horizontal-between-cards: 0.75rem;
+    // Between Chips: Chips allows you to filter content and are typically placed close to each other.
+    --fbtf-spacing-horizontal-between-chips: 0.5rem;
+    // Screen Edge: The overarching spacing between the edge of the screen/window and our content.
+    --fbtf-spacing-horizontal-screen-edge: 1.5rem;
+    // Component Default: When no specific spacing token exists. Between buttons etc.
+    --fbtf-spacing-horizontal-component-default: 1rem;
+
+    // VERTICAL SPACING
+    // Between Text: Text is any copy that isn't using a display style.
+    --fbtf-spacing-vertical-between-text: 0.5rem;
+    // Image Bottom: Extra breathing room below hero graphics.
+    --fbtf-spacing-vertical-image-bottom: 0.5rem;
+    // Display Text Bottom: Additional spacing underneath display text.
+    --fbtf-spacing-vertical-display-text-bottom: 1rem;
+    // Text To Component: Between any non-display text and a component.
+    --fbtf-spacing-vertical-text-to-component: 1rem;
+    // Content To Button: When a button is displayed directly after content and not in a footer.
+    --fbtf-spacing-vertical-content-to-button: 1.5rem;
+    // Between Sections: Separate groups of content to show that are not directly connected.
+    --fbtf-spacing-vertical-between-sections: 2rem;
+    // Between Options: Options have a large tough area and hence have this spacing already incorporated.
+    --fbtf-spacing-vertical-between-options: 0rem;
+    // Component Default: When no specific spacing token exists. Below section headers, between form fields, between buttons etc.
+    --fbtf-spacing-vertical-component-default: 1rem;
+
+    // PALETTE COLORS
+    --fbtf-palette-black: #000;
+    --fbtf-palette-gray90: #141414;
+    --fbtf-palette-gray80: #1f1f1f;
+    --fbtf-palette-gray70: #333;
+    --fbtf-palette-gray60: #545454;
+    --fbtf-palette-gray50: #757575;
+    --fbtf-palette-gray40: #afafaf;
+    --fbtf-palette-gray30: #cbcbcb;
+    --fbtf-palette-gray20: #e2e2e2;
+    --fbtf-palette-gray10: #eee;
+    --fbtf-palette-gray05: #f6f6f6;
+    --fbtf-palette-white: #fff;
+    --fbtf-palette-blue70: #0f2358;
+    --fbtf-palette-blue60: #1a3c97;
+    --fbtf-palette-blue50: #1f4cc0;
+    --fbtf-palette-blue40: #4272ef; // primary accent color
+    --fbtf-palette-blue30: #5ab8ff;
+    --fbtf-palette-blue20: #a4bdfd;
+    --fbtf-palette-blue10: #cad9ff;
+    --fbtf-palette-blue05: #eaf0ff;
+    --fbtf-palette-magenta-regular: #EE5D94;
+    --fbtf-palette-magenta-dense: #EB367D;
+    --fbtf-palette-peach-regular: #F79C87;
+    --fbtf-palette-peach-dense: #FA8573;
+    --fbtf-palette-yellow-regular: #FED142;
+    --fbtf-palette-yellow-dense: #FFC212;
+    --fbtf-palette-tosca-regular: #3AB8B4;
+    --fbtf-palette-tosca-dense: #03A7A6;
+
+    --fbtf-palette-gray-light: #d1d1d1;
+    --fbtf-palette-gray-regular: #99a3a3;
+    --fbtf-palette-gray-dark: #6d7677;
+
+    --fbtf-palette-tan-light: #ede2df;
+    --fbtf-palette-tan-regular: #d1c7b8; // d8aa9a;
+    --fbtf-palette-tan-dark: #b9816a;
+
+    // d1c7b8
+
+
+    // SURFACE TOKENS
+	@include surfaces.background;
+//     --fbtf-surface-color-default: var(--fbtf-palette-white);
+//     --fbtf-surface-color-muted: var(--fbtf-palette-gray10);
+//     --fbtf-on-surface-color-default: var(--fbtf-palette-black);
+//     --fbtf-on-surface-color-variant:  var(--fbtf-palette-gray60);
+//     --fbtf-on-surface-color-muted:  var(--fbtf-palette-gray50);
+//     --fbtf-on-surface-accent-default:  var(--fbtf-palette-blue40);
+//     --fbtf-on-surface-accent-muted:  var(--fbtf-palette-blue20);
+//     --fbtf-on-surface-border-default:  var(--fbtf-palette-gray20);
+//     --fbtf-on-surface-border-hover:  var(--fbtf-palette-black);
+//     --fbtf-on-surface-border-active:  var(--fbtf-palette-blue40);
+}
+
+* {
+	box-sizing: border-box;
+	color: inherit;
+	fill: inherit;
+
+    line-height: 125%;
+}
+
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i, a,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, main, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:inherit;
+    font-weight:inherit;
+    vertical-align:baseline;
+    background:transparent;
+	color:inherit;
+
+    -webkit-background-clip: padding-box;
+    -moz-background-clip:    padding;
+    background-clip:         padding-box;
+}
+
+html, body {
+	font-family: quantico-regular;
+	font-weight: 400;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: greyscale;
+	letter-spacing: 0.02rem;
+
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+
+	-webkit-appearance:none;
+
+	@include surfaces.background;
+
+    @media print {
+        font-size: 10pt;
+    }
+}
+
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section {
+	display:block;
+}
+
+ul, ol {
+    list-style:none;
+}
+
+blockquote, q {
+    quotes:none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content:'';
+    content:none;
+}
+
+a {
+	text-decoration:none;
+}
+
+/* change colours to suit your needs */
+ins {
+    background-color:#ff9;
+    color:#000;
+    text-decoration:none;
+	font-family: "Roboto", sans-serif;
+    display: inline-block;
+    white-space: nowrap;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+
+/* change colours to suit your needs */
+mark {
+    background-color:#ff9;
+    color:#000;
+    font-weight:bold;
+	font-family: "Roboto", sans-serif;
+    display: inline-block;
+    white-space: nowrap;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+abbr[title], dfn[title] {
+    border-bottom:1px dotted;
+    cursor:help;
+}
+
+/* CLEARFIX GROUP */
+.group:after {
+	visibility: hidden;
+	display: block;
+	content: "";
+	clear: both;
+	height: 0;
+	}
+* html .group             { zoom: 1; } /* IE6 */
+*:first-child+html .group { zoom: 1; } /* IE7 */
+
+svg {
+	fill: inherit;
+}
+
+* html .v3-cFormField > legend             { zoom: 1; } /* IE6 */
+*:first-child+html .v3-cFormField > legend { zoom: 1; } /* IE7 */
+
+@media not print {
+    .print-only {
+        display: none;
+    }
+}
+
+@media not screen {
+    .screen-only {
+        display: none;
+    }
+}
