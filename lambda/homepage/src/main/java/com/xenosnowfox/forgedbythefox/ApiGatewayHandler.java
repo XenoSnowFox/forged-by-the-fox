@@ -1,4 +1,4 @@
-package com.xenosnowfox.forgedbythefox.lambda.homepage;
+package com.xenosnowfox.forgedbythefox;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
@@ -6,14 +6,14 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.xenosnowfox.forgedbythefox.lambda.homepage.route.AuthenticationRoute;
-import com.xenosnowfox.forgedbythefox.lambda.homepage.route.HomepageRoute;
-import com.xenosnowfox.forgedbythefox.lambda.homepage.util.HttpMethod;
-import com.xenosnowfox.forgedbythefox.lambda.homepage.util.Route;
+import com.xenosnowfox.forgedbythefox.routes.AuthenticationRoute;
+import com.xenosnowfox.forgedbythefox.routes.HomepageRoute;
 import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
 import com.xenosnowfox.forgedbythefox.service.character.CharacterManagementService;
 import com.xenosnowfox.forgedbythefox.service.identity.IdentityManagementService;
 import com.xenosnowfox.forgedbythefox.service.session.SessionManagementService;
+import com.xenosnowfox.forgedbythefox.util.HttpMethod;
+import com.xenosnowfox.forgedbythefox.util.Route;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;

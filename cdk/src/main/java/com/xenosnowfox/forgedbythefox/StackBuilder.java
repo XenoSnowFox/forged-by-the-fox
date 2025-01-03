@@ -125,7 +125,7 @@ public class StackBuilder extends Stack {
         Function homepageLambdaFunction = Function.Builder.create(stack, "HomepageLambda")
                 .runtime(Runtime.JAVA_21)
                 .code(Code.fromAsset("./build/modules/lambda-homepage/libs/forged-by-the-fox-homepage.jar"))
-                .handler("com.xenosnowfox.forgedbythefox.lambda.homepage.ApiGatewayHandler::handleRequest")
+                .handler("com.xenosnowfox.forgedbythefox.ApiGatewayHandler::handleRequest")
                 .memorySize(512)
                 .timeout(Duration.minutes(5))
                 .logRetention(RetentionDays.ONE_WEEK)

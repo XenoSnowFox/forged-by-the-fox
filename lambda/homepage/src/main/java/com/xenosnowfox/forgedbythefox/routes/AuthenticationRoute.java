@@ -1,4 +1,4 @@
-package com.xenosnowfox.forgedbythefox.lambda.homepage.route;
+package com.xenosnowfox.forgedbythefox.routes;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
