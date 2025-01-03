@@ -1,7 +1,0 @@
-
-dependencies {
-	// thymeleaf
-	// see: https://www.thymeleaf.org/index.html
-	implementation 'org.thymeleaf:thymeleaf:3.1.2.RELEASE'
-	testImplementation 'org.thymeleaf.testing:thymeleaf-testing:3.1.2.RELEASE'
-}
