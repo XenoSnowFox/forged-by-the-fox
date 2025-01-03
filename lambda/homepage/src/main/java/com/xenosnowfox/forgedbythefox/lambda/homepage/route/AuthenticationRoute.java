@@ -1,21 +1,22 @@
-package com.xenosnowfox.forgedbythefox.lambda.authentication;
+package com.xenosnowfox.forgedbythefox.lambda.homepage.route;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.xenosnowfox.forgedbythefox.library.models.account.AccountName;
-import com.xenosnowfox.forgedbythefox.library.models.identity.Identity;
-import com.xenosnowfox.forgedbythefox.library.models.identity.IdentityIdentifier;
-import com.xenosnowfox.forgedbythefox.library.models.identity.IdentityProvider;
-import com.xenosnowfox.forgedbythefox.library.models.session.Session;
-import com.xenosnowfox.forgedbythefox.services.accountmanagement.AccountManagementService;
-import com.xenosnowfox.forgedbythefox.services.identitymanagement.IdentityManagementService;
-import com.xenosnowfox.forgedbythefox.services.sessionmanagement.SessionManagementService;
+import com.xenosnowfox.forgedbythefox.models.account.AccountName;
+import com.xenosnowfox.forgedbythefox.models.identity.Identity;
+import com.xenosnowfox.forgedbythefox.models.identity.IdentityIdentifier;
+import com.xenosnowfox.forgedbythefox.models.identity.IdentityProvider;
+import com.xenosnowfox.forgedbythefox.models.session.Session;
+import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
+import com.xenosnowfox.forgedbythefox.service.identity.IdentityManagementService;
+import com.xenosnowfox.forgedbythefox.service.session.SessionManagementService;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,12 +30,19 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import lombok.Builder;
+import lombok.NonNull;
 import org.apache.http.client.utils.URIBuilder;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRequest;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
 
-public class ApiGatewayHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+@Builder(builderClassName = "Builder")
+public record AuthenticationRoute(
+        @NonNull AccountManagementService accountManagementService,
+        @NonNull IdentityManagementService identityManagementService,
+        @NonNull SessionManagementService sessionManagementService)
+        implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
             .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
@@ -45,11 +53,8 @@ public class ApiGatewayHandler implements RequestHandler<APIGatewayProxyRequestE
 
     private static final String GOOGLE_TOKEN_URI = "https://oauth2.googleapis.com/token";
 
-    private final AccountManagementService accountManagementService = new AccountManagementService();
-
-    private final IdentityManagementService identityManagementService = new IdentityManagementService();
-
-    private final SessionManagementService sessionManagementService = new SessionManagementService();
+    public record GoogleOAuth2Credentials(
+            @JsonProperty("ClientId") String clientId, @JsonProperty("ClientSecret") String clientSecret) {}
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent event, final Context context) {

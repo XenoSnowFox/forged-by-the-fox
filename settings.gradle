@@ -2,6 +2,4 @@ rootProject.name = "Forged by the Fox"
 
 // Lambda Functions
 include "cdk"
-include "lambda:api", "lambda:authentication", "lambda:homepage"
-include "library:models"
-include "services:account-management", "services:character-management", "services:identity-management", "services:session-management", "services:template-engine"
+include "lambda:homepage"

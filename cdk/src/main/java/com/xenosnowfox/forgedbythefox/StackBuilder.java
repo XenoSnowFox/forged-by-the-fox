@@ -15,7 +15,6 @@ import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.apigateway.AwsIntegration;
 import software.amazon.awscdk.services.apigateway.IntegrationOptions;
 import software.amazon.awscdk.services.apigateway.IntegrationResponse;
-import software.amazon.awscdk.services.apigateway.LambdaIntegration;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
 import software.amazon.awscdk.services.apigateway.MethodOptions;
 import software.amazon.awscdk.services.apigateway.MethodResponse;
@@ -131,18 +130,8 @@ public class StackBuilder extends Stack {
                 .timeout(Duration.minutes(5))
                 .logRetention(RetentionDays.ONE_WEEK)
                 .build();
+        googleOAuth2CredentialsSecret.grantRead(Objects.requireNonNull(homepageLambdaFunction.getRole()));
         homepageLambdaFunction.getRole().attachInlinePolicy(databaseReadWritePolicy);
-
-        Function authenticationFunction = Function.Builder.create(stack, "AuthenticationLambda")
-                .runtime(Runtime.JAVA_21)
-                .code(Code.fromAsset("./build/modules/lambda-authentication/libs/forged-by-the-fox-authentication.jar"))
-                .handler("com.xenosnowfox.forgedbythefox.lambda.authentication.ApiGatewayHandler::handleRequest")
-                .memorySize(512)
-                .timeout(Duration.minutes(5))
-                .logRetention(RetentionDays.ONE_WEEK)
-                .build();
-        googleOAuth2CredentialsSecret.grantRead(Objects.requireNonNull(authenticationFunction.getRole()));
-        authenticationFunction.getRole().attachInlinePolicy(databaseReadWritePolicy);
 
         final Map<String, String> stageVariables = Map.of(
                 "GOOGLE_OAUTH2_CREDENTIALS_SECRET_NAME",
@@ -158,43 +147,10 @@ public class StackBuilder extends Stack {
         LambdaRestApi apiGateway = LambdaRestApi.Builder.create(stack, "ApiGateway")
                 .restApiName("forged-by-the-fox:api-gateway")
                 .handler(homepageLambdaFunction)
-                .proxy(false)
+                .proxy(true)
                 .deploy(true)
                 .deployOptions(stageOptions)
                 .build();
-
-        apiGateway
-                .getRoot()
-                .addMethod(
-                        "ANY",
-                        LambdaIntegration.Builder.create(homepageLambdaFunction)
-                                .proxy(true)
-                                .integrationResponses(List.of(IntegrationResponse.builder()
-                                        .statusCode("200")
-                                        .build()))
-                                .build(),
-                        MethodOptions.builder()
-                                .methodResponses(List.of(MethodResponse.builder()
-                                        .statusCode("200")
-                                        .build()))
-                                .build());
-
-        apiGateway
-                .getRoot()
-                .addResource("auth")
-                .addMethod(
-                        "ANY",
-                        LambdaIntegration.Builder.create(authenticationFunction)
-                                .proxy(true)
-                                .integrationResponses(List.of(IntegrationResponse.builder()
-                                        .statusCode("200")
-                                        .build()))
-                                .build(),
-                        MethodOptions.builder()
-                                .methodResponses(List.of(MethodResponse.builder()
-                                        .statusCode("200")
-                                        .build()))
-                                .build());
 
         // Set up S3 bucket for storing static resources
         final Bucket bucket = Bucket.Builder.create(stack, "static-resources-s3-bucket")

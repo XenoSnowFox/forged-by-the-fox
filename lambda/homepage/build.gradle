@@ -1,7 +1,13 @@
 
 dependencies {
-	implementation project(":services:account-management")
-	implementation project(":services:character-management")
-	implementation project(":services:session-management")
-	implementation project(":services:template-engine")
+	// AWS resources
+	implementation 'software.amazon.awssdk:dynamodb'
+	implementation 'software.amazon.awssdk:dynamodb-enhanced'
+
+	implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+
+	// thymeleaf
+	// see: https://www.thymeleaf.org/index.html
+	implementation 'org.thymeleaf:thymeleaf:3.1.2.RELEASE'
+	testImplementation 'org.thymeleaf.testing:thymeleaf-testing:3.1.2.RELEASE'
 }
