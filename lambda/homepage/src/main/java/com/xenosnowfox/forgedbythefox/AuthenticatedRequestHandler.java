@@ -35,20 +35,26 @@ public interface AuthenticatedRequestHandler
         }
 
         final Map<String, String> headers = event.getHeaders();
-        if (headers == null || headers.isEmpty() || !headers.containsKey("Cookie")) {
+        if (headers == null || headers.isEmpty()) {
             return null;
         }
 
-        final String cookieHeader = headers.get("Cookie");
-        if (cookieHeader == null || cookieHeader.isBlank()) {
-            return null;
-        }
+        for (Map.Entry<String, String> header : headers.entrySet()) {
+            if (!header.getKey().equalsIgnoreCase("cookie")) {
+                continue;
+            }
 
-        final String[] cookies = cookieHeader.split(";");
-        for (String cookie : cookies) {
-            final String[] cookieParts = cookie.split("=");
-            if (cookieParts[0].trim().equalsIgnoreCase("session")) {
-                return new SessionIdentifier(cookieParts[1].trim());
+            final String cookieHeader = header.getValue();
+            if (cookieHeader == null || cookieHeader.isBlank()) {
+                return null;
+            }
+
+            final String[] cookies = cookieHeader.split(";");
+            for (String cookie : cookies) {
+                final String[] cookieParts = cookie.split("=");
+                if (cookieParts[0].trim().equalsIgnoreCase("session")) {
+                    return new SessionIdentifier(cookieParts[1].trim());
+                }
             }
         }
 
