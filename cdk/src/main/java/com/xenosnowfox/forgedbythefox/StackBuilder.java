@@ -175,32 +175,6 @@ public class StackBuilder extends Stack {
 
         apiGateway
                 .getRoot()
-                .addResource("fonts")
-                .addResource("{object}")
-                .addMethod(
-                        "GET",
-                        AwsIntegration.Builder.create()
-                                .service("s3")
-                                .integrationHttpMethod("GET")
-                                .path("forged-by-the-fox-static-resources/fonts/{object}")
-                                .options(IntegrationOptions.builder()
-                                        .requestParameters(
-                                                Map.of("integration.request.path.object", "method.request.path.object"))
-                                        .integrationResponses(List.of(IntegrationResponse.builder()
-                                                .statusCode("200")
-                                                .build()))
-                                        .credentialsRole(role)
-                                        .build())
-                                .build(),
-                        MethodOptions.builder()
-                                .requestParameters(Map.of("method.request.path.object", true))
-                                .methodResponses(List.of(MethodResponse.builder()
-                                        .statusCode("200")
-                                        .build()))
-                                .build());
-
-        apiGateway
-                .getRoot()
                 .addResource("styles")
                 .addResource("{object}")
                 .addMethod(
@@ -229,7 +203,7 @@ public class StackBuilder extends Stack {
                                         .build()))
                                 .build());
 
-        // Upload fonts to S3 bucket
+        // Upload styles to S3 bucket
         BucketDeployment.Builder.create(stack, "forged-by-the-fox-static-resources-deployment")
                 .sources(List.of(Source.asset("./build/modules/static-resources")))
                 .destinationBucket(bucket)

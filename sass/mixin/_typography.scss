@@ -1,0 +1,9 @@
+
+@mixin apply {
+    font-family: var(--fbtf-typography-default);
+}
+
+@mixin monospace {
+    --fbtf-typography-default: monospace;
+    @include apply;
+}

@@ -1,25 +1,5 @@
 @use "./mixin/surfaces" as surfaces;
 
-@font-face {
-   font-family: quantico-regular;
-   src: url(../fonts/quantico-regular.ttf);
-}
-
-@font-face {
-   font-family: quantico-italic;
-   src: url(../fonts/quantico-italic.ttf);
-}
-
-@font-face {
-   font-family: quantico-bold;
-   src: url(../fonts/quantico-bold.ttf);
-}
-
-@font-face {
-   font-family: sixtyfour-regular;
-   src: url(../fonts/sixtyfour-regular.ttf);
-}
-
 :root {
     // HORIZONTAL SPACING
     // Between Cards: Cards are self contained blocks.
@@ -78,6 +58,12 @@
     --fbtf-palette-yellow-dense: #FFC212;
     --fbtf-palette-tosca-regular: #3AB8B4;
     --fbtf-palette-tosca-dense: #03A7A6;
+
+    --fbtf-palette-black-lightest: #343a40;
+    --fbtf-palette-black-regular: #212529;
+    --fbtf-palette-black-darkest: #000;
+
+    --fbtf-palette-white-lightest: #fff;
 
     --fbtf-palette-gray-light: #d1d1d1;
     --fbtf-palette-gray-regular: #99a3a3;
@@ -140,8 +126,9 @@ time, mark, audio, video {
 }
 
 html, body {
-	font-family: quantico-regular;
-	font-weight: 400;
+	font-family: sans-serif;
+	font-weight: normal;
+	font-style: normal;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: greyscale;
 	letter-spacing: 0.02rem;

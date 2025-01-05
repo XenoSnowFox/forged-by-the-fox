@@ -6,13 +6,18 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Getter
+@Accessors(fluent = true)
 @RequiredArgsConstructor
 public enum Playbook {
     MECHANIC("Mechanic", Map.of(Action.RIG, 2, Action.STUDY, 1)),
+    MUSCLE("Muscle", Map.of(Action.SCRAP, 2, Action.COMMAND, 1)),
     MYSTIC("Mystic", Map.of(Action.SCRAMBLE, 1, Action.ATTUNE, 2)),
     PILOT("Pilot", Map.of(Action.RIG, 1, Action.HELM, 2)),
+    SCOUNDREL("Scoundrel", Map.of(Action.SKULK, 1, Action.SWAY, 2)),
+    SPEAKER("Speaker", Map.of(Action.COMMAND, 1, Action.CONSORT, 2)),
     STITCH("Stitch", Map.of(Action.DOCTOR, 2, Action.STUDY, 1));
 
     private final String title;

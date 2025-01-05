@@ -4,62 +4,18 @@
     <title>Forged by the Fox</title>
     <th:block th:replace="~{fragment/core :: meta}" />
     <th:block th:replace="~{fragment/core :: stylesheets}" />
-
-    <style>
-        body {
-            padding-left: 30vw;
-        }
-
-        body > header {
-            position: fixed;
-            left: 0;
-            width: 30vw;
-            top:0;
-            bottom:0;
-            text-transform: lowercase;
-            padding: 2rem;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: end;
-
-
-            background: var(--fbtf-palette-gray-regular);
-            color: var(--fbtf-palette-tan-dark);
-
-        }
-
-        body > header > h1 {
-            line-height: 60%;
-            font-size: 4rem;
-            font-family: sixtyfour-regular;
-        }
-
-        h1 > small {
-            display: block;
-            font-size: 0.63em;
-        }
-
-        a {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--fbtf-palette-gray-dark);
-            border-radius: 0.25rem;
-            cursor: pointer;
-        }
-
-        a:hover {
-            background: var(--fbtf-palette-gray-regular);
-        }
-
-    </style>
 </head>
 <body>
-    <header>
-        <h1>Forged <small>By The Fox</small></h1>
-    </header>
-    <h2>Welcome.</h2>
-    <p><a th:href="${ctx.url.resolve('/auth')}">Sign In To Continue</a></p>
+    <th:block th:replace="~{component/global-header :: root}" />
+    <div class="fbtf-component-welcome">
+        <th:block th:replace="~{svg/logos :: forged-by-the-fox}" />
+        <h1><span>Forged</span><span>by the</span><span>Fox</span></h1>
+    </div>
+    <div style="max-width: 32rem;margin:1rem auto;" class="blurb">
+        <p style="margin:0.25rem 1rem;">Welcome.</p>
+        <p style="margin:0.25rem 1rem;">Forged by the Fox is a fan-made online character sheet for your <a href="https://bladesinthedark.com/">Blades in the Dark</a>, <a href="https://evilhat.com/product/scum-and-villainy/">Scum &amp; Villainy</a> and potentially other games built upon the <a href="https://bladesinthedark.com/forged-dark">Forged in the Dark</a> system.</p>
+        <p style="margin:0.25rem 1rem;">This site is in no way affiliated with the aforementioned games.</p>
+        <p style="text-align:center;"><a style="border:1px solid grey;padding:1rem;border-radius:0.25rem;display:inline-block;margin:1rem;" th:href="${ctx.url.resolve('/auth')}">Sign In To Continue</a></p>
+    </div>
 </body>
 </html>

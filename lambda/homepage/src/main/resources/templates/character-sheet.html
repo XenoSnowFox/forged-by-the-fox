@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Forged by the Fox</title>
+    <th:block th:replace="~{fragment/core :: meta}" />
+    <th:block th:replace="~{fragment/core :: stylesheets}" />
+</head>
+<body>
+<th:block th:replace="~{component/global-header :: root}" />
+<div>
+    <!-- Actions & Attributes -->
+    <div style="width: 14rem;">
+        <th:block th:each="attribute : ${ctx.attributes}">
+            <th:block th:replace="~{component/attribute-display :: root(${ctx.character}, ${attribute})}" />
+        </th:block>
+    </div>
+</div>
+
+
+</body>
+</html>

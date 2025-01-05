@@ -5,8 +5,10 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Getter
+@Accessors(fluent = true)
 @RequiredArgsConstructor
 public enum Attribute {
     INSIGHT("Insight"),
@@ -17,10 +19,10 @@ public enum Attribute {
 
     private final Set<Action> actions = new HashSet<>();
 
-    public Set<Action> getActions() {
+    public Set<Action> actions() {
         if (this.actions.isEmpty()) {
             Arrays.stream(Action.values())
-                    .filter(action -> action.getAttribute().equals(this))
+                    .filter(action -> action.attribute().equals(this))
                     .forEach(this.actions::add);
         }
         return Set.copyOf(this.actions);

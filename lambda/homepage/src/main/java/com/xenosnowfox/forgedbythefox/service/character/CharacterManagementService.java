@@ -1,9 +1,11 @@
 package com.xenosnowfox.forgedbythefox.service.character;
 
 import com.xenosnowfox.forgedbythefox.models.character.Character;
+import com.xenosnowfox.forgedbythefox.models.character.CharacterExperience;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
 import java.time.Instant;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,6 +45,10 @@ public class CharacterManagementService {
                         .timestampCreated(Instant.now())
                         .accountIdentifier(withRequest.accountIdentifier())
                         .playbook(withRequest.playbook())
+                        .experience(CharacterExperience.builder()
+                                .playbook(0)
+                                .attributes(Collections.emptyMap())
+                                .build())
                         .build();
 
                 PutItemEnhancedRequest<Character> putRequest = PutItemEnhancedRequest.builder(Character.class)

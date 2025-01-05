@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Root Element -->
+<th:block th:fragment="root">
+    <header class="fbtf-component-global-header">
+        <a th:href="${ctx.url.resolve('/')}"><span>Forged by the Fox</span></a>
+
+        <!-- TODO MENU -->
+
+        <div class="spacer"></div>
+
+        <th:block th:if="${ctx.account}">
+            <img th:src="${ctx.account.profilePictureUrl}" />
+            <a href="#"><span>Sign Out</span> <th:block th:replace="~{svg/icon :: door-open}" /></a>
+        </th:block>
+
+        <th:block th:unless="${ctx.account}">
+            <a th:href="${ctx.url.resolve('/auth')}"><span>Sign In</span><th:block th:replace="~{svg/icon :: key}" /></a>
+        </th:block>
+
+    </header>
+</th:block>
+
+
+</body>
+</html>

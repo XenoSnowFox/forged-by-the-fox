@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.xenosnowfox.forgedbythefox.routes.AuthenticationRoute;
+import com.xenosnowfox.forgedbythefox.routes.CharacterSheetRoute;
 import com.xenosnowfox.forgedbythefox.routes.HomepageRoute;
 import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
 import com.xenosnowfox.forgedbythefox.service.character.CharacterManagementService;
@@ -52,6 +53,14 @@ public class ApiGatewayHandler extends Route {
                         AuthenticationRoute.builder()
                                 .accountManagementService(accountManagementService)
                                 .identityManagementService(identityManagementService)
+                                .sessionManagementService(sessionManagementService)
+                                .build())
+                .register(
+                        HttpMethod.ANY,
+                        "/characters/{character}",
+                        CharacterSheetRoute.builder()
+                                .accountManagementService(accountManagementService)
+                                .characterManagementService(characterManagementService)
                                 .sessionManagementService(sessionManagementService)
                                 .build())
                 .register(HttpMethod.GET, "/debug", (e1, c1) -> {

@@ -1,0 +1,9 @@
+@use 'component/attribute-display';
+@use 'component/global-header';
+@use 'component/welcome';
+
+.fbtf-component {
+    @include attribute-display.component;
+    @include global-header.component;
+    @include welcome.component;
+}

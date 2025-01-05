@@ -5,19 +5,43 @@
     fill: var(--fbtf-on-surface-color-default);
 }
 
+@mixin deep-black {
+    /* background */
+    --fbtf-surface-color-default: var(--fbtf-palette-black-darkest);
+    --fbtf-surface-color-hover: var(--fbtf-palette-black-dark);
+    --fbtf-surface-color-muted: var(--fbtf-palette-black-dark);
+    // color
+    --fbtf-on-surface-color-default:  var(--fbtf-palette-white-lightest);
+    --fbtf-on-surface-color-hover: var(--fbtf-palette-white-lightest);
+    --fbtf-on-surface-color-muted:  var(--fbtf-palette-white-lightest);
+    // accent
+    --fbtf-on-surface-accent-default:  var(--fbtf-palette-gray-regular);
+    --fbtf-on-surface-accent-muted:  var(--fbtf-palette-gray-regular);
+    --fbtf-on-surface-accent-hover:  var(--fbtf-palette-gray-regular);
+    // border
+    --fbtf-on-surface-border-default:  var(--fbtf-palette-black-darkest);
+    --fbtf-on-surface-border-hover:  var(--fbtf-palette-black-darkest);
+    --fbtf-on-surface-border-active:  var(--fbtf-palette-black-darkest);
+    @include apply;
+}
+
 @mixin background {
-    --fbtf-surface-color-default: var(--fbtf-palette-tan-light);
-    --fbtf-surface-color-hover: var(--fbtf-palette-tan-light);
-    --fbtf-surface-color-muted: var(--fbtf-palette-tan-light);
-    --fbtf-on-surface-color-default:  var(--fbtf-palette-gray-dark);
-    --fbtf-on-surface-color-hover: var(--fbtf-palette-gray-dark);
-    --fbtf-on-surface-color-muted:  var(--fbtf-palette-gray-dark);
-    --fbtf-on-surface-accent-default:  var(--fbtf-palette-tan-dark);
-    --fbtf-on-surface-accent-muted:  var(--fbtf-palette-tan-dark);
-    --fbtf-on-surface-accent-hover:  var(--fbtf-palette-tan-dark);
-    --fbtf-on-surface-border-default:  var(--fbtf-palette-tan-dark);
-    --fbtf-on-surface-border-hover:  var(--fbtf-palette-tan-dark);
-    --fbtf-on-surface-border-active:  var(--fbtf-palette-tan-dark);
+    // background
+    --fbtf-surface-color-default: var(--fbtf-palette-black-regular);
+    --fbtf-surface-color-hover: var(--fbtf-palette-black-light);
+    --fbtf-surface-color-muted: var(--fbtf-palette-black-light);
+    // color
+    --fbtf-on-surface-color-default:  var(--fbtf-palette-white-lightest);
+    --fbtf-on-surface-color-hover: var(--fbtf-palette-white-lightest);
+    --fbtf-on-surface-color-muted:  var(--fbtf-palette-white-lightest);
+    // accent
+    --fbtf-on-surface-accent-default:  var(--fbtf-palette-gray-regular);
+    --fbtf-on-surface-accent-muted:  var(--fbtf-palette-gray-regular);
+    --fbtf-on-surface-accent-hover:  var(--fbtf-palette-gray-regular);
+    // border
+    --fbtf-surface-color-default: var(--fbtf-palette-black-regular);
+    --fbtf-surface-color-hover: var(--fbtf-palette-black-light);
+    --fbtf-surface-color-muted: var(--fbtf-palette-black-light);
     @include apply;
 }
 

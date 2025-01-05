@@ -38,7 +38,7 @@ public class Route implements RequestHandler<APIGatewayProxyRequestEvent, APIGat
             // is this a wildcard field
             final Route r;
             if (part.startsWith("{") && part.endsWith("}")) {
-                r = this.wildcardRoutes.computeIfAbsent(part, unused -> new Route());
+                r = this.wildcardRoutes.computeIfAbsent(part.substring(1, part.length() - 1), unused -> new Route());
             } else {
                 r = this.subroutes.computeIfAbsent(part, unused -> new Route());
             }
@@ -93,7 +93,7 @@ public class Route implements RequestHandler<APIGatewayProxyRequestEvent, APIGat
             final Map<String, String> pathParameters = new HashMap<>(event.getPathParameters());
             for (var x : this.wildcardRoutes.entrySet()) {
                 final Map<String, String> pp = new HashMap<>(pathParameters);
-                pp.put(x.getKey().substring(1, x.getKey().length() - 2), part);
+                pp.put(x.getKey(), part);
                 event.setPathParameters(pp);
                 final APIGatewayProxyResponseEvent response = x.getValue().handleRequest(event, context);
                 if (response != null) {

@@ -1,0 +1,111 @@
+@use "../mixin/surfaces";
+@use "../mixin/typography";
+
+@mixin component {
+  &-attribute-display {
+      @include typography.monospace;
+
+      figure {
+          @include surfaces.article;
+
+        border: 0.125rem solid var(--fbtf-surface-color-default);
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: stretch;
+
+        > span {
+            @include surfaces.background;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 1.25rem;
+            width: 3rem;
+            text-align: center;
+        }
+
+
+
+    figcaption {
+
+        flex: 1 100%;
+        padding:0.25rem 0.5rem;
+
+        p {
+            display: block;
+            font-size: 1rem;
+        }
+
+        .exp {
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+
+        svg {
+            opacity: 0.333;
+            height: 0.8rem;
+            display: inline-block;
+        }
+        }
+    }
+
+
+        &[data-experience="1"] svg:nth-of-type(1),
+        &[data-experience="2"] svg:nth-of-type(1),
+        &[data-experience="2"] svg:nth-of-type(2),
+       &[data-experience="3"] svg:nth-of-type(1),
+       &[data-experience="3"] svg:nth-of-type(2),
+       &[data-experience="3"] svg:nth-of-type(3),
+       &[data-experience="4"] svg:nth-of-type(1),
+       &[data-experience="4"] svg:nth-of-type(2),
+       &[data-experience="4"] svg:nth-of-type(3),
+       &[data-experience="4"] svg:nth-of-type(4),
+       &[data-experience="5"] svg:nth-of-type(1),
+       &[data-experience="5"] svg:nth-of-type(2),
+       &[data-experience="5"] svg:nth-of-type(3),
+       &[data-experience="5"] svg:nth-of-type(4),
+       &[data-experience="5"] svg:nth-of-type(5),
+       &[data-experience="6"] svg,{
+           opacity: 1;
+       }
+      }
+
+    ul {
+        margin-bottom: 1rem;
+    }
+
+    li {
+        padding: 0.25rem 3rem 0.25rem 0.5rem;
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+
+        span {
+            flex: 1 100%;
+        }
+
+        svg {
+
+            opacity: 0.125;
+            height: 1.5rem;
+        }
+
+        &[data-dots="1"] svg:nth-of-type(1) {
+                                                   fill: white;
+                                                   opacity: 1;
+                                               }
+         &[data-dots="2"] { svg:nth-of-type(1), svg:nth-of-type(2) {
+                                                                         fill: white;
+                                                                         opacity: 1;
+                                                                     }
+                                                                 }
+         &[data-dots="3"] svg {
+
+            opacity: 1;
+        }
+
+    }
+
+  }
+}
