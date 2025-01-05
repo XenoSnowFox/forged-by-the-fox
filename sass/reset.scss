@@ -125,6 +125,12 @@ time, mark, audio, video {
     background-clip:         padding-box;
 }
 
+html {
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
 html, body {
 	font-family: sans-serif;
 	font-weight: normal;
@@ -132,10 +138,6 @@ html, body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: greyscale;
 	letter-spacing: 0.02rem;
-
-    font-size: 100%;
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
 
 	-webkit-appearance:none;
 
