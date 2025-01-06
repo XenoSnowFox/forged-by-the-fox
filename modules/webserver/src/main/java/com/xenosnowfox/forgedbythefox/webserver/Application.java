@@ -62,8 +62,6 @@ public class Application {
         handler.status(response.getStatusCode());
         handler.result(Optional.ofNullable(response.getBody()).orElse(""));
         response.getHeaders().forEach(handler::header);
-
-        System.out.println(response.getHeaders());
     }
 
     private static APIGatewayProxyRequestEvent parseEvent(Context handler) {
@@ -97,7 +95,7 @@ public class Application {
 
         final APIGatewayProxyRequestEvent.ProxyRequestContext context =
                 new APIGatewayProxyRequestEvent.ProxyRequestContext();
-        context.setAccountId("");
+        context.setAccountId("000000000");
         context.setRequestId(UUID.randomUUID().toString());
         context.setPath(handler.path());
         context.setHttpMethod(handler.method().name());
