@@ -35,15 +35,16 @@ public class Application {
                         return;
                     }
 
-                    // stream, streamReader en buffer om file uit te lezen
-                    FileInputStream fileInputStream = new FileInputStream(p.toFile());
-                    InputStreamReader inputStreamReader =
-                            new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
-                    BufferedReader reader = new BufferedReader(inputStreamReader);
-
                     ctx.contentType(ContentType.CSS);
                     ctx.header("Cache-Control", "no-store");
-                    ctx.result(reader.lines().collect(Collectors.joining()) + "\n");
+
+                    try (FileInputStream fileInputStream = new FileInputStream(p.toFile());
+                            InputStreamReader inputStreamReader =
+                                    new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
+                            BufferedReader reader = new BufferedReader(inputStreamReader); ) {
+
+                        ctx.result(reader.lines().collect(Collectors.joining()) + "\n");
+                    }
                 })
                 .get("*", Application::handle)
                 .put("*", Application::handle)

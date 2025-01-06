@@ -208,13 +208,14 @@ public record AuthenticationRoute(
         // success
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         response.setIsBase64Encoded(false);
-        response.setStatusCode(307);
+        response.setStatusCode(200);
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Set-Cookie", cookieValue);
-        headers.put("Location", redirectUrl);
+        headers.put("Content-Type", "text/html");
         headers.put("Cache-control", "private, no-cache, no-store, max-age=0, must-revalidate");
         response.setHeaders(headers);
-        response.setBody("");
+        response.setBody("<!DOCTYPE html><html><body><script type='text/javascript'>window.location = '" + redirectUrl
+                + "';</script></body></html>");
         return Optional.of(response);
     }
 

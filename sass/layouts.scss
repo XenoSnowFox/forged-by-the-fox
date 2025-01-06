@@ -1,0 +1,7 @@
+// LAYOUTS
+@use 'layout/labeled-container';
+
+.fbtf-layout {
+    @include labeled-container.component;
+
+}

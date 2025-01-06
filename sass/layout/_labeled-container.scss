@@ -1,0 +1,22 @@
+@use "../mixin/surfaces";
+@use "../mixin/typography";
+
+@mixin component {
+  &-labeled-container {
+
+    > .label {
+        span {
+            @include surfaces.article;
+            @include typography.monospace;
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+        }
+    }
+
+
+    > .content {
+        border: 0.0625rem solid white;
+    }
+
+  }
+}

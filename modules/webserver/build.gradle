@@ -1,3 +1,10 @@
+plugins {
+	id "application"
+}
+
+application {
+	mainClassName "com.xenosnowfox.forgedbythefox.webserver.Application"
+}
 
 dependencies {
 	implementation project(":lambda:homepage")

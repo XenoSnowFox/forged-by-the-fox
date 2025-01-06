@@ -126,9 +126,13 @@ time, mark, audio, video {
 }
 
 html {
-    font-size: 100%;
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
+    font-size: 81.25%;
+    -webkit-text-size-adjust: 81.25%;
+    -ms-text-size-adjust: 81.25%;
+}
+
+body {
+    font-size: 1rem;
 }
 
 html, body {
@@ -202,6 +206,10 @@ del {
 abbr[title], dfn[title] {
     border-bottom:1px dotted;
     cursor:help;
+}
+
+strong {
+    font-weight: bolder;
 }
 
 /* CLEARFIX GROUP */

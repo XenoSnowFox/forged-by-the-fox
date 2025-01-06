@@ -4,6 +4,11 @@
 <!-- Root Element -->
 <th:block th:fragment="root">
     <header class="fbtf-component-global-header">
+
+        <th:block th:if="${ctx.account}">
+            <img th:src="${ctx.account.profilePictureUrl}" />
+        </th:block>
+
         <a th:href="${ctx.url.resolve('/')}"><span>Forged by the Fox</span></a>
 
         <!-- TODO MENU -->
@@ -11,7 +16,6 @@
         <div class="spacer"></div>
 
         <th:block th:if="${ctx.account}">
-            <img th:src="${ctx.account.profilePictureUrl}" />
             <a href="#"><span>Sign Out</span> <th:block th:replace="~{svg/icon :: door-open}" /></a>
         </th:block>
 

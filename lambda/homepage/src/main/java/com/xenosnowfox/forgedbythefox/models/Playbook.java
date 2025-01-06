@@ -20,7 +20,7 @@ public enum Playbook {
     SPEAKER("Speaker", Map.of(Action.COMMAND, 1, Action.CONSORT, 2)),
     STITCH("Stitch", Map.of(Action.DOCTOR, 2, Action.STUDY, 1));
 
-    private final String title;
+    private final String label;
 
     private final Map<Action, Integer> startingActions;
 
@@ -28,7 +28,7 @@ public enum Playbook {
 
     private Set<Ability> specialAbilities;
 
-    public Ability getStartingAbility() {
+    public Ability startingAbility() {
         if (this.startingAbility == null) {
             this.startingAbility = Arrays.stream(Ability.values())
                     .filter(Ability::isStartingAbility)
@@ -39,7 +39,7 @@ public enum Playbook {
         return this.startingAbility;
     }
 
-    public Set<Ability> getSpecialAbilities() {
+    public Set<Ability> specialAbilities() {
         if (this.specialAbilities == null) {
             this.specialAbilities = Arrays.stream(Ability.values())
                     .filter(ability -> !ability.isStartingAbility())

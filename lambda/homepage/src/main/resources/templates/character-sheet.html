@@ -1,17 +1,102 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Forged by the Fox</title>
     <th:block th:replace="~{fragment/core :: meta}" />
     <th:block th:replace="~{fragment/core :: stylesheets}" />
+
+    <style>
+        .character-sheet {
+            display: grid;
+            grid-template-columns: 3fr 3fr 1fr;
+            margin: 0 auto;
+            max-width: 86rem;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        @media (max-width: 56rem) {
+            .character-sheet {
+                grid-template-columns: 3fr 2fr;
+            }
+
+            .character-sheet div:first-child {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 36rem) {
+            .character-sheet {
+                grid-template-columns: 1fr;
+            }
+
+            .character-sheet div:first-child {
+                grid-column: span 1;
+            }
+
+            .character-sheet > .attributes {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+        }
+
+    </style>
 </head>
 <body>
 <th:block th:replace="~{component/global-header :: root}" />
-<div>
+<div class="character-sheet">
+    <!-- Character details -->
+    <div>
+        <th:block th:replace="~{layout/labeled-container :: root(label=${ctx.character.playbook.label} + ' Playbook', content=~{:: #character-details})}">
+            <ul id="character-details" style="padding: 0.0625rem;display:grid;grid-template-columns:1fr 1fr;">
+                <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+                    <strong style="text-decoration:underline;font-weight:bolder">Name</strong>
+                    <p th:text="${ctx.character.name}"></p>
+                </li>
+
+                <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+                    <strong style="text-decoration:underline;font-weight:bolder">Alias</strong>
+                    <p th:text="${ctx.character.alias}"></p>
+                </li>
+            </ul>
+        </th:block>
+    </div>
+
+    <!-- Abilities -->
+    <div>
+        <th:block th:replace="~{layout/labeled-container :: root(label='Special Abilities', content=~{:: #character-abilities})}">
+            <ul id="character-abilities" style="padding: 0.0625rem;">
+
+                <th:block th:each="ability: ${ctx.character.abilities}">
+                    <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+                        <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                        <p th:text="${ability.markdown}"></p>
+                    </li>
+                </th:block>
+            </ul>
+        </th:block>
+    </div>
+
     <!-- Actions & Attributes -->
-    <div style="width: 14rem;">
+    <div class="attributes">
         <th:block th:each="attribute : ${ctx.attributes}">
             <th:block th:replace="~{component/attribute-display :: root(${ctx.character}, ${attribute})}" />
+        </th:block>
+        <th:block th:replace="~{layout/labeled-container :: root(label='Bonus Dice', content=~{:: #character-bonus-dice})}">
+            <ul id="character-bonus-dice" style="padding: 0.0625rem;">
+                <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+                    <p><strong style="text-decoration:underline;font-weight:bolder">Push yourself</strong> (take 2 stress) <strong style="white-space:nowrap;">-or-</strong> accept a <strong style="text-decoration:underline;font-weight:bolder">Devil's Bargain</strong></p>
+                </li>
+
+                <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+                    <p><strong style="text-decoration:underline;font-weight:bolder">Assist</strong> (they take 1 stress)</p>
+                </li>
+
+                <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+                    <p><strong style="text-decoration:underline;font-weight:bolder">Spend a Gambit</strong></p>
+                </li>
+            </ul>
         </th:block>
     </div>
 </div>

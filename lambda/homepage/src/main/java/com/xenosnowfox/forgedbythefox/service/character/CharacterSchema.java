@@ -1,5 +1,6 @@
 package com.xenosnowfox.forgedbythefox.service.character;
 
+import com.xenosnowfox.forgedbythefox.models.Ability;
 import com.xenosnowfox.forgedbythefox.models.Action;
 import com.xenosnowfox.forgedbythefox.models.Playbook;
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
@@ -7,8 +8,10 @@ import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterExperience;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
@@ -64,6 +67,17 @@ public class CharacterSchema {
             .addAttribute(String.class, builder -> builder.name("playbook")
                     .getter(record -> record.playbook().toString())
                     .setter((b, i) -> b.playbook(Playbook.valueOf(i))))
+            // Abilities
+            .addAttribute(EnhancedType.setOf(String.class), builder -> builder.name("abilities")
+                    .getter(character -> Optional.of(character.abilities().stream()
+                                    .map(Enum::name)
+                                    .collect(Collectors.toSet()))
+                            .filter(x -> !x.isEmpty())
+                            .orElse(null))
+                    .setter((b, data) -> b.abilities(
+                            data == null
+                                    ? new HashSet<>()
+                                    : data.stream().map(Ability::valueOf).collect(Collectors.toSet()))))
             // Experience
             .addAttribute(
                     EnhancedType.documentOf(CharacterExperience.class, CharacterExperienceSchema.getTableSchema()),

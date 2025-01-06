@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Forged by the Fox</title>
     <th:block th:replace="~{fragment/core :: meta}" />
@@ -8,46 +8,50 @@
 <body>
     <th:block th:replace="~{component/global-header :: root}" />
 
-       <p th:utext="'Hi ' + ${ctx.account.name} + ','" style="padding: 1rem;"></p>
+    <div style="padding: 1rem;">
+        <th:block th:replace="~{layout/labeled-container :: root(label='Characters', content=~{:: #character-content})}">
+            <ul id="character-content" style="padding: 0.0625rem;">
+                <th:block th:if="${ctx.characters}">
+                    <th:block th:each="character: ${ctx.characters}">
+                        <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+                            <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}"
+                               th:text="${character.name} ?: 'Unnamed Character'"
+                                style="text-decoration:underline;font-weight:bolder;display:inline-block;"></a>
+                            <br />
+                            <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}" th:text="${character.playbook.label} + ' Playbook'"></a>
+                        </li>
+                    </th:block>
 
-    <h2 style="padding: 1rem;">Your Characters:</h2>
-    <ul style="padding: 1rem;">
-        <th:block th:if="${ctx.characters}">
-            <th:block th:each="character: ${ctx.characters}">
-                <li>
-                    <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}"
-                    th:text="${character.name + ' (' + character.playbook.title + ')'}"></a>
-                </li>
-            </th:block>
 
-
+                </th:block>
+            </ul>
         </th:block>
-    </ul>
+    </div>
 
 
-<hr />
+    <div style="padding: 1rem;">
+        <th:block th:replace="~{layout/labeled-container :: root(label='New Character', content=~{:: #create-content})}">
+            <form id="create-content" method="post" th:action="${ctx.url.resolve('./')}">
+                <label>Playbook</label>
+                <select name="playbook">
+                    <option value=""></option>
+                    <option value="MECHANIC">Mechanic</option>
+                    <option value="MUSCLE">Muscle</option>
+                    <option value="MYSTIC">Mystic</option>
+                    <option value="PILOT">Pilot</option>
+                    <option value="SCOUNDREL">Scoundrel</option>
+                    <option value="SPEAKER">Speaker</option>
+                    <option value="STITCH">Stitch</option>
+                </select>
 
-<div style="padding: 1rem;">
-    <h2>Create A New Character</h2>
-    <form method="post" th:action="${ctx.url.resolve('./')}">
-        <label>Playbook</label>
-        <select name="playbook">
-            <option value=""></option>
-            <option value="MECHANIC">Mechanic</option>
-            <option value="MUSCLE">Muscle</option>
-            <option value="MYSTIC">Mystic</option>
-            <option value="PILOT">Pilot</option>
-            <option value="SCOUNDREL">Scoundrel</option>
-            <option value="SPEAKER">Speaker</option>
-            <option value="STITCH">Stitch</option>
-        </select>
+                <br />
 
-        <br />
+                <button type="submit">Create Character</button>
 
-        <button type="submit">Create Character</button>
+            </form>
+        </th:block>
 
-    </form>
-</div>
+    </div>
 
 </body>
 </html>

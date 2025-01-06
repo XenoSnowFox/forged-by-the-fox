@@ -1,5 +1,6 @@
 package com.xenosnowfox.forgedbythefox.models.character;
 
+import com.xenosnowfox.forgedbythefox.models.Ability;
 import com.xenosnowfox.forgedbythefox.models.Action;
 import com.xenosnowfox.forgedbythefox.models.Attribute;
 import com.xenosnowfox.forgedbythefox.models.Playbook;
@@ -7,7 +8,10 @@ import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import lombok.Builder;
 import lombok.NonNull;
 
@@ -24,12 +28,17 @@ public record Character(
         String vice,
         @NonNull Playbook playbook,
         @NonNull CharacterExperience experience,
-        Map<Action, Integer> actionDots) {
+        Map<Action, Integer> actionDots,
+        Set<Ability> abilities) {
 
     public static Duration TIME_TO_LIVE = Duration.ofDays(31);
 
     public Character {
         actionDots = new HashMap<>(actionDots == null ? playbook.startingActions() : actionDots);
+        abilities = Optional.ofNullable(abilities)
+                .or(() -> Optional.ofNullable(playbook.startingAbility()).map(Set::of))
+                .map(HashSet::new)
+                .orElse(new HashSet<>());
     }
 
     public int dotsForAttribute(final Attribute withAttribute) {
