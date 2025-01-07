@@ -15,5 +15,10 @@
         <link rel="stylesheet" th:href="${ctx.url.resolve('/styles/layouts.css')}">
     </th:block>
 
+    <!-- Progressive Web App -->
+    <th:block th:fragment="pwa">
+        <link rel="manifest" th:href="${ctx.url.resolve('/manifest.json')}">
+    </th:block>
+
 </body>
 </html>

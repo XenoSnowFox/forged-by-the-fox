@@ -16,7 +16,7 @@ plugins {
 
 group = 'com.xenosnowfox.forgedbythefox'
 version = '0.0.0'
-defaultTasks "spotlessApply", "clean", "compileSass", "copyFonts", "shadowJar"
+defaultTasks "spotlessApply", "clean", "compileSass", "copyAssets", "copyFonts", "shadowJar"
 
 repositories {
 	mavenCentral()
@@ -118,6 +118,12 @@ compileSass {
 	sourceMap = none
 	sourceMapUrls = relative
 }
+
+task copyAssets(type: Copy) {
+	from 'assets'
+	into 'build/modules/static-resources'
+}
+compileJava.dependsOn copyAssets
 
 task copyFonts(type: Copy) {
 	from 'font'
