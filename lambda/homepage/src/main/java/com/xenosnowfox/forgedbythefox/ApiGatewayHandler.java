@@ -47,6 +47,10 @@ public class ApiGatewayHandler extends Route {
                                 .characterManagementService(characterManagementService)
                                 .sessionManagementService(sessionManagementService)
                                 .build())
+                //                .register(
+                //                        HttpMethod.GET,
+                //                        "/manifest.json",
+                //                        PwaManifestRoute.builder().build())
                 .register(
                         HttpMethod.ANY,
                         "/auth",

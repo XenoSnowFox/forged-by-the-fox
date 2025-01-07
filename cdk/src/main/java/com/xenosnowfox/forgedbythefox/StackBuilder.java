@@ -18,6 +18,7 @@ import software.amazon.awscdk.services.apigateway.IntegrationResponse;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
 import software.amazon.awscdk.services.apigateway.MethodOptions;
 import software.amazon.awscdk.services.apigateway.MethodResponse;
+import software.amazon.awscdk.services.apigateway.PassthroughBehavior;
 import software.amazon.awscdk.services.apigateway.StageOptions;
 import software.amazon.awscdk.services.dynamodb.Attribute;
 import software.amazon.awscdk.services.dynamodb.AttributeType;
@@ -150,6 +151,8 @@ public class StackBuilder extends Stack {
                 .proxy(true)
                 .deploy(true)
                 .deployOptions(stageOptions)
+                .binaryMediaTypes(List.of(
+                        "application/octet-stream", "image/png", "image/avif", "image/webp", "image/apng", "image/*"))
                 .build();
 
         // Set up S3 bucket for storing static resources
@@ -197,6 +200,41 @@ public class StackBuilder extends Stack {
                                 .build(),
                         MethodOptions.builder()
                                 .requestParameters(Map.of("method.request.path.object", true))
+                                .methodResponses(List.of(MethodResponse.builder()
+                                        .statusCode("200")
+                                        .responseParameters(Map.of("method.response.header.Content-Type", true))
+                                        .build()))
+                                .build());
+
+        apiGateway
+                .getRoot()
+                .addResource("images")
+                .addResource("{object}")
+                .addMethod(
+                        "GET",
+                        AwsIntegration.Builder.create()
+                                .service("s3")
+                                .integrationHttpMethod("GET")
+                                .path("forged-by-the-fox-static-resources/images/{object}")
+                                .options(IntegrationOptions.builder()
+                                        .requestParameters(Map.of(
+                                                "integration.request.path.object",
+                                                "method.request.path.object",
+                                                "integration.request.header.Accept",
+                                                "method.request.header.Accept"))
+                                        .integrationResponses(List.of(IntegrationResponse.builder()
+                                                .statusCode("200")
+                                                .responseParameters(Map.of(
+                                                        "method.response.header.Content-Type",
+                                                        "integration.response.header.Content-Type"))
+                                                .build()))
+                                        .credentialsRole(role)
+                                        .passthroughBehavior(PassthroughBehavior.WHEN_NO_TEMPLATES)
+                                        .build())
+                                .build(),
+                        MethodOptions.builder()
+                                .requestParameters(Map.of(
+                                        "method.request.path.object", true, "method.request.header.Accept", true))
                                 .methodResponses(List.of(MethodResponse.builder()
                                         .statusCode("200")
                                         .responseParameters(Map.of("method.response.header.Content-Type", true))
