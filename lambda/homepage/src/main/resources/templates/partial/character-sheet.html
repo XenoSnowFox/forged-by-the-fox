@@ -2,9 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <!-- Root View Element -->
-<th:block th:fragment="view">
-    <div id="character-details">
-        <ul style="padding: 0.0625rem;display:grid;grid-template-columns:1fr 1fr;">
+<th:block th:fragment="view-details">
+    <div id="character-details" style="display:grid;grid-template-columns:1fr;">
+        <ul style="margin: 0.5rem;display:grid;grid-template-columns:1fr 1fr;">
             <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
                 <strong style="text-decoration:underline;font-weight:bolder">Name</strong>
                 <p th:text="${ctx.character.name}"></p>
@@ -16,25 +16,23 @@
             </li>
         </ul>
 
-        <div class="character-panel"
-             style="text-align:center;padding:1rem;cursor:pointer;background:var(--fbtf-surface-color-muted)"
+        <button type="button" style="margin: 0.5rem;"
              th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/details?edit'"
              hx-replace="outerHTML"
              hx-target="#character-details"
             >
             <span>Edit Details</span>
-        </div>
+        </button>
     </div>
 </th:block>
 
 
 <!-- Root Edit Element -->
-<th:block th:fragment="edit">
+<th:block th:fragment="edit-details">
     <form
-        style="padding: 0.0625rem;display:grid;grid-template-columns:1fr;"
+        style="display:grid;grid-template-columns:1fr;"
         th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/details'"
         hx-replace="outerHTML"
-        hx-indicator="closest .fbtf-component-loading-indicator"
         >
         <fieldset style="margin: 0.5rem;">
             <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;">Name</legend>
@@ -50,11 +48,71 @@
                 hx-indicator="closest .fbtf-component-loading-indicator">Cancel</button>
 
         <button type="submit" style="margin: 0.5rem;">Save Changes</button>
-
-        <th:block th:replace="~{component/loading-indicator :: root }" />
     </form>
 </th:block>
 
+<!-- Root View Element -->
+<th:block th:fragment="view-abilities">
+    <div id="character-abilities" style="display:grid;grid-template-columns:1fr;">
+
+    <ul style="margin: 0.5rem;display:grid;grid-template-columns:1fr;">
+
+        <th:block th:each="ability: ${ctx.character.abilities}">
+            <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+                <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                <p th:text="${ability.markdown}"></p>
+            </li>
+        </th:block>
+    </ul>
+
+        <button type="button" style="margin: 0.5rem;"
+                th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/abilities?edit'"
+                hx-replace="outerHTML"
+                hx-target="#character-abilities"
+        >
+            <span>Select Abilities</span>
+        </button>
+    </div>
+</th:block>
+
+
+<!-- Root Edit Element -->
+<th:block th:fragment="edit-abilities">
+    <form
+            style="display:grid;grid-template-columns:1fr;"
+            th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/abilities'"
+            hx-replace="outerHTML"
+    >
+        <div style="padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);margin:0 0 0.25rem;width:auto;">Starting Ability</div>
+        <ul style="margin: 0.5rem;display:grid;grid-template-columns:1fr;">
+            <th:block th:with="ability = ${ctx.character.playbook.startingAbility}">
+                <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+                    <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                    <p th:text="${ability.markdown}"></p>
+                </li>
+            </th:block>
+        </ul>
+
+
+        <div style="padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);margin:0.25rem 0;width:auto;">Special Abilities</div>
+        <ul style="margin: 0.5rem;display:grid;grid-template-columns:1fr;">
+            <th:block th:each="ability : ${ctx.character.playbook.specialAbilities}">
+                <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+                    <label>
+                        <input type="checkbox" th:name="'ability.' + ${ability.name}" th:checked="${ctx.character.abilities.contains(ability)}" style="display:inline;width:auto;" />
+                        <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                        <p th:text="${ability.markdown}"></p>
+                    </label>
+                </li>
+            </th:block>
+        </ul>
+
+        <button type="button" style="margin: 0.5rem;" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/abilities'" hx-replace="outerHTML" hx-target="closest form"
+                hx-indicator="closest .fbtf-component-loading-indicator">Cancel</button>
+
+        <button type="submit" style="margin: 0.5rem;">Save Selection</button>
+    </form>
+</th:block>
 
 
 

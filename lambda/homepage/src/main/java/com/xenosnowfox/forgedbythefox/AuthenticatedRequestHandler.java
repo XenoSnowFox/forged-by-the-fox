@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 public interface AuthenticatedRequestHandler
         extends RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
@@ -62,13 +63,10 @@ public interface AuthenticatedRequestHandler
     }
 
     private Session getSession(final APIGatewayProxyRequestEvent event) {
-        final SessionIdentifier sessionIdentifier = this.getSessionIdentifierFromEvent(event);
-        if (sessionIdentifier == null) {
-            return null;
-        }
-
-        System.out.println("Fetching session: " + sessionIdentifier);
-        return this.sessionManagementService().retrieve(sessionIdentifier);
+        return Optional.of(event)
+                .map(this::getSessionIdentifierFromEvent)
+                .map(sessionManagementService()::retrieve)
+                .orElse(null);
     }
 
     private static APIGatewayProxyResponseEvent handleUnauthenticatedRequest(

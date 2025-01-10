@@ -20,16 +20,19 @@ import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.model.Page;
 import software.amazon.awssdk.enhanced.dynamodb.model.PutItemEnhancedRequest;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.ConditionalCheckFailedException;
 
 public class CharacterManagementService {
 
+    private final DynamoDbClient client;
     private final DynamoDbEnhancedClient enhancedClient;
     private final DynamoDbTable<Character> table;
     private final DynamoDbIndex<Character> documentsByAccount;
 
     public CharacterManagementService() {
+        this.client = DynamoDbClient.create();
         this.enhancedClient = DynamoDbEnhancedClient.create();
         this.table = enhancedClient.table("forged-by-the-fox", CharacterSchema.getTableSchema());
         this.documentsByAccount = this.table.index("documents-by-account");
@@ -134,5 +137,13 @@ public class CharacterManagementService {
 
     public CharacterQueryExecutor query() {
         return new CharacterQueryExecutor(this.documentsByAccount);
+    }
+
+    public CharacterMutationExecutor mutate() {
+        return new CharacterMutationExecutor(this.client, this.table);
+    }
+
+    public CharacterMutationExecutor mutate(final Character withCharacter) {
+        return new CharacterMutationExecutor(this.client, this.table).withIdentifier(withCharacter.identifier());
     }
 }

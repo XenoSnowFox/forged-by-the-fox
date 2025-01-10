@@ -10,6 +10,7 @@ import com.xenosnowfox.forgedbythefox.routes.AuthenticationRoute;
 import com.xenosnowfox.forgedbythefox.routes.CampaignCharactersRoute;
 import com.xenosnowfox.forgedbythefox.routes.CharacterSheetRoute;
 import com.xenosnowfox.forgedbythefox.routes.HomepageRoute;
+import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterAbilitiesDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterDetailsDisplayFragment;
 import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
 import com.xenosnowfox.forgedbythefox.service.campaign.CampaignService;
@@ -85,9 +86,17 @@ public class ApiGatewayHandler extends Route {
                                 .templateService(templateService)
                                 .build())
                 .register(
-                        HttpMethod.GET,
+                        HttpMethod.ANY,
                         "/fragments/characters/{character}/details",
                         CharacterDetailsDisplayFragment.builder()
+                                .accountManagementService(accountManagementService)
+                                .sessionManagementService(sessionManagementService)
+                                .templateService(templateService)
+                                .build())
+                .register(
+                        HttpMethod.ANY,
+                        "/fragments/characters/{character}/abilities",
+                        CharacterAbilitiesDisplayFragment.builder()
                                 .accountManagementService(accountManagementService)
                                 .sessionManagementService(sessionManagementService)
                                 .templateService(templateService)

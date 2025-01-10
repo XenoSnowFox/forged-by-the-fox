@@ -76,15 +76,7 @@
     <!-- Abilities -->
     <div>
         <th:block th:replace="~{layout/labeled-container :: root(label='Special Abilities', content=~{:: #character-abilities})}">
-            <ul id="character-abilities" style="padding: 0.0625rem;">
-
-                <th:block th:each="ability: ${ctx.character.abilities}">
-                    <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
-                        <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
-                        <p th:text="${ability.markdown}"></p>
-                    </li>
-                </th:block>
-            </ul>
+            <div id="character-abilities" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/abilities'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
         </th:block>
     </div>
 
