@@ -1,6 +1,8 @@
 package com.xenosnowfox.forgedbythefox.models;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,7 +46,8 @@ public enum Playbook {
             this.specialAbilities = Arrays.stream(Ability.values())
                     .filter(ability -> !ability.isStartingAbility())
                     .filter(x -> x.getPlaybook().equals(this))
-                    .collect(Collectors.toSet());
+                    .sorted(Comparator.comparing(Enum::name)) // sort while streaming
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
         }
         return this.specialAbilities;
     }

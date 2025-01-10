@@ -1,7 +1,8 @@
 package com.xenosnowfox.forgedbythefox.models;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +18,15 @@ public enum Attribute {
 
     private final String label;
 
-    private final Set<Action> actions = new HashSet<>();
+    private final Set<Action> actions = new LinkedHashSet<>();
 
     public Set<Action> actions() {
         if (this.actions.isEmpty()) {
             Arrays.stream(Action.values())
                     .filter(action -> action.attribute().equals(this))
+                    .sorted(Comparator.comparing(Enum::name))
                     .forEach(this.actions::add);
         }
-        return Set.copyOf(this.actions);
+        return new LinkedHashSet<>(this.actions);
     }
 }

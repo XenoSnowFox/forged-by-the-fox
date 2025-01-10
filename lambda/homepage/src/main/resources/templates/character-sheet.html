@@ -18,16 +18,16 @@
         .character-sheet {
             flex: 1 100%;
             display: grid;
-            grid-template-columns: 3fr 3fr 1fr;
+            grid-template-columns: 5fr 5fr 2fr;
             margin: 0 auto;
-            max-width: 86rem;
-            gap: 1rem;
+            max-width: 110rem;
+            gap: 2rem;
             padding: 1rem;
 
             background: var(--fbtf-palette-black-regular);
         }
 
-        @media (max-width: 56rem) {
+        @media (max-width: 60rem) {
             .character-sheet {
                 grid-template-columns: 3fr 2fr;
             }
@@ -37,7 +37,7 @@
             }
         }
 
-        @media (max-width: 36rem) {
+        @media (max-width: 38rem) {
             .character-sheet {
                 grid-template-columns: 1fr;
             }

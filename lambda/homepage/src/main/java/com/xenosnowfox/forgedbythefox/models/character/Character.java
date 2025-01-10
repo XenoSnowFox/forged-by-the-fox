@@ -8,11 +8,14 @@ import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.NonNull;
 
@@ -40,7 +43,10 @@ public record Character(
         abilities = Optional.ofNullable(abilities)
                 .or(() -> Optional.ofNullable(playbook.startingAbility()).map(Set::of))
                 .map(HashSet::new)
-                .orElse(new HashSet<>());
+                .orElse(new HashSet<>())
+                .stream()
+                .sorted(Comparator.comparing(Enum::name)) // sort while streaming
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public int dotsForAttribute(final Attribute withAttribute) {

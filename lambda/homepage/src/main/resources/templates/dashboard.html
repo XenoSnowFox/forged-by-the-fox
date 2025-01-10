@@ -5,16 +5,52 @@
     <th:block th:replace="~{fragment/core :: meta}" />
     <th:block th:replace="~{fragment/core :: stylesheets}" />
     <th:block th:replace="~{fragment/core :: pwa}" />
+
+    <style>
+        main {
+            padding: 1rem;
+            display:grid;
+            grid-template-columns:5fr 3fr;
+            gap:2rem;
+            max-width: 110rem;
+            margin: auto;
+        }
+
+        #character-content {
+            margin: 0.5rem 0;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:0.25rem;
+        }
+
+        #character-content > li {
+            cursor:pointer;
+            font-size: 0.8rem;
+            display: block;
+            background:var(--fbtf-surface-color-muted);
+            padding: 0.5rem 1rem;
+        }
+
+        @media (max-width: 60rem) {
+            main {
+                grid-template-columns:1fr;
+            }
+
+            #character-content
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <th:block th:replace="~{component/global-header :: root}" />
 
-    <div style="padding: 1rem;">
+    <main style="">
         <th:block th:replace="~{layout/labeled-container :: root(label='Characters', content=~{:: #character-content})}">
-            <ul id="character-content" style="padding: 0.0625rem;">
+            <ul id="character-content" style="">
                 <th:block th:if="${ctx.characters}">
                     <th:block th:each="character: ${ctx.characters}">
-                        <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;font-size:0.8rem;">
+                        <li>
                             <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}"
                                th:text="${character.name} ?: 'Unnamed Character'"
                                 style="text-decoration:underline;font-weight:bolder;display:inline-block;font-size:1rem;"></a>
@@ -29,13 +65,11 @@
                 </th:block>
             </ul>
         </th:block>
-    </div>
 
 
-    <div style="padding: 1rem;">
         <th:block th:replace="~{layout/labeled-container :: root(label='New Character', content=~{:: #create-content})}">
             <form id="create-content" method="post" th:action="${ctx.url.resolve('./')}" style="padding: 0.0625rem;display:grid;grid-template-columns:1fr;">
-                <fieldset style="margin: 0.5rem;">
+                <fieldset style="margin: 0.5rem 0;">
                     <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;">Playbook</legend>
                     <select name="playbook">
                         <option value=""></option>
@@ -49,12 +83,12 @@
                     </select>
                 </fieldset>
 
-                <button type="submit" style="margin: 0.5rem;">Create Character</button>
+                <button type="submit" style="margin: 0.5rem 0;">Create Character</button>
 
             </form>
         </th:block>
 
-    </div>
+    </main>
 
 </body>
 </html>
