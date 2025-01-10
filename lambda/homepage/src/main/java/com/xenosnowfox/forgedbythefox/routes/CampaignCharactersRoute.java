@@ -9,8 +9,8 @@ import com.xenosnowfox.forgedbythefox.ApiGatewayHandler;
 import com.xenosnowfox.forgedbythefox.AuthenticatedRequestHandler;
 import com.xenosnowfox.forgedbythefox.models.Attribute;
 import com.xenosnowfox.forgedbythefox.models.account.Account;
-import com.xenosnowfox.forgedbythefox.models.character.Character;
-import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
+import com.xenosnowfox.forgedbythefox.models.campaign.Campaign;
+import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
 import com.xenosnowfox.forgedbythefox.models.session.Session;
 import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
 import com.xenosnowfox.forgedbythefox.service.session.SessionManagementService;
@@ -23,7 +23,7 @@ import java.util.Map;
 import lombok.Builder;
 
 @Builder(builderClassName = "Builder")
-public record CharacterSheetRoute(
+public record CampaignCharactersRoute(
         AccountManagementService accountManagementService,
         SessionManagementService sessionManagementService,
         TemplateService templateService)
@@ -41,14 +41,17 @@ public record CharacterSheetRoute(
             final Account account,
             final Session session) {
 
-        final String characterPathParameter = event.getPathParameters().get("character");
-        if (characterPathParameter == null || characterPathParameter.isBlank()) {
+        final String campaignPathParameter = event.getPathParameters().get("campaign");
+        if (campaignPathParameter == null || campaignPathParameter.isBlank()) {
             return null;
         }
 
-        final CharacterIdentifier characterIdentifier = new CharacterIdentifier(characterPathParameter);
-        final Character character = this.templateService.characterService().retrieve(characterIdentifier);
-        if (character == null) {
+        final Campaign campaign = templateService
+                .campaignService()
+                .fetch()
+                .withIdentifier(new CampaignIdentifier(campaignPathParameter))
+                .orElse(null);
+        if (campaign == null) {
             return null;
         }
 
@@ -81,10 +84,10 @@ public record CharacterSheetRoute(
         final Map<String, Object> ctx = new HashMap<>();
         ctx.put("account", account);
         ctx.put("attributes", Attribute.values());
-        ctx.put("character", character);
+        ctx.put("campaign", campaign);
         ctx.put("url", urlResolver);
 
-        final String html = templateService.parse("character-sheet", ctx);
+        final String html = templateService.parse("campaign-characters", ctx);
         response.setBody(html);
         return response;
     }

@@ -14,12 +14,14 @@
             <ul id="character-content" style="padding: 0.0625rem;">
                 <th:block th:if="${ctx.characters}">
                     <th:block th:each="character: ${ctx.characters}">
-                        <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+                        <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;font-size:0.8rem;">
                             <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}"
                                th:text="${character.name} ?: 'Unnamed Character'"
-                                style="text-decoration:underline;font-weight:bolder;display:inline-block;"></a>
+                                style="text-decoration:underline;font-weight:bolder;display:inline-block;font-size:1rem;"></a>
                             <br />
-                            <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}" th:text="${character.playbook.label} + ' Playbook'"></a>
+                            <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}" th:text="${character.alias}" style="font-family:monospace;" ></a>
+                            &nbsp;
+                            <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}" th:text="${character.playbook.label}" style="font-family:monospace;" ></a>
                         </li>
                     </th:block>
 

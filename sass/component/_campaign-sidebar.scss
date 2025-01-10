@@ -1,0 +1,47 @@
+@use "../mixin/surfaces";
+@use "../mixin/typography";
+
+@mixin component {
+  &-campaign-sidebar {
+
+    min-height: 100vh;
+    width: 18%;
+    max-width: 26rem;
+    min-width: 18rem;
+
+    border-right: 0.125rem solid var(--fbtf-on-surface-border-default);
+
+    >.heading {
+      @include typography.monospace;
+
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .character-panel {
+      font-size: 0.8rem;
+      display: block;
+      margin: 0.125rem 1rem;
+      background:var(--fbtf-surface-color-muted);
+      padding: 0.5rem 1rem;
+
+      > span {
+
+        &:first-child {
+          font-size: 1rem;
+          display: block;
+        }
+
+        &:not(:first-child) {
+          @include typography.monospace;
+          color: var(--fbtf-on-surface-color-muted);
+        }
+      }
+
+      &:hover {
+        @include surfaces.article;
+      }
+    }
+
+  }
+}

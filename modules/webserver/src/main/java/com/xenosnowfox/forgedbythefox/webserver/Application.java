@@ -11,12 +11,14 @@ import io.javalin.http.ContentType;
 import io.javalin.http.Context;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,26 +28,43 @@ public class Application {
 
     private static ApiGatewayHandler API_GATEWAY_HANDLER = new ApiGatewayHandler();
 
+    private static void staticResourcewHandler(Context ctx) {
+        ctx.header("Cache-Control", "no-store");
+
+        Path p = Path.of("./build/modules/static-resources/" + ctx.path());
+        if (!p.toFile().isFile()) {
+            ctx.status(404);
+            return;
+        }
+
+        if (ctx.path().toLowerCase(Locale.ROOT).endsWith(".css")) {
+            ctx.contentType(ContentType.CSS);
+        }
+        if (ctx.path().toLowerCase(Locale.ROOT).endsWith(".js")) {
+            ctx.contentType(ContentType.JAVASCRIPT);
+        }
+        if (ctx.path().toLowerCase(Locale.ROOT).endsWith(".json")) {
+            ctx.contentType(ContentType.JSON);
+        }
+        if (ctx.path().toLowerCase(Locale.ROOT).endsWith(".png")) {
+            ctx.contentType(ContentType.IMAGE_PNG);
+        }
+
+        try (FileInputStream fileInputStream = new FileInputStream(p.toFile());
+                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
+                BufferedReader reader = new BufferedReader(inputStreamReader); ) {
+
+            ctx.result(reader.lines().collect(Collectors.joining()) + "\n");
+        } catch (IOException ex) {
+            ctx.status(404);
+        }
+    }
+
     public static void main(final String[] args) {
         Javalin.create()
-                .get("/styles/*", ctx -> {
-                    Path p = Path.of("./build/modules/static-resources/" + ctx.path());
-                    if (!p.toFile().isFile()) {
-                        ctx.status(404);
-                        return;
-                    }
-
-                    ctx.contentType(ContentType.CSS);
-                    ctx.header("Cache-Control", "no-store");
-
-                    try (FileInputStream fileInputStream = new FileInputStream(p.toFile());
-                            InputStreamReader inputStreamReader =
-                                    new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
-                            BufferedReader reader = new BufferedReader(inputStreamReader); ) {
-
-                        ctx.result(reader.lines().collect(Collectors.joining()) + "\n");
-                    }
-                })
+                .get("/styles/*", Application::staticResourcewHandler)
+                .get("/scripts/*", Application::staticResourcewHandler)
+                .get("/images/*", Application::staticResourcewHandler)
                 .get("*", Application::handle)
                 .put("*", Application::handle)
                 .post("*", Application::handle)

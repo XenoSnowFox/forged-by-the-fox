@@ -1,4 +1,4 @@
-package com.xenosnowfox.forgedbythefox.routes;
+package com.xenosnowfox.forgedbythefox.routes.fragment;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
@@ -20,10 +20,11 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import lombok.Builder;
 
 @Builder(builderClassName = "Builder")
-public record CharacterSheetRoute(
+public record CharacterDetailsDisplayFragment(
         AccountManagementService accountManagementService,
         SessionManagementService sessionManagementService,
         TemplateService templateService)
@@ -84,7 +85,7 @@ public record CharacterSheetRoute(
         ctx.put("character", character);
         ctx.put("url", urlResolver);
 
-        final String html = templateService.parse("character-sheet", ctx);
+        final String html = templateService.parse("partial/character-sheet", Set.of("details"), ctx);
         response.setBody(html);
         return response;
     }

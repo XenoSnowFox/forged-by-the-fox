@@ -5,6 +5,7 @@ import com.xenosnowfox.forgedbythefox.models.Action;
 import com.xenosnowfox.forgedbythefox.models.Attribute;
 import com.xenosnowfox.forgedbythefox.models.Playbook;
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
+import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import lombok.NonNull;
 public record Character(
         @NonNull CharacterIdentifier identifier,
         @NonNull AccountIdentifier accountIdentifier,
+        CampaignIdentifier campaignIdentifier,
         @NonNull Instant timestampCreated,
         String name,
         String alias,

@@ -7,13 +7,24 @@
     <th:block th:replace="~{fragment/core :: pwa}" />
 
     <style>
+        main {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: start;
+            align-items: stretch;
+        }
+
         .character-sheet {
+            flex: 1 100%;
             display: grid;
             grid-template-columns: 3fr 3fr 1fr;
             margin: 0 auto;
             max-width: 86rem;
             gap: 1rem;
             padding: 1rem;
+
+            background: var(--fbtf-palette-black-regular);
         }
 
         @media (max-width: 56rem) {
@@ -40,27 +51,25 @@
                 grid-template-columns: 1fr 1fr;
                 gap: 0.5rem;
             }
+
+            main > aside {
+                display: none;
+            }
         }
 
     </style>
 </head>
 <body>
 <th:block th:replace="~{component/global-header :: root}" />
+<main th:with="_campaign=${ctx.character.campaignIdentifier ? service.campaigns.fetch.withIdentifier(ctx.character.campaignIdentifier).get : _}">
+    <th:block th:if="${_campaign}">
+        <th:block th:replace="~{component/campaign-sidebar :: root(${_campaign}, ${ctx.account})}" />
+    </th:block>
 <div class="character-sheet">
     <!-- Character details -->
     <div>
         <th:block th:replace="~{layout/labeled-container :: root(label=${ctx.character.playbook.label} + ' Playbook', content=~{:: #character-details})}">
-            <ul id="character-details" style="padding: 0.0625rem;display:grid;grid-template-columns:1fr 1fr;">
-                <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
-                    <strong style="text-decoration:underline;font-weight:bolder">Name</strong>
-                    <p th:text="${ctx.character.name}"></p>
-                </li>
-
-                <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
-                    <strong style="text-decoration:underline;font-weight:bolder">Alias</strong>
-                    <p th:text="${ctx.character.alias}"></p>
-                </li>
-            </ul>
+            <div id="character-details" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/details'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
         </th:block>
     </div>
 
@@ -102,6 +111,6 @@
     </div>
 </div>
 
-
+</main>
 </body>
 </html>

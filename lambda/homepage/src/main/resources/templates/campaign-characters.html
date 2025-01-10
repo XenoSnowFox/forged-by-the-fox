@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Forged by the Fox</title>
+    <th:block th:replace="~{fragment/core :: meta}" />
+    <th:block th:replace="~{fragment/core :: stylesheets}" />
+    <th:block th:replace="~{fragment/core :: pwa}" />
+
+    <style>
+        main {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: start;
+            align-items: stretch;
+        }
+
+        .character-sheet {
+            flex: 1 100%;
+            display: grid;
+            grid-template-columns: 3fr 3fr 1fr;
+            margin: 0 auto;
+            max-width: 86rem;
+            gap: 1rem;
+            padding: 1rem;
+
+            background: var(--fbtf-palette-black-regular);
+        }
+
+        @media (max-width: 56rem) {
+            .character-sheet {
+                grid-template-columns: 3fr 2fr;
+            }
+
+            .character-sheet div:first-child {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 36rem) {
+            .character-sheet {
+                grid-template-columns: 1fr;
+            }
+
+            .character-sheet div:first-child {
+                grid-column: span 1;
+            }
+
+            .character-sheet > .attributes {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+
+            main > aside {
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+<body>
+<th:block th:replace="~{component/global-header :: root}" />
+<main>
+    <th:block th:replace="~{component/campaign-sidebar :: root(${ctx.campaign}, ${ctx.account})}" />
+    <div class="character-sheet">
+
+
+    </div>
+
+</main>
+</body>
+</html>

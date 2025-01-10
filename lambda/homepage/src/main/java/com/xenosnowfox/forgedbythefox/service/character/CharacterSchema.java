@@ -4,6 +4,7 @@ import com.xenosnowfox.forgedbythefox.models.Ability;
 import com.xenosnowfox.forgedbythefox.models.Action;
 import com.xenosnowfox.forgedbythefox.models.Playbook;
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
+import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterExperience;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
@@ -48,6 +49,12 @@ public class CharacterSchema {
                     .tags(StaticAttributeTags.secondaryPartitionKey(List.of("documents-by-account")))
                     .getter(record -> record.accountIdentifier().toUrn())
                     .setter((builder, value) -> builder.accountIdentifier(AccountIdentifier.fromUrn(value))))
+            .addAttribute(String.class, attributeBuilder -> attributeBuilder
+                    .name("campaign-identifier")
+                    .getter(instance -> Optional.ofNullable(instance.campaignIdentifier())
+                            .map(CampaignIdentifier::toUrn)
+                            .orElse(null))
+                    .setter((builder, value) -> builder.campaignIdentifier(CampaignIdentifier.fromUrn(value))))
             // Name
             .addAttribute(String.class, attributeBuilder -> attributeBuilder
                     .name("name")

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Root Element -->
+<th:block th:fragment="details">
+    <ul id="character-details" style="padding: 0.0625rem;display:grid;grid-template-columns:1fr 1fr;">
+        <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+            <strong style="text-decoration:underline;font-weight:bolder">Name</strong>
+            <p th:text="${ctx.character.name}"></p>
+        </li>
+
+        <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+            <strong style="text-decoration:underline;font-weight:bolder">Alias</strong>
+            <p th:text="${ctx.character.alias}"></p>
+        </li>
+    </ul>
+</th:block>
+
+
+
+
+</body>
+</html>

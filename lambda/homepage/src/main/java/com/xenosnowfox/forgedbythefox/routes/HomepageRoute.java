@@ -14,7 +14,6 @@ import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.session.Session;
 import com.xenosnowfox.forgedbythefox.models.session.SessionIdentifier;
 import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
-import com.xenosnowfox.forgedbythefox.service.character.CharacterManagementService;
 import com.xenosnowfox.forgedbythefox.service.character.CreateCharacterRequest;
 import com.xenosnowfox.forgedbythefox.service.session.SessionManagementService;
 import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
@@ -29,8 +28,8 @@ import lombok.Builder;
 @Builder(builderClassName = "Builder")
 public record HomepageRoute(
         AccountManagementService accountManagementService,
-        CharacterManagementService characterManagementService,
-        SessionManagementService sessionManagementService)
+        SessionManagementService sessionManagementService,
+        TemplateService templateService)
         implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
@@ -78,7 +77,7 @@ public record HomepageRoute(
             }
 
             // TODO remove session cookie
-            final String html = TemplateService.parse("homepage", contextData);
+            final String html = templateService.parse("homepage", contextData);
             response.setBody(html);
             return response;
         }
@@ -94,7 +93,7 @@ public record HomepageRoute(
             }
 
             // TODO remove session cookie
-            final String html = TemplateService.parse("homepage", contextData);
+            final String html = templateService.parse("homepage", contextData);
             response.setBody(html);
             return response;
         }
@@ -108,7 +107,7 @@ public record HomepageRoute(
 
         // retrieve list of all characters
         final Set<Character> characterSet =
-                characterManagementService.query(b -> b.accountIdentifier(account.identifier()));
+                templateService.characterService().query(b -> b.accountIdentifier(account.identifier()));
         contextData.put("characters", characterSet);
 
         String json;
@@ -121,7 +120,7 @@ public record HomepageRoute(
         }
 
         contextData.put("json", json);
-        final String html = TemplateService.parse("dashboard", contextData);
+        final String html = templateService.parse("dashboard", contextData);
         response.setBody(html);
         return response;
     }
@@ -147,7 +146,7 @@ public record HomepageRoute(
                 .playbook(Playbook.valueOf(formFields.get("playbook")))
                 .build();
 
-        final Character character = characterManagementService.create(createCharacterRequest);
+        final Character character = templateService.characterService().create(createCharacterRequest);
 
         // redirect to character sheet
         response.setStatusCode(307);

@@ -131,4 +131,8 @@ public class CharacterManagementService {
         withMutator.accept(builder);
         return this.query(builder.build());
     }
+
+    public CharacterQueryExecutor query() {
+        return new CharacterQueryExecutor(this.documentsByAccount);
+    }
 }

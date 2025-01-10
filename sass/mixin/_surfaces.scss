@@ -39,22 +39,26 @@
     --fbtf-on-surface-accent-muted:  var(--fbtf-palette-gray-regular);
     --fbtf-on-surface-accent-hover:  var(--fbtf-palette-gray-regular);
     // border
-    --fbtf-surface-color-default: var(--fbtf-palette-black-regular);
-    --fbtf-surface-color-hover: var(--fbtf-palette-black-light);
-    --fbtf-surface-color-muted: var(--fbtf-palette-black-light);
+    --fbtf-on-surface-border-default: var(--fbtf-palette-black-light);
+    --fbtf-on-surface-border-hover: var(--fbtf-palette-black-lightest);
+    --fbtf-on-surface-border-muted: var(--fbtf-palette-black-lightest);
     @include apply;
 }
 
 @mixin article {
-    --fbtf-surface-color-default: var(--fbtf-palette-white);
+    // background
+    --fbtf-surface-color-default: var(--fbtf-palette-white-regular);
     --fbtf-surface-color-hover: var(--fbtf-palette-gray10);
     --fbtf-surface-color-muted: var(--fbtf-palette-gray20);
+    // color
     --fbtf-on-surface-color-default:  var(--fbtf-palette-gray60);
     --fbtf-on-surface-color-hover: var(--fbtf-palette-black);
     --fbtf-on-surface-color-muted:  var(--fbtf-palette-gray50);
+    // accent
     --fbtf-on-surface-accent-default:  var(--fbtf-palette-blue40);
     --fbtf-on-surface-accent-muted:  var(--fbtf-palette-blue20);
     --fbtf-on-surface-accent-hover:  var(--fbtf-palette-blue60);
+    // border
     --fbtf-on-surface-border-default:  var(--fbtf-palette-gray20);
     --fbtf-on-surface-border-hover:  var(--fbtf-palette-black);
     --fbtf-on-surface-border-active:  var(--fbtf-palette-blue40);

@@ -208,6 +208,36 @@ public class StackBuilder extends Stack {
 
         apiGateway
                 .getRoot()
+                .addResource("scripts")
+                .addResource("{object}")
+                .addMethod(
+                        "GET",
+                        AwsIntegration.Builder.create()
+                                .service("s3")
+                                .integrationHttpMethod("GET")
+                                .path("forged-by-the-fox-static-resources/scripts/{object}")
+                                .options(IntegrationOptions.builder()
+                                        .requestParameters(
+                                                Map.of("integration.request.path.object", "method.request.path.object"))
+                                        .integrationResponses(List.of(IntegrationResponse.builder()
+                                                .statusCode("200")
+                                                .responseParameters(Map.of(
+                                                        "method.response.header.Content-Type",
+                                                        "integration.response.header.Content-Type"))
+                                                .build()))
+                                        .credentialsRole(role)
+                                        .build())
+                                .build(),
+                        MethodOptions.builder()
+                                .requestParameters(Map.of("method.request.path.object", true))
+                                .methodResponses(List.of(MethodResponse.builder()
+                                        .statusCode("200")
+                                        .responseParameters(Map.of("method.response.header.Content-Type", true))
+                                        .build()))
+                                .build());
+
+        apiGateway
+                .getRoot()
                 .addResource("images")
                 .addResource("{object}")
                 .addMethod(

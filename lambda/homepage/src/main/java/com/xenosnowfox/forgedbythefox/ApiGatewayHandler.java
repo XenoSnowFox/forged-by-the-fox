@@ -7,12 +7,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.xenosnowfox.forgedbythefox.routes.AuthenticationRoute;
+import com.xenosnowfox.forgedbythefox.routes.CampaignCharactersRoute;
 import com.xenosnowfox.forgedbythefox.routes.CharacterSheetRoute;
 import com.xenosnowfox.forgedbythefox.routes.HomepageRoute;
+import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterDetailsDisplayFragment;
 import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
+import com.xenosnowfox.forgedbythefox.service.campaign.CampaignService;
 import com.xenosnowfox.forgedbythefox.service.character.CharacterManagementService;
 import com.xenosnowfox.forgedbythefox.service.identity.IdentityManagementService;
 import com.xenosnowfox.forgedbythefox.service.session.SessionManagementService;
+import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
 import com.xenosnowfox.forgedbythefox.util.HttpMethod;
 import com.xenosnowfox.forgedbythefox.util.Route;
 import java.text.SimpleDateFormat;
@@ -35,17 +39,22 @@ public class ApiGatewayHandler extends Route {
         super();
 
         final AccountManagementService accountManagementService = new AccountManagementService();
-        final CharacterManagementService characterManagementService = new CharacterManagementService();
         final IdentityManagementService identityManagementService = new IdentityManagementService();
         final SessionManagementService sessionManagementService = new SessionManagementService();
+
+        final TemplateService templateService = TemplateService.builder()
+                .templateEngine(TemplateService.TEMPLATE_ENGINE)
+                .campaignService(new CampaignService())
+                .characterService(new CharacterManagementService())
+                .build();
 
         this.register(
                         HttpMethod.ANY,
                         "",
                         HomepageRoute.builder()
                                 .accountManagementService(accountManagementService)
-                                .characterManagementService(characterManagementService)
                                 .sessionManagementService(sessionManagementService)
+                                .templateService(templateService)
                                 .build())
                 //                .register(
                 //                        HttpMethod.GET,
@@ -64,8 +73,24 @@ public class ApiGatewayHandler extends Route {
                         "/characters/{character}",
                         CharacterSheetRoute.builder()
                                 .accountManagementService(accountManagementService)
-                                .characterManagementService(characterManagementService)
                                 .sessionManagementService(sessionManagementService)
+                                .templateService(templateService)
+                                .build())
+                .register(
+                        HttpMethod.ANY,
+                        "/campaigns/{campaign}/characters",
+                        CampaignCharactersRoute.builder()
+                                .accountManagementService(accountManagementService)
+                                .sessionManagementService(sessionManagementService)
+                                .templateService(templateService)
+                                .build())
+                .register(
+                        HttpMethod.GET,
+                        "/fragments/characters/{character}/details",
+                        CharacterDetailsDisplayFragment.builder()
+                                .accountManagementService(accountManagementService)
+                                .sessionManagementService(sessionManagementService)
+                                .templateService(templateService)
                                 .build())
                 .register(HttpMethod.GET, "/debug", (e1, c1) -> {
                     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();

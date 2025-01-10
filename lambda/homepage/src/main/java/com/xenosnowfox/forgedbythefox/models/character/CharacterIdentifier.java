@@ -25,6 +25,11 @@ public record CharacterIdentifier(@NonNull String value) {
         return new CharacterIdentifier(UUID.randomUUID().toString());
     }
 
+    @Override
+    public String toString() {
+        return this.value;
+    }
+
     public String toUrn() {
         return "CHARACTER:" + this.value;
     }
