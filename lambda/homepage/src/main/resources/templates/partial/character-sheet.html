@@ -1,19 +1,58 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<!-- Root Element -->
-<th:block th:fragment="details">
-    <ul id="character-details" style="padding: 0.0625rem;display:grid;grid-template-columns:1fr 1fr;">
-        <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
-            <strong style="text-decoration:underline;font-weight:bolder">Name</strong>
-            <p th:text="${ctx.character.name}"></p>
-        </li>
+<!-- Root View Element -->
+<th:block th:fragment="view">
+    <div id="character-details">
+        <ul style="padding: 0.0625rem;display:grid;grid-template-columns:1fr 1fr;">
+            <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+                <strong style="text-decoration:underline;font-weight:bolder">Name</strong>
+                <p th:text="${ctx.character.name}"></p>
+            </li>
 
-        <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
-            <strong style="text-decoration:underline;font-weight:bolder">Alias</strong>
-            <p th:text="${ctx.character.alias}"></p>
-        </li>
-    </ul>
+            <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
+                <strong style="text-decoration:underline;font-weight:bolder">Alias</strong>
+                <p th:text="${ctx.character.alias}"></p>
+            </li>
+        </ul>
+
+        <div class="character-panel"
+             style="text-align:center;padding:1rem;cursor:pointer;background:var(--fbtf-surface-color-muted)"
+             th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/details?edit'"
+             hx-replace="outerHTML"
+             hx-target="#character-details"
+            >
+            <span>Edit Details</span>
+        </div>
+    </div>
+</th:block>
+
+
+<!-- Root Edit Element -->
+<th:block th:fragment="edit">
+    <form
+        style="padding: 0.0625rem;display:grid;grid-template-columns:1fr;"
+        th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/details'"
+        hx-replace="outerHTML"
+        hx-indicator="closest .fbtf-component-loading-indicator"
+        >
+        <fieldset style="margin: 0.5rem;">
+            <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;">Name</legend>
+            <input type="text" name="name" th:value="${ctx.character.name}" />
+        </fieldset>
+
+        <fieldset style="margin: 0.5rem;">
+            <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;">Alias</legend>
+            <input type="text" name="alias" th:value="${ctx.character.alias}" />
+        </fieldset>
+
+        <button type="button" style="margin: 0.5rem;" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/details'" hx-replace="outerHTML" hx-target="closest form"
+                hx-indicator="closest .fbtf-component-loading-indicator">Cancel</button>
+
+        <button type="submit" style="margin: 0.5rem;">Save Changes</button>
+
+        <th:block th:replace="~{component/loading-indicator :: root }" />
+    </form>
 </th:block>
 
 

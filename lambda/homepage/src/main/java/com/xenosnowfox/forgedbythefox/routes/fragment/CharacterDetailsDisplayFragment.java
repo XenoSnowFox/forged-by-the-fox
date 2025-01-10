@@ -85,7 +85,10 @@ public record CharacterDetailsDisplayFragment(
         ctx.put("character", character);
         ctx.put("url", urlResolver);
 
-        final String html = templateService.parse("partial/character-sheet", Set.of("details"), ctx);
+        final String html = templateService.parse(
+                "partial/character-sheet",
+                Set.of(event.getQueryStringParameters().containsKey("edit") ? "edit" : "view"),
+                ctx);
         response.setBody(html);
         return response;
     }

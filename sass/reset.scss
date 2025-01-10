@@ -1,4 +1,5 @@
 @use "./mixin/surfaces" as surfaces;
+@use "./mixin/typography" as typography;
 
 :root {
     // HORIZONTAL SPACING
@@ -247,3 +248,45 @@ svg {
         display: none;
     }
 }
+
+input, select, textarea {
+  @include typography.monospace;
+
+  width: 100%;
+  background: var(--fbtf-surface-color-muted);
+  border: 1px solid var(--fbtf-on-surface-border-muted);
+  border-radius: 0;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+
+
+  &:active, &:focus {
+    border: 1px solid var(--fbtf-on-surface-border-default);
+  }
+}
+
+button {
+  background: var(--fbtf-surface-color-muted);
+  border: 1px solid var(--fbtf-on-surface-border-muted);
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--fbtf-on-surface-accent-muted);
+  }
+
+  &:active, &:focus {
+    border: 1px solid var(--fbtf-on-surface-border-default);
+  }
+}
+
+// .htmx-indicator{
+//     display:none !important;
+// }
+// .htmx-request .htmx-indicator{
+//     display:initial !important;
+// }
+// .htmx-request.htmx-indicator{
+//     display:initial !important;
+// }
