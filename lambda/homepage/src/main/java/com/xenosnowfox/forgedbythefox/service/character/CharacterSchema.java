@@ -3,12 +3,15 @@ package com.xenosnowfox.forgedbythefox.service.character;
 import com.xenosnowfox.forgedbythefox.models.Ability;
 import com.xenosnowfox.forgedbythefox.models.Action;
 import com.xenosnowfox.forgedbythefox.models.Playbook;
+import com.xenosnowfox.forgedbythefox.models.Trauma;
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterExperience;
+import com.xenosnowfox.forgedbythefox.models.character.CharacterHarm;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -97,5 +100,28 @@ public class CharacterSchema {
                             .collect(Collectors.toMap(x -> x.getKey().toString(), Map.Entry::getValue)))
                     .setter((b, m) -> b.actionDots(m.entrySet().stream()
                             .collect(Collectors.toMap(x -> Action.valueOf(x.getKey()), Map.Entry::getValue)))))
+            // Character Harm
+            .addAttribute(
+                    EnhancedType.documentOf(CharacterHarm.class, CharacterHarmSchema.getTableSchema()),
+                    attributeBuilder -> attributeBuilder
+                            .name("harm")
+                            .getter(Character::harm)
+                            .setter(Character.Builder::harm))
+            // Trauma
+            .addAttribute(EnhancedType.setOf(String.class), attributeBuilder -> attributeBuilder
+                    .name("trauma")
+                    .getter(instance -> Optional.of(instance)
+                            .map(Character::trauma)
+                            .map(Collection::stream)
+                            .map(x -> x.map(Enum::name))
+                            .map(x -> x.collect(Collectors.toSet()))
+                            .orElse(null))
+                    .setter((builder, value) ->
+                            builder.trauma(value.stream().map(Trauma::valueOf).collect(Collectors.toSet()))))
+            // Stress
+            .addAttribute(Integer.class, attributeBuilder -> attributeBuilder
+                    .name("stress")
+                    .getter(Character::stress)
+                    .setter(Character.Builder::stress))
             .build();
 }

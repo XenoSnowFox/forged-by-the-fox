@@ -12,6 +12,8 @@ import com.xenosnowfox.forgedbythefox.routes.CharacterSheetRoute;
 import com.xenosnowfox.forgedbythefox.routes.HomepageRoute;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterAbilitiesDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterDetailsDisplayFragment;
+import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterHarmDisplayFragment;
+import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterStressDisplayFragment;
 import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
 import com.xenosnowfox.forgedbythefox.service.campaign.CampaignService;
 import com.xenosnowfox.forgedbythefox.service.character.CharacterManagementService;
@@ -39,24 +41,20 @@ public class ApiGatewayHandler extends Route {
     public ApiGatewayHandler() {
         super();
 
-        final AccountManagementService accountManagementService = new AccountManagementService();
         final IdentityManagementService identityManagementService = new IdentityManagementService();
-        final SessionManagementService sessionManagementService = new SessionManagementService();
 
         final TemplateService templateService = TemplateService.builder()
                 .templateEngine(TemplateService.TEMPLATE_ENGINE)
+                .accountService(new AccountManagementService())
                 .campaignService(new CampaignService())
                 .characterService(new CharacterManagementService())
+                .sessionService(new SessionManagementService())
                 .build();
 
         this.register(
                         HttpMethod.ANY,
                         "",
-                        HomepageRoute.builder()
-                                .accountManagementService(accountManagementService)
-                                .sessionManagementService(sessionManagementService)
-                                .templateService(templateService)
-                                .build())
+                        HomepageRoute.builder().templateService(templateService).build())
                 //                .register(
                 //                        HttpMethod.GET,
                 //                        "/manifest.json",
@@ -65,40 +63,44 @@ public class ApiGatewayHandler extends Route {
                         HttpMethod.ANY,
                         "/auth",
                         AuthenticationRoute.builder()
-                                .accountManagementService(accountManagementService)
+                                .accountManagementService(templateService.accountService())
                                 .identityManagementService(identityManagementService)
-                                .sessionManagementService(sessionManagementService)
+                                .sessionManagementService(templateService.sessionService())
                                 .build())
                 .register(
                         HttpMethod.ANY,
                         "/characters/{character}",
                         CharacterSheetRoute.builder()
-                                .accountManagementService(accountManagementService)
-                                .sessionManagementService(sessionManagementService)
                                 .templateService(templateService)
                                 .build())
                 .register(
                         HttpMethod.ANY,
                         "/campaigns/{campaign}/characters",
                         CampaignCharactersRoute.builder()
-                                .accountManagementService(accountManagementService)
-                                .sessionManagementService(sessionManagementService)
                                 .templateService(templateService)
                                 .build())
                 .register(
                         HttpMethod.ANY,
                         "/fragments/characters/{character}/details",
                         CharacterDetailsDisplayFragment.builder()
-                                .accountManagementService(accountManagementService)
-                                .sessionManagementService(sessionManagementService)
                                 .templateService(templateService)
                                 .build())
                 .register(
                         HttpMethod.ANY,
                         "/fragments/characters/{character}/abilities",
                         CharacterAbilitiesDisplayFragment.builder()
-                                .accountManagementService(accountManagementService)
-                                .sessionManagementService(sessionManagementService)
+                                .templateService(templateService)
+                                .build())
+                .register(
+                        HttpMethod.ANY,
+                        "/fragments/characters/{character}/harm",
+                        CharacterHarmDisplayFragment.builder()
+                                .templateService(templateService)
+                                .build())
+                .register(
+                        HttpMethod.ANY,
+                        "/fragments/characters/{character}/stress",
+                        CharacterStressDisplayFragment.builder()
                                 .templateService(templateService)
                                 .build())
                 .register(HttpMethod.GET, "/debug", (e1, c1) -> {

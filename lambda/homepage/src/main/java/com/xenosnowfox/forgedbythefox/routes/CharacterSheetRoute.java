@@ -12,8 +12,6 @@ import com.xenosnowfox.forgedbythefox.models.account.Account;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
 import com.xenosnowfox.forgedbythefox.models.session.Session;
-import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
-import com.xenosnowfox.forgedbythefox.service.session.SessionManagementService;
 import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
 import java.net.URI;
 import java.text.SimpleDateFormat;
@@ -23,11 +21,7 @@ import java.util.Map;
 import lombok.Builder;
 
 @Builder(builderClassName = "Builder")
-public record CharacterSheetRoute(
-        AccountManagementService accountManagementService,
-        SessionManagementService sessionManagementService,
-        TemplateService templateService)
-        implements AuthenticatedRequestHandler {
+public record CharacterSheetRoute(TemplateService templateService) implements AuthenticatedRequestHandler {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
             .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)

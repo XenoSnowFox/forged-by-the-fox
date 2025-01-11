@@ -11,8 +11,6 @@ import com.xenosnowfox.forgedbythefox.models.account.Account;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
 import com.xenosnowfox.forgedbythefox.models.session.Session;
-import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
-import com.xenosnowfox.forgedbythefox.service.session.SessionManagementService;
 import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -28,10 +26,7 @@ import java.util.Set;
 import lombok.Builder;
 
 @Builder(builderClassName = "Builder")
-public record CharacterAbilitiesDisplayFragment(
-        AccountManagementService accountManagementService,
-        SessionManagementService sessionManagementService,
-        TemplateService templateService)
+public record CharacterAbilitiesDisplayFragment(TemplateService templateService)
         implements AuthenticatedRequestHandler {
 
     @Override

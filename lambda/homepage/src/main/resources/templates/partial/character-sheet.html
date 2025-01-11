@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<!-- Root View Element -->
+<!-- View Details Element -->
 <th:block th:fragment="view-details">
     <div id="character-details" style="display:grid;grid-template-columns:1fr;">
         <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr 1fr;gap:0.25rem">
@@ -27,7 +27,7 @@
 </th:block>
 
 
-<!-- Root Edit Element -->
+<!-- Edit Details Element -->
 <th:block th:fragment="edit-details">
     <form
         style="display:grid;grid-template-columns:1fr;"
@@ -51,7 +51,7 @@
     </form>
 </th:block>
 
-<!-- Root View Element -->
+<!-- View Abilities Element -->
 <th:block th:fragment="view-abilities">
     <div id="character-abilities" style="display:grid;grid-template-columns:1fr;">
 
@@ -76,7 +76,7 @@
 </th:block>
 
 
-<!-- Root Edit Element -->
+<!-- Abilities Edit Element -->
 <th:block th:fragment="edit-abilities">
     <form
             style="display:grid;grid-template-columns:1fr;"
@@ -114,6 +114,258 @@
     </form>
 </th:block>
 
+
+<!-- Harm View Element -->
+<th:block th:fragment="view-harm">
+    <div id="character-harm" style="display:grid;grid-template-columns:1fr;">
+
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:3rem 1fr 1fr 5rem;gap:0.25rem;font-family:monospace">
+
+            <!-- Fatal Harm -->
+            <th:block th:with="harmLevel = ${ctx.HarmLevel.FATAL}">
+                <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                    <th:block th:if="${harm.size > 0}">
+                        <li style="background: var(--fbtf-palette-magenta-regular);padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;">
+                            <span th:text="${harmLevel.level}"></span>
+                        </li>
+                        <li style="background: var(--fbtf-palette-magenta-regular);padding: 0.5rem 1rem;grid-column: span 2;font-size:1rem;display:flex;align-items:center;justify-content:start;">
+                            <span th:text="${harm.size > 0 ? harm.get(0) : ''}"></span>
+                        </li>
+                        <li style="background: var(--fbtf-palette-magenta-regular);padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;">
+                            <span th:text="${harmLevel.effect}"></span>
+                        </li>
+                    </th:block>
+                </th:block>
+            </th:block>
+
+
+            <!-- Severe Harm -->
+            <th:block th:with="harmLevel = ${ctx.HarmLevel.SEVERE}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;">
+                    <span th:text="${harmLevel.level}"></span>
+                </li>
+                <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                    <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;grid-column: span 2;font-size:1rem;display:flex;align-items:center;justify-content:start;">
+                        <span th:text="${harm.size > 0 ? harm.get(0) : ''}"></span>
+                    </li>
+                    <li th:style="${harm.size > 0 ? 'background: var(--fbtf-palette-magenta-regular);' : 'background: var(--fbtf-surface-color-muted);'} + 'padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;'">
+                        <span th:text="${harmLevel.effect}"></span>
+                    </li>
+                </th:block>
+            </th:block>
+
+            <!-- Moderate Harm -->
+            <th:block th:with="harmLevel = ${ctx.HarmLevel.MODERATE}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;">
+                    <span th:text="${harmLevel.level}"></span>
+                </li>
+                <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                    <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;font-size:1rem;display:flex;align-items:center;justify-content:start;">
+                        <span th:text="${harm.size > 0 ? harm.get(0) : ''}"></span>
+                    </li>
+                    <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;font-size:1rem;display:flex;align-items:center;justify-content:start;">
+                        <span th:text="${harm.size > 1 ? harm.get(1) : ''}"></span>
+                    </li>
+                    <li th:style="${harm.size > 0 ? 'background: var(--fbtf-palette-magenta-regular);' : 'background: var(--fbtf-surface-color-muted);'} + 'padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;'">
+                        <span th:text="${harmLevel.effect}"></span>
+                    </li>
+                </th:block>
+            </th:block>
+
+            <!-- Lesser Harm -->
+            <th:block th:with="harmLevel = ${ctx.HarmLevel.LESSER}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;">
+                    <span th:text="${harmLevel.level}"></span>
+                </li>
+                <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                    <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;font-size:1rem;display:flex;align-items:center;justify-content:start;">
+                        <span th:text="${harm.size > 0 ? harm.get(0) : ''}"></span>
+                    </li>
+                    <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;font-size:1rem;display:flex;align-items:center;justify-content:start;">
+                        <span th:text="${harm.size > 1 ? harm.get(1) : ''}"></span>
+                    </li>
+                    <li th:style="${harm.size > 0 ? 'background: var(--fbtf-palette-magenta-regular);' : 'background: var(--fbtf-surface-color-muted);'} + 'padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;'">
+                        <span th:text="${harmLevel.effect}"></span>
+                    </li>
+                </th:block>
+            </th:block>
+        </ul>
+
+
+        <button type="button" style="margin: 0.5rem 0;"
+                th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/harm?edit'"
+                hx-replace="outerHTML"
+                hx-target="#character-harm"
+        >
+            <span>Edit Harm</span>
+        </button>
+    </div>
+</th:block>
+
+
+<!-- Harm Edit Element -->
+<th:block th:fragment="edit-harm">
+    <form
+            style="display:grid;grid-template-columns:1fr;"
+            th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/harm'"
+            hx-replace="outerHTML"
+    >
+        <!-- Fatal Harm -->
+        <th:block th:with="harmLevel = ${ctx.HarmLevel.FATAL}">
+            <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                <fieldset style="margin: 0.5rem 0;">
+                    <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;" th:text="'Level ' + ${harmLevel.level} + ' - ' + ${harmLevel.label} + ' Harm'"></legend>
+                    <input type="text" th:name="${harmLevel.name}" th:value="${harm.size > 0 ? harm.get(0) : ''}" />
+                </fieldset>
+            </th:block>
+        </th:block>
+
+
+        <!-- Severe Harm -->
+        <th:block th:with="harmLevel = ${ctx.HarmLevel.SEVERE}">
+            <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                <fieldset style="margin: 0.5rem 0;">
+                    <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;" th:text="'Level ' + ${harmLevel.level} + ' - ' + ${harmLevel.label} + ' Harm'"></legend>
+                    <input type="text" th:name="${harmLevel.name}" th:value="${harm.size > 0 ? harm.get(0) : ''}" />
+                </fieldset>
+            </th:block>
+        </th:block>
+
+
+        <th:block th:with="harmLevel = ${ctx.HarmLevel.MODERATE}">
+            <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                <fieldset style="margin: 0.5rem 0;">
+                    <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;" th:text="'Level ' + ${harmLevel.level} + ' - ' + ${harmLevel.label} + ' Harm'"></legend>
+                    <input type="text" th:name="${harmLevel.name}" th:value="${harm.size > 0 ? harm.get(0) : ''}" />
+                    <br />
+                    <br />
+                    <input type="text" th:name="${harmLevel.name}" th:value="${harm.size > 1 ? harm.get(1) : ''}" />
+                </fieldset>
+            </th:block>
+        </th:block>
+
+
+        <th:block th:with="harmLevel = ${ctx.HarmLevel.LESSER}">
+            <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                <fieldset style="margin: 0.5rem 0;">
+                    <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;" th:text="'Level ' + ${harmLevel.level} + ' - ' + ${harmLevel.label} + ' Harm'"></legend>
+                    <input type="text" th:name="${harmLevel.name}" th:value="${harm.size > 0 ? harm.get(0) : ''}" />
+                    <br />
+                    <br />
+                    <input type="text" th:name="${harmLevel.name}" th:value="${harm.size > 1 ? harm.get(1) : ''}" />
+                </fieldset>
+            </th:block>
+        </th:block>
+
+
+
+
+        <button type="button" style="margin: 1.5rem 0 0.5rem;" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/harm'" hx-replace="outerHTML" hx-target="closest form"
+                hx-indicator="closest .fbtf-component-loading-indicator">Cancel</button>
+
+        <button type="submit" style="margin: 0.5rem 0;">Save Changes</button>
+    </form>
+</th:block>
+
+
+<!-- Stress View Element -->
+<th:block th:fragment="view-stress">
+    <div id="character-stress" style="display:grid;grid-template-columns:1fr;">
+
+        <!-- Stress -->
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:min-content 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;gap:0.25rem">
+
+            <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">Stress:</li>
+            <th:block th:if="${ctx.character.stress > 0}" th:each="i : ${#numbers.sequence(1, ctx.character.stress)}">
+                <li style="background: var(--fbtf-palette-magenta-regular);" >&nbsp;</li>
+            </th:block>
+            <th:block th:if="${ctx.character.stress < 9}" th:each="i : ${#numbers.sequence(ctx.character.stress, 8)}">
+                <li style="background: var(--fbtf-surface-color-muted);" >&nbsp;</li>
+            </th:block>
+        </ul>
+
+        <!-- Add Remove Single Stress -->
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr 1fr ;gap:0.25rem">
+            <li >
+                <th:block th:if="${ctx.character.stress > 0}" >
+                    <form
+                            th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/stress'"
+                            hx-replace="outerHTML"
+                            hx-target="#character-stress">
+                        <input type="hidden" name="stress" th:value="${ctx.character.stress - 1}" />
+                    <button type="submit" style="margin: 0.5rem 0;width:100%;">
+                        <span>Remove 1 Stress</span>
+                    </button>
+                    </form>
+                </th:block>
+            </li>
+            <li>
+                <th:block th:if="${ctx.character.stress < 9}" >
+                    <form
+                            th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/stress'"
+                            hx-replace="outerHTML"
+                            hx-target="#character-stress">
+                        <input type="hidden" name="stress" th:value="${ctx.character.stress + 1}" />
+                    <button type="submit" style="margin: 0.5rem 0;width:100%;">
+                        <span>Add 1 Stress</span>
+                    </button>
+                    </form>
+                </th:block>
+            </li>
+        </ul>
+
+        <!-- Trauma -->
+        <th:block th:if="${ctx.character.trauma.size > 0}">
+            <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
+
+                <th:block th:each="trauma: ${ctx.character.trauma}">
+                    <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                        <strong th:text="${trauma.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                        <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${trauma.description}"></p>
+                    </li>
+                </th:block>
+            </ul>
+        </th:block>
+
+        <button type="button" style="margin: 0.5rem 0;"
+                th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/stress?edit'"
+                hx-replace="outerHTML"
+                hx-target="#character-stress"
+        >
+            <span>Edit Stress & Trauma</span>
+        </button>
+    </div>
+</th:block>
+
+
+
+<!-- Stress Edit Element -->
+<th:block th:fragment="edit-stress">
+    <form
+            style="display:grid;grid-template-columns:1fr;"
+            th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/stress'"
+            hx-replace="outerHTML"
+    >
+
+        <div style="padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);margin:0.25rem 0;width:auto;">Trauma</div>
+        <ul style="margin: 0.5rem;display:grid;grid-template-columns:1fr;gap:0.25rem">
+            <th:block th:each="trauma : ${ctx.Trauma.values}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <label>
+                        <input type="checkbox" th:name="'trauma.' + ${trauma.name}" th:checked="${ctx.character.trauma.contains(trauma)}" style="display:inline;width:auto;" />
+                        <strong th:text="${trauma.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                        <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${trauma.description}"></p>
+                    </label>
+                </li>
+            </th:block>
+        </ul>
+
+        <button type="button" style="margin: 0.5rem;" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/abilities'" hx-replace="outerHTML" hx-target="closest form"
+                hx-indicator="closest .fbtf-component-loading-indicator">Cancel</button>
+
+        <button type="submit" style="margin: 0.5rem;">Save Selection</button>
+    </form>
+</th:block>
 
 
 </body>

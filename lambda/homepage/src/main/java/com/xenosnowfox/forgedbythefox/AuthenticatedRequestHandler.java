@@ -7,8 +7,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.xenosnowfox.forgedbythefox.models.account.Account;
 import com.xenosnowfox.forgedbythefox.models.session.Session;
 import com.xenosnowfox.forgedbythefox.models.session.SessionIdentifier;
-import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
-import com.xenosnowfox.forgedbythefox.service.session.SessionManagementService;
+import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -20,9 +19,7 @@ import java.util.Optional;
 public interface AuthenticatedRequestHandler
         extends RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-    AccountManagementService accountManagementService();
-
-    SessionManagementService sessionManagementService();
+    TemplateService templateService();
 
     APIGatewayProxyResponseEvent handleRequest(
             final APIGatewayProxyRequestEvent event,
@@ -65,7 +62,7 @@ public interface AuthenticatedRequestHandler
     private Session getSession(final APIGatewayProxyRequestEvent event) {
         return Optional.of(event)
                 .map(this::getSessionIdentifierFromEvent)
-                .map(sessionManagementService()::retrieve)
+                .map(templateService().sessionService()::retrieve)
                 .orElse(null);
     }
 
@@ -98,7 +95,7 @@ public interface AuthenticatedRequestHandler
             return AuthenticatedRequestHandler.handleUnauthenticatedRequest(event, context);
         }
 
-        final Account account = this.accountManagementService().retrieve(session.accountIdentifier());
+        final Account account = this.templateService().accountService().retrieve(session.accountIdentifier());
         if (account == null) {
             return AuthenticatedRequestHandler.handleUnauthenticatedRequest(event, context);
         }

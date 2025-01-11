@@ -1,7 +1,9 @@
 package com.xenosnowfox.forgedbythefox.service.character;
 
 import com.xenosnowfox.forgedbythefox.models.Ability;
+import com.xenosnowfox.forgedbythefox.models.Trauma;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
+import com.xenosnowfox.forgedbythefox.models.character.CharacterHarm;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,7 +40,16 @@ public class CharacterMutationExecutor {
     private String withAlias;
 
     @Setter
+    private Integer withStress;
+
+    @Setter
+    private Set<Trauma> withTrauma;
+
+    @Setter
     private Set<Ability> withAbilities;
+
+    @Setter
+    private CharacterHarm withHarm;
 
     public Character orNull() {
         return this.get();
@@ -69,10 +80,30 @@ public class CharacterMutationExecutor {
             append.accept("alias", AttributeValue.fromS(withAlias.trim()));
         }
 
-        if (withAbilities != null) {
+        if (this.withAbilities != null) {
             append.accept(
                     "abilities",
-                    AttributeValue.fromSs(withAbilities.stream().map(Enum::name).toList()));
+                    AttributeValue.fromSs(
+                            this.withAbilities.stream().map(Enum::name).toList()));
+        }
+
+        if (this.withHarm != null) {
+            append.accept(
+                    "harm",
+                    AttributeValue.fromM(CharacterHarmSchema.getTableSchema().itemToMap(this.withHarm, true)));
+        }
+
+        if (this.withStress != null) {
+            append.accept("stress", AttributeValue.fromN(String.valueOf(this.withStress)));
+        }
+
+        if (this.withTrauma != null) {
+            append.accept(
+                    "trauma",
+                    this.withTrauma.isEmpty()
+                            ? AttributeValue.fromNul(true)
+                            : AttributeValue.fromSs(
+                                    this.withTrauma.stream().map(Enum::name).toList()));
         }
 
         if (updateExpressionParts.isEmpty()) {

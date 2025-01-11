@@ -1,7 +1,9 @@
 package com.xenosnowfox.forgedbythefox.service.template;
 
+import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
 import com.xenosnowfox.forgedbythefox.service.campaign.CampaignService;
 import com.xenosnowfox.forgedbythefox.service.character.CharacterManagementService;
+import com.xenosnowfox.forgedbythefox.service.session.SessionManagementService;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -18,8 +20,10 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 @Builder(builderClassName = "Builder", toBuilder = true)
 public record TemplateService(
         @NonNull ITemplateEngine templateEngine,
+        @NonNull AccountManagementService accountService,
         @NonNull CampaignService campaignService,
-        @NonNull CharacterManagementService characterService) {
+        @NonNull CharacterManagementService characterService,
+        @NonNull SessionManagementService sessionService) {
 
     public static final ITemplateEngine TEMPLATE_ENGINE = buildTemplateEngine();
 

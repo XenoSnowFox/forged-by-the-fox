@@ -3,11 +3,10 @@ package com.xenosnowfox.forgedbythefox.routes.fragment;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.xenosnowfox.forgedbythefox.ApiGatewayHandler;
 import com.xenosnowfox.forgedbythefox.AuthenticatedRequestHandler;
 import com.xenosnowfox.forgedbythefox.models.Attribute;
+import com.xenosnowfox.forgedbythefox.models.Trauma;
 import com.xenosnowfox.forgedbythefox.models.account.Account;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
@@ -16,23 +15,21 @@ import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.Builder;
 
 @Builder(builderClassName = "Builder")
-public record CharacterDetailsDisplayFragment(TemplateService templateService) implements AuthenticatedRequestHandler {
-
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
-            .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-            .findAndRegisterModules()
-            .setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'"));
+public record CharacterStressDisplayFragment(TemplateService templateService) implements AuthenticatedRequestHandler {
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(
@@ -84,6 +81,7 @@ public record CharacterDetailsDisplayFragment(TemplateService templateService) i
         ctx.put("attributes", Attribute.values());
         ctx.put("character", character);
         ctx.put("url", urlResolver(event));
+        ctx.put("Trauma", Arrays.stream(Trauma.values()).collect(Collectors.toMap(Enum::name, Function.identity())));
 
         final String html = templateService.parse(
                 "partial/character-sheet",
@@ -92,7 +90,7 @@ public record CharacterDetailsDisplayFragment(TemplateService templateService) i
                                 .filter(x -> x.containsKey("edit"))
                                 .map(x -> "edit")
                                 .orElse("view")
-                        + "-details"),
+                        + "-stress"),
                 ctx);
         response.setBody(html);
         return response;
@@ -111,11 +109,20 @@ public record CharacterDetailsDisplayFragment(TemplateService templateService) i
         }
 
         final Map<String, List<String>> data = parseBodyString(event.getBody());
+
+        final Set<Trauma> trauma = new HashSet<>();
+        Arrays.stream(Trauma.values())
+                .filter(t -> data.containsKey("trauma." + t.name().toLowerCase(Locale.ROOT)))
+                .forEach(trauma::add);
+
         final Character mutatedCharacter = this.templateService
                 .characterService()
                 .mutate(character)
-                .withName(data.computeIfAbsent("name", k -> new ArrayList<>()).getFirst())
-                .withAlias(data.computeIfAbsent("alias", k -> new ArrayList<>()).getFirst())
+                .withStress(data.computeIfAbsent("stress", k -> new ArrayList<>()).stream()
+                        .findFirst()
+                        .map(Integer::parseInt)
+                        .orElse(null))
+                .withTrauma(trauma)
                 .orNull();
 
         return renderPage(event, context, account, session, mutatedCharacter);

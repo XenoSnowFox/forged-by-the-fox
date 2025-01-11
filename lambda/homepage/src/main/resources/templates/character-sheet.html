@@ -71,6 +71,18 @@
         <th:block th:replace="~{layout/labeled-container :: root(label=${ctx.character.playbook.label} + ' Playbook', content=~{:: #character-details})}">
             <div id="character-details" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/details'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
         </th:block>
+
+        <!-- Stress & Trauma -->
+        <br />
+        <th:block th:replace="~{layout/labeled-container :: root(label='Stress & Trauma', content=~{:: #character-stress})}">
+            <div id="character-stress" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/stress'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
+        </th:block>
+
+        <!-- Harm -->
+        <br />
+        <th:block th:replace="~{layout/labeled-container :: root(label='Harm', content=~{:: #character-harm})}">
+            <div id="character-harm" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/harm'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
+        </th:block>
     </div>
 
     <!-- Abilities -->

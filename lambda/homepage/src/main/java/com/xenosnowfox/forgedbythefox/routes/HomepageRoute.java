@@ -13,9 +13,7 @@ import com.xenosnowfox.forgedbythefox.models.account.Account;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.session.Session;
 import com.xenosnowfox.forgedbythefox.models.session.SessionIdentifier;
-import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
 import com.xenosnowfox.forgedbythefox.service.character.CreateCharacterRequest;
-import com.xenosnowfox.forgedbythefox.service.session.SessionManagementService;
 import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
 import java.net.URI;
 import java.text.SimpleDateFormat;
@@ -26,10 +24,7 @@ import java.util.Set;
 import lombok.Builder;
 
 @Builder(builderClassName = "Builder")
-public record HomepageRoute(
-        AccountManagementService accountManagementService,
-        SessionManagementService sessionManagementService,
-        TemplateService templateService)
+public record HomepageRoute(TemplateService templateService)
         implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
@@ -84,7 +79,7 @@ public record HomepageRoute(
         contextData.put("session", currentSession);
 
         // fetch account details.
-        final Account account = accountManagementService.retrieve(currentSession.accountIdentifier());
+        final Account account = templateService.accountService().retrieve(currentSession.accountIdentifier());
         if (account == null) {
             if (!event.getHttpMethod().equalsIgnoreCase("get")) {
                 response.withHeaders(Map.of("Location", event.getPath()));
@@ -194,6 +189,6 @@ public record HomepageRoute(
         }
 
         System.out.println("Fetching session: " + sessionIdentifier);
-        return sessionManagementService.retrieve(sessionIdentifier);
+        return templateService.sessionService().retrieve(sessionIdentifier);
     }
 }

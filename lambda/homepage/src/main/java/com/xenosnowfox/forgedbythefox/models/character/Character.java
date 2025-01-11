@@ -4,6 +4,7 @@ import com.xenosnowfox.forgedbythefox.models.Ability;
 import com.xenosnowfox.forgedbythefox.models.Action;
 import com.xenosnowfox.forgedbythefox.models.Attribute;
 import com.xenosnowfox.forgedbythefox.models.Playbook;
+import com.xenosnowfox.forgedbythefox.models.Trauma;
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
 import java.time.Duration;
@@ -34,12 +35,16 @@ public record Character(
         @NonNull Playbook playbook,
         @NonNull CharacterExperience experience,
         Map<Action, Integer> actionDots,
-        Set<Ability> abilities) {
+        Set<Ability> abilities,
+        int stress,
+        Set<Trauma> trauma,
+        CharacterHarm harm) {
 
     public static Duration TIME_TO_LIVE = Duration.ofDays(31);
 
     public Character {
         actionDots = new HashMap<>(actionDots == null ? playbook.startingActions() : actionDots);
+
         abilities = Optional.ofNullable(abilities)
                 .or(() -> Optional.ofNullable(playbook.startingAbility()).map(Set::of))
                 .map(HashSet::new)
@@ -47,6 +52,12 @@ public record Character(
                 .stream()
                 .sorted(Comparator.comparing(Enum::name)) // sort while streaming
                 .collect(Collectors.toCollection(LinkedHashSet::new));
+
+        trauma = Optional.ofNullable(trauma).map(HashSet::new).orElse(new HashSet<>());
+
+        stress = Math.clamp(stress, 0, 9);
+
+        harm = new CharacterHarm(harm);
     }
 
     public int dotsForAttribute(final Attribute withAttribute) {
