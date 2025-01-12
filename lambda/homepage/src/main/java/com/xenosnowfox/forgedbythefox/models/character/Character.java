@@ -3,6 +3,8 @@ package com.xenosnowfox.forgedbythefox.models.character;
 import com.xenosnowfox.forgedbythefox.models.Ability;
 import com.xenosnowfox.forgedbythefox.models.Action;
 import com.xenosnowfox.forgedbythefox.models.Attribute;
+import com.xenosnowfox.forgedbythefox.models.Item;
+import com.xenosnowfox.forgedbythefox.models.Load;
 import com.xenosnowfox.forgedbythefox.models.Playbook;
 import com.xenosnowfox.forgedbythefox.models.Trauma;
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
@@ -38,7 +40,9 @@ public record Character(
         Set<Ability> abilities,
         int stress,
         Set<Trauma> trauma,
-        CharacterHarm harm) {
+        CharacterHarm harm,
+        Load load,
+        Set<Item> items) {
 
     public static Duration TIME_TO_LIVE = Duration.ofDays(31);
 
@@ -58,6 +62,10 @@ public record Character(
         stress = Math.clamp(stress, 0, 9);
 
         harm = new CharacterHarm(harm);
+
+        load = load == null ? Load.NORMAL : load;
+
+        items = Optional.ofNullable(items).map(HashSet::new).orElse(new HashSet<>());
     }
 
     public int dotsForAttribute(final Attribute withAttribute) {
@@ -72,5 +80,9 @@ public record Character(
 
     public int dotsForAction(final Action withAction) {
         return this.actionDots.compute(withAction, (attributes, value) -> value == null ? 0 : Math.clamp(value, 0, 3));
+    }
+
+    public int currentLoadAmount() {
+        return this.items.stream().map(Item::loadCost).reduce(Integer::sum).orElse(0);
     }
 }

@@ -90,6 +90,12 @@
         <th:block th:replace="~{layout/labeled-container :: root(label='Special Abilities', content=~{:: #character-abilities})}">
             <div id="character-abilities" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/abilities'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
         </th:block>
+
+        <!-- Items and Load -->
+        <br />
+        <th:block th:replace="~{layout/labeled-container :: root(label='Items & Load', content=~{:: #character-items})}">
+            <div id="character-items" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/items'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
+        </th:block>
     </div>
 
     <!-- Actions & Attributes -->

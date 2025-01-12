@@ -2,6 +2,8 @@ package com.xenosnowfox.forgedbythefox.service.character;
 
 import com.xenosnowfox.forgedbythefox.models.Ability;
 import com.xenosnowfox.forgedbythefox.models.Action;
+import com.xenosnowfox.forgedbythefox.models.Item;
+import com.xenosnowfox.forgedbythefox.models.Load;
 import com.xenosnowfox.forgedbythefox.models.Playbook;
 import com.xenosnowfox.forgedbythefox.models.Trauma;
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
@@ -123,5 +125,21 @@ public class CharacterSchema {
                     .name("stress")
                     .getter(Character::stress)
                     .setter(Character.Builder::stress))
+            // Load
+            .addAttribute(String.class, attributeBuilder -> attributeBuilder
+                    .name("load")
+                    .getter(instance -> instance.load().name())
+                    .setter((builder, value) -> builder.load(Load.valueOf(value))))
+            // Items
+            .addAttribute(EnhancedType.setOf(String.class), attributeBuilder -> attributeBuilder
+                    .name("items")
+                    .getter(instance -> Optional.of(instance)
+                            .map(Character::items)
+                            .map(Collection::stream)
+                            .map(x -> x.map(Enum::name))
+                            .map(x -> x.collect(Collectors.toSet()))
+                            .orElse(null))
+                    .setter((builder, value) ->
+                            builder.items(value.stream().map(Item::valueOf).collect(Collectors.toSet()))))
             .build();
 }

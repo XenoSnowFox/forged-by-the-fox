@@ -13,6 +13,7 @@ import com.xenosnowfox.forgedbythefox.routes.HomepageRoute;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterAbilitiesDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterDetailsDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterHarmDisplayFragment;
+import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterItemDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterStressDisplayFragment;
 import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
 import com.xenosnowfox.forgedbythefox.service.campaign.CampaignService;
@@ -101,6 +102,12 @@ public class ApiGatewayHandler extends Route {
                         HttpMethod.ANY,
                         "/fragments/characters/{character}/stress",
                         CharacterStressDisplayFragment.builder()
+                                .templateService(templateService)
+                                .build())
+                .register(
+                        HttpMethod.ANY,
+                        "/fragments/characters/{character}/items",
+                        CharacterItemDisplayFragment.builder()
                                 .templateService(templateService)
                                 .build())
                 .register(HttpMethod.GET, "/debug", (e1, c1) -> {

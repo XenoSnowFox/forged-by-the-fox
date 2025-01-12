@@ -22,6 +22,8 @@ public enum Playbook {
     SPEAKER("Speaker", Map.of(Action.COMMAND, 1, Action.CONSORT, 2)),
     STITCH("Stitch", Map.of(Action.DOCTOR, 2, Action.STUDY, 1));
 
+    private static Set<Item> commonItems;
+
     private final String label;
 
     private final Map<Action, Integer> startingActions;
@@ -29,6 +31,8 @@ public enum Playbook {
     private Ability startingAbility;
 
     private Set<Ability> specialAbilities;
+
+    private Set<Item> exclusiveItems;
 
     public Ability startingAbility() {
         if (this.startingAbility == null) {
@@ -50,5 +54,25 @@ public enum Playbook {
                     .collect(Collectors.toCollection(LinkedHashSet::new));
         }
         return this.specialAbilities;
+    }
+
+    public Set<Item> exclusiveItems() {
+        if (this.exclusiveItems == null) {
+            this.exclusiveItems = Arrays.stream(Item.values())
+                    .filter(item -> this.equals(item.playbook()))
+                    .sorted(Comparator.comparing(Item::label)) // sort while streaming
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
+        }
+        return this.exclusiveItems;
+    }
+
+    public static Set<Item> commonItems() {
+        if (Playbook.commonItems == null) {
+            Playbook.commonItems = Arrays.stream(Item.values())
+                    .filter(item -> item.playbook() == null)
+                    .sorted(Comparator.comparing(Item::label)) // sort while streaming
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
+        }
+        return Playbook.commonItems;
     }
 }

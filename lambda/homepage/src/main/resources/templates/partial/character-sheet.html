@@ -368,5 +368,99 @@
 </th:block>
 
 
+<!-- View Abilities Element -->
+<th:block th:fragment="view-items">
+    <div id="character-items" style="display:grid;grid-template-columns:1fr;">
+        <!-- Stress -->
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:min-content 1fr 1fr 1fr 1px 1fr 1fr 1px 1fr 1fr 1fr;gap:0.25rem">
+
+            <li></li>
+            <li style="background: var(--fbtf-surface-color-muted);font-family:monospace;text-align:center;padding: 0.125rem 0.5rem;grid-column:span 3;">Light</li>
+            <li style="border-left:1px dashed var(--fbtf-palette-gray-dark); border-right:1px dashed var(--fbtf-palette-gray-dark); grid-row: span 2;"></li>
+            <li style="background: var(--fbtf-surface-color-muted);font-family:monospace;text-align:center;padding: 0.125rem 0.5rem;grid-column:span 2;">Normal</li>
+            <li style="border-left:1px dashed var(--fbtf-palette-gray-dark); border-right:1px dashed var(--fbtf-palette-gray-dark); grid-row: span 2;"></li>
+            <li style="background: var(--fbtf-surface-color-muted);font-family:monospace;text-align:center;padding: 0.125rem 0.5rem;grid-column:span 3;">Heavy</li>
+
+            <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">Load:</li>
+            <th:block th:if="${ctx.character.currentLoadAmount > 0}" th:each="i : ${#numbers.sequence(1, ctx.character.currentLoadAmount)}">
+                <li style="background: var(--fbtf-palette-magenta-regular);" >&nbsp;</li>
+            </th:block>
+            <th:block th:if="${ctx.character.currentLoadAmount < 8}" th:each="i : ${#numbers.sequence(ctx.character.currentLoadAmount, 7)}">
+                <li style="background: var(--fbtf-surface-color-muted);" >&nbsp;</li>
+            </th:block>
+        </ul>
+
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
+
+            <th:block th:each="item: ${ctx.character.items}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <div style="display:flex;align-items:center;gap:0.25rem;flex-wrap:nowrap;">
+                        <strong th:text="${item.label}" style="text-decoration:underline;font-weight:bolder;flex: 1 100%;"></strong>
+                        <span style="display:inline-block;white-space:nowrap;padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);" th:text="${item.loadCost > 0 ? ('Load: ' + item.loadCost) : 'No Cost'}"></span>
+                    </div>
+                    <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${item.description}"></p>
+                </li>
+            </th:block>
+        </ul>
+
+        <button type="button" style="margin: 0.5rem 0;"
+                th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/items?edit'"
+                hx-replace="outerHTML"
+                hx-target="#character-items"
+        >
+            <span>Select Items</span>
+        </button>
+    </div>
+</th:block>
+
+
+<!-- Items Edit Element -->
+<th:block th:fragment="edit-items">
+    <form
+            style="display:grid;grid-template-columns:1fr;"
+            th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/items'"
+            hx-replace="outerHTML"
+    >
+        <div style="padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);margin:0 0 0.25rem;width:auto;">Playbook Items</div>
+        <ul style="margin: 0.5rem;display:grid;grid-template-columns:1fr;gap:0.25rem">
+            <th:block th:each="item : ${ctx.character.playbook.exclusiveItems}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <label>
+                        <div style="display:flex;align-items:center;gap:0.25rem;flex-wrap:nowrap;">
+                            <input type="checkbox" th:name="'item.' + ${item.name}" th:checked="${ctx.character.items.contains(item)}" style="display:inline;width:auto;" />
+                            <strong th:text="${item.label}" style="text-decoration:underline;font-weight:bolder;flex: 1 100%;"></strong>
+                            <span style="display:inline-block;white-space:nowrap;padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);" th:text="${item.loadCost > 0 ? ('Load: ' + item.loadCost) : 'No Cost'}"></span>
+                        </div>
+                        <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${item.description}"></p>
+                    </label>
+                </li>
+            </th:block>
+        </ul>
+
+
+        <div style="padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);margin:0.25rem 0;width:auto;">Common Items</div>
+        <ul style="margin: 0.5rem;display:grid;grid-template-columns:1fr;gap:0.25rem">
+            <th:block th:each="item : ${ctx.character.playbook.commonItems}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <label>
+                        <div style="display:flex;align-items:center;gap:0.25rem;flex-wrap:nowrap;">
+                            <input type="checkbox" th:name="'item.' + ${item.name}" th:checked="${ctx.character.items.contains(item)}" style="display:inline;width:auto;" />
+                            <strong th:text="${item.label}" style="text-decoration:underline;font-weight:bolder;flex: 1 100%;"></strong>
+                            <span style="display:inline-block;white-space:nowrap;padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);" th:text="${item.loadCost > 0 ? ('Load: ' + item.loadCost) : 'No Cost'}"></span>
+                        </div>
+                        <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${item.description}"></p>
+                    </label>
+                </li>
+            </th:block>
+        </ul>
+
+        <button type="button" style="margin: 0.5rem;" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/items'" hx-replace="outerHTML" hx-target="closest form"
+                hx-indicator="closest .fbtf-component-loading-indicator">Cancel</button>
+
+        <button type="submit" style="margin: 0.5rem;">Save Selection</button>
+    </form>
+</th:block>
+
+
 </body>
 </html>

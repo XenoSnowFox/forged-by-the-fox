@@ -1,6 +1,7 @@
 package com.xenosnowfox.forgedbythefox.service.character;
 
 import com.xenosnowfox.forgedbythefox.models.Ability;
+import com.xenosnowfox.forgedbythefox.models.Item;
 import com.xenosnowfox.forgedbythefox.models.Trauma;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterHarm;
@@ -50,6 +51,9 @@ public class CharacterMutationExecutor {
 
     @Setter
     private CharacterHarm withHarm;
+
+    @Setter
+    private Set<Item> withItems;
 
     public Character orNull() {
         return this.get();
@@ -104,6 +108,15 @@ public class CharacterMutationExecutor {
                             ? AttributeValue.fromNul(true)
                             : AttributeValue.fromSs(
                                     this.withTrauma.stream().map(Enum::name).toList()));
+        }
+
+        if (this.withItems != null) {
+            append.accept(
+                    "items",
+                    this.withItems.isEmpty()
+                            ? AttributeValue.fromNul(true)
+                            : AttributeValue.fromSs(
+                                    this.withItems.stream().map(Enum::name).toList()));
         }
 
         if (updateExpressionParts.isEmpty()) {
