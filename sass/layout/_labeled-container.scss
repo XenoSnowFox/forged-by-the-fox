@@ -5,17 +5,28 @@
 	&-labeled-container {
 		> .label {
 			span {
-				@include surfaces.article {
+				@include surfaces.foreground {
 					@include typography.monospace;
 					display: inline-block;
 					padding: 0.25rem 0.5rem;
+					border-top-left-radius: 0.25rem;
+					border-top-right-radius: 0.25rem;
+
+					background: var(--fbtf-on-surface-border-default);
 				}
 			}
 		}
 
 		> .content {
+			border: 1px solid var(--fbtf-on-surface-border-default);
+
+			padding: 0.5rem;
+			border-bottom-left-radius: 0.25rem;
+			border-bottom-right-radius: 0.25rem;
+			border-top-right-radius: 0.25rem;
+
 			@include surfaces.foreground {
-				border-top: 0.0625rem solid white;
+				// 				border-top: 0.0625rem solid white;
 			}
 		}
 	}
