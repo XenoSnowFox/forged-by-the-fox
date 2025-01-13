@@ -7,63 +7,21 @@
     <th:block th:replace="~{fragment/core :: pwa}" />
 
     <style>
-        main {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            justify-content: start;
-            align-items: stretch;
-        }
-
-        .character-sheet {
-            flex: 1 100%;
-            display: grid;
-            grid-template-columns: 5fr 5fr 2fr;
-            margin: 0 auto;
-            max-width: 110rem;
-            gap: 2rem;
-            padding: 1rem;
-        }
-
-        @media (max-width: 60rem) {
-            .character-sheet {
-                grid-template-columns: 3fr 2fr;
-            }
-
-            .character-sheet div:first-child {
-                grid-column: span 2;
-            }
-        }
-
-        @media (max-width: 38rem) {
-            .character-sheet {
-                grid-template-columns: 1fr;
-            }
-
-            .character-sheet div:first-child {
-                grid-column: span 1;
-            }
-
-            .character-sheet > .attributes {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 0.5rem;
-            }
-
-            main > aside {
-                display: none;
-            }
-        }
 
     </style>
 </head>
 <body>
 <th:block th:replace="~{component/global-header :: root}" />
-<main th:with="_campaign=${ctx.character.campaignIdentifier ? service.campaigns.fetch.withIdentifier(ctx.character.campaignIdentifier).get : _}">
+<main class="fbtf-page-character-sheet" th:with="_campaign=${ctx.character.campaignIdentifier ? service.campaigns.fetch.withIdentifier(ctx.character.campaignIdentifier).get : _}">
     <th:block th:if="${_campaign}">
         <th:block th:replace="~{component/campaign-sidebar :: root(${_campaign}, ${ctx.account})}" />
     </th:block>
-<div class="character-sheet">
+
+    <header>
+        HEADER
+    </header>
+<section class="character-sheet">
+
     <!-- Character details -->
     <div>
         <th:block th:replace="~{layout/labeled-container :: root(label=${ctx.character.playbook.label} + ' Playbook', content=~{:: #character-details})}">
@@ -117,7 +75,7 @@
             </ul>
         </th:block>
     </div>
-</div>
+</section>
 
 </main>
 </body>

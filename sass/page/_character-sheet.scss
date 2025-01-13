@@ -1,0 +1,77 @@
+@use "../mixin/surfaces";
+@use "../mixin/typography";
+
+@mixin component {
+	&-character-sheet {
+		display: grid;
+		grid-template-columns: min-content 1fr min-content;
+
+		justify-content: start;
+		align-items: stretch;
+
+		min-height: calc(100vh - 2.5rem);
+
+		> aside {
+			grid-row: 1 / -1;
+			grid-row-start: 1;
+			grid-row-end: span 1000;
+
+			&:first-of-type {
+				grid-column: 1;
+			}
+
+			&:last-of-type:not(:first-of-type) {
+				grid-column: 3;
+			}
+		}
+
+		> header {
+			grid-column: 2;
+			@include surfaces.foreground {
+				min-height: 8rem;
+				border-bottom: 0.125rem solid var(--fbtf-on-surface-border-default);
+			}
+		}
+
+		> section {
+			grid-column: 2;
+
+			display: grid;
+			grid-template-columns: 5fr 5fr 2fr;
+			margin: 0 auto;
+			max-width: 110rem;
+			gap: 2rem;
+			padding: 1rem;
+		}
+
+		@media (max-width: 60rem) {
+			.character-sheet {
+				grid-template-columns: 3fr 2fr;
+			}
+
+			.character-sheet div:first-child {
+				grid-column: span 2;
+			}
+		}
+
+		@media (max-width: 38rem) {
+			.character-sheet {
+				grid-template-columns: 1fr;
+			}
+
+			.character-sheet div:first-child {
+				grid-column: span 1;
+			}
+
+			.character-sheet > .attributes {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 0.5rem;
+			}
+
+			& > aside {
+				display: none;
+			}
+		}
+	}
+}
