@@ -5,12 +5,12 @@
 <th:block th:fragment="view-details">
     <div id="character-details" style="display:grid;grid-template-columns:1fr;">
         <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr 1fr;gap:0.25rem">
-            <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+            <li style="padding: 0.5rem 1rem;">
                 <strong style="text-decoration:underline;font-weight:bolder">Name</strong>
                 <p th:text="${ctx.character.name}"></p>
             </li>
 
-            <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+            <li style="padding: 0.5rem 1rem;">
                 <strong style="text-decoration:underline;font-weight:bolder">Alias</strong>
                 <p th:text="${ctx.character.alias}"></p>
             </li>
@@ -58,7 +58,7 @@
     <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
 
         <th:block th:each="ability: ${ctx.character.abilities}">
-            <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+            <li style="border-top:1px solid var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
                 <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
                 <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${ability.markdown}"></p>
             </li>
@@ -319,7 +319,7 @@
             <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
 
                 <th:block th:each="trauma: ${ctx.character.trauma}">
-                    <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <li style="border-top:1px solid var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
                         <strong th:text="${trauma.label}" style="text-decoration:underline;font-weight:bolder"></strong>
                         <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${trauma.description}"></p>
                     </li>
@@ -393,7 +393,7 @@
         <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
 
             <th:block th:each="item: ${ctx.character.items}">
-                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                <li style="border-top:1px solid var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
                     <div style="display:flex;align-items:center;gap:0.25rem;flex-wrap:nowrap;">
                         <strong th:text="${item.label}" style="text-decoration:underline;font-weight:bolder;flex: 1 100%;"></strong>
                         <span style="display:inline-block;white-space:nowrap;padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);" th:text="${item.loadCost > 0 ? ('Load: ' + item.loadCost) : 'No Cost'}"></span>
