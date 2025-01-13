@@ -1,70 +1,68 @@
-@use "../mixin/surfaces";
+// @use "../mixin/surfaces";
 @use "../mixin/typography";
 
 @mixin component {
-  &-loading-indicator {
+	&-loading-indicator {
+		@include typography.monospace;
 
-      @include typography.monospace;
+		display: block;
+		text-align: center;
 
-      display: block;
-      text-align:center;
+		span {
+			opacity: 0.666;
+			margin: 1rem;
 
-      span {
-        opacity: 0.666;
-        margin: 1rem;
+			&::before {
+				content: "";
+				display: block;
+				height: 1em;
+				text-align: center;
+				animation: fbtf-animation-loading-indicator 1.5s steps(4, end) infinite;
+			}
 
-        &::before {
-          content: '';
-          display: block;
-          height: 1em;
-          text-align: center;
-          animation: fbtf-animation-loading-indicator 1.5s steps(4, end) infinite;
-        }
+			&::after {
+				content: "";
+				display: block;
+				height: 1em;
+				text-align: center;
+				animation: fbtf-animation-loading-indicator 1.5s steps(4, end) infinite;
+			}
+		}
+	}
 
-        &::after {
-          content: '';
-          display: block;
-          height: 1em;
-          text-align: center;
-          animation: fbtf-animation-loading-indicator 1.5s steps(4, end) infinite;
-        }
-      }
-
-  }
-
-  @keyframes fbtf-animation-loading-indicator {
-    0% {
-        content: '';
-    }
-    10% {
-        content: '-';
-    }
-    20% {
-        content: '---';
-    }
-    30% {
-        content: '-----';
-    }
-    40% {
-        content: '---=---';
-    }
-    50% {
-        content: '---===---';
-    }
-    60% {
-        content: '---=====--';
-    }
-    70% {
-        content: '---=======---';
-    }
-    80% {
-        content: '--=========--';
-    }
-    90% {
-        content: '-=========-';
-    }
-    100% {
-        content: '===========';
-    }
-  }
+	@keyframes fbtf-animation-loading-indicator {
+		0% {
+			content: "";
+		}
+		10% {
+			content: "-";
+		}
+		20% {
+			content: "---";
+		}
+		30% {
+			content: "-----";
+		}
+		40% {
+			content: "---=---";
+		}
+		50% {
+			content: "---===---";
+		}
+		60% {
+			content: "---=====--";
+		}
+		70% {
+			content: "---=======---";
+		}
+		80% {
+			content: "--=========--";
+		}
+		90% {
+			content: "-=========-";
+		}
+		100% {
+			content: "===========";
+		}
+	}
 }

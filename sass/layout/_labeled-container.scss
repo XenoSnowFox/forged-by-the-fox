@@ -2,21 +2,21 @@
 @use "../mixin/typography";
 
 @mixin component {
-  &-labeled-container {
+	&-labeled-container {
+		> .label {
+			span {
+				@include surfaces.article {
+					@include typography.monospace;
+					display: inline-block;
+					padding: 0.25rem 0.5rem;
+				}
+			}
+		}
 
-    > .label {
-        span {
-            @include surfaces.article;
-            @include typography.monospace;
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-        }
-    }
-
-
-    > .content {
-        border-top: 0.0625rem solid white;
-    }
-
-  }
+		> .content {
+			@include surfaces.foreground {
+				border-top: 0.0625rem solid white;
+			}
+		}
+	}
 }

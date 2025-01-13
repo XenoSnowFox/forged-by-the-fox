@@ -1,7 +1,6 @@
 // LAYOUTS
-@use 'layout/labeled-container';
+@use "layout/labeled-container";
 
 .fbtf-layout {
-    @include labeled-container.component;
-
+	@include labeled-container.component;
 }

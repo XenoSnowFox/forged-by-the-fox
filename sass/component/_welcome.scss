@@ -2,37 +2,33 @@
 @use "../mixin/typography";
 
 @mixin component {
-  &-welcome {
+	&-welcome {
+		@include typography.monospace;
 
-      @include typography.monospace;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items:center;
+		padding: 2rem 1rem;
 
-      padding: 2rem 1rem;
+		svg {
+			width: 10rem;
+			fill: #f48c06;
+			opacity: 0.666;
+			margin: 1rem;
+		}
 
-      svg {
-        width: 10rem;
-        fill: #f48c06;
-        opacity: 0.666;
-        margin: 1rem;
-      }
+		h1 {
+			font-size: 3rem;
+			text-transform: uppercase;
 
-      h1 {
-            font-size: 3rem;
-            text-transform: uppercase;
-
-            span {
-                    display: block;
-                    text-align: left;
-                    line-height: 2.75rem;
-            font-size: 3rem;
-                }
-      }
-
-
-
-  }
+			span {
+				display: block;
+				text-align: left;
+				line-height: 2.75rem;
+				font-size: 3rem;
+			}
+		}
+	}
 }

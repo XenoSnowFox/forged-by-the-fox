@@ -91,15 +91,16 @@ subprojects {
 			palantirJavaFormat()
 			formatAnnotations()
 		}
-		format("styling") {
-			target("sass/**/*.css", "sass/**/*.scss", "sass/*.css", "sass/*.scss")
-		}
 	}
 }
 
 spotless {
 	format("styling") {
-		target("*.css", "*.scss")
+		target("sass/**/*.css", "sass/**/*.scss", "sass/*.css", "sass/*.scss")
+
+		// you can also set some style options
+		// https://prettier.io/docs/en/configuration.html
+		prettier().config(['parser': 'css', 'tabWidth': 4]).configFile('.prettierrc.json')
 	}
 }
 

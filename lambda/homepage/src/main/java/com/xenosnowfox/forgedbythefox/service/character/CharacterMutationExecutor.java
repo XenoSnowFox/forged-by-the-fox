@@ -6,12 +6,9 @@ import com.xenosnowfox.forgedbythefox.models.Trauma;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterHarm;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import com.xenosnowfox.forgedbythefox.models.dynamodb.DynamoDbUpdateExpressionMutator;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -31,29 +28,73 @@ public class CharacterMutationExecutor {
 
     private final DynamoDbTable<Character> dynamoDbTable;
 
+    private final DynamoDbUpdateExpressionMutator mutator = new DynamoDbUpdateExpressionMutator();
+
     @Setter
     private CharacterIdentifier withIdentifier;
 
-    @Setter
-    private String withName;
+    public CharacterMutationExecutor withName(final String withName) {
+        if (withName != null) {
+            this.mutator.set("name", AttributeValue.fromS(withName));
+        }
+        return this;
+    }
 
-    @Setter
-    private String withAlias;
+    public CharacterMutationExecutor withAlias(final String withAlias) {
+        if (withAlias != null) {
+            this.mutator.set("alias", AttributeValue.fromS(withAlias));
+        }
+        return this;
+    }
 
-    @Setter
-    private Integer withStress;
+    public CharacterMutationExecutor withStress(final Integer withStress) {
+        if (withStress != null) {
+            this.mutator.set("stress", AttributeValue.fromS(String.valueOf(withStress)));
+        }
+        return this;
+    }
 
-    @Setter
-    private Set<Trauma> withTrauma;
+    public CharacterMutationExecutor withHarm(final CharacterHarm withHarm) {
+        if (withHarm != null) {
+            this.mutator.set(
+                    "harm",
+                    AttributeValue.fromM(CharacterHarmSchema.getTableSchema().itemToMap(withHarm, true)));
+        }
+        return this;
+    }
 
-    @Setter
-    private Set<Ability> withAbilities;
+    public CharacterMutationExecutor withAbilities(final Set<Ability> withAbilities) {
+        if (withAbilities != null) {
+            this.mutator.set(
+                    "abilities",
+                    AttributeValue.fromSs(withAbilities.stream().map(Enum::name).toList()));
+        }
+        return this;
+    }
 
-    @Setter
-    private CharacterHarm withHarm;
+    public CharacterMutationExecutor withTrauma(final Set<Trauma> withTrauma) {
+        if (withTrauma != null) {
+            this.mutator.set(
+                    "trauma",
+                    withTrauma.isEmpty()
+                            ? AttributeValue.fromNul(true)
+                            : AttributeValue.fromSs(
+                                    withTrauma.stream().map(Enum::name).toList()));
+        }
+        return this;
+    }
 
-    @Setter
-    private Set<Item> withItems;
+    public CharacterMutationExecutor withItems(final Set<Item> withItems) {
+        if (withItems != null) {
+            this.mutator.set(
+                    "items",
+                    withItems.isEmpty()
+                            ? AttributeValue.fromNul(true)
+                            : AttributeValue.fromSs(
+                                    withItems.stream().map(Enum::name).toList()));
+        }
+        return this;
+    }
 
     public Character orNull() {
         return this.get();
@@ -65,72 +106,14 @@ public class CharacterMutationExecutor {
                 .partitionValue(withIdentifier.toUrn())
                 .sortValue("CHARACTER")
                 .build();
-
-        final Set<String> updateExpressionParts = new HashSet<>();
-        final Map<String, String> attributeKeyMap = new HashMap<>();
-        final Map<String, AttributeValue> attributeValueMap = new HashMap<>();
-
-        final BiConsumer<String, AttributeValue> append = (k, v) -> {
-            updateExpressionParts.add("#k" + attributeKeyMap.size() + " = :v" + attributeValueMap.size());
-            attributeKeyMap.put("#k" + attributeKeyMap.size(), k);
-            attributeValueMap.put(":v" + attributeValueMap.size(), v);
-        };
-
-        if (this.withName != null && !this.withName.isBlank()) {
-            append.accept("name", AttributeValue.fromS(withName.trim()));
-        }
-
-        if (this.withAlias != null && !this.withAlias.isBlank()) {
-            append.accept("alias", AttributeValue.fromS(withAlias.trim()));
-        }
-
-        if (this.withAbilities != null) {
-            append.accept(
-                    "abilities",
-                    AttributeValue.fromSs(
-                            this.withAbilities.stream().map(Enum::name).toList()));
-        }
-
-        if (this.withHarm != null) {
-            append.accept(
-                    "harm",
-                    AttributeValue.fromM(CharacterHarmSchema.getTableSchema().itemToMap(this.withHarm, true)));
-        }
-
-        if (this.withStress != null) {
-            append.accept("stress", AttributeValue.fromN(String.valueOf(this.withStress)));
-        }
-
-        if (this.withTrauma != null) {
-            append.accept(
-                    "trauma",
-                    this.withTrauma.isEmpty()
-                            ? AttributeValue.fromNul(true)
-                            : AttributeValue.fromSs(
-                                    this.withTrauma.stream().map(Enum::name).toList()));
-        }
-
-        if (this.withItems != null) {
-            append.accept(
-                    "items",
-                    this.withItems.isEmpty()
-                            ? AttributeValue.fromNul(true)
-                            : AttributeValue.fromSs(
-                                    this.withItems.stream().map(Enum::name).toList()));
-        }
-
-        if (updateExpressionParts.isEmpty()) {
-            return dynamoDbTable.getItem(key);
-        }
-
+        System.out.println(this.mutator.toString());
         final UpdateItemRequest updateRequest = UpdateItemRequest.builder()
                 .tableName(dynamoDbTable.tableName())
                 .key(key.primaryKeyMap(dynamoDbTable.tableSchema()))
-                .updateExpression("SET " + String.join(", ", updateExpressionParts))
-                .expressionAttributeNames(attributeKeyMap)
-                .expressionAttributeValues(attributeValueMap)
+                .applyMutation(this.mutator)
                 .returnValues(ReturnValue.ALL_NEW)
                 .build();
+        System.out.println(updateRequest);
 
         final UpdateItemResponse updateResponse = this.dynamoDbClient.updateItem(updateRequest);
 

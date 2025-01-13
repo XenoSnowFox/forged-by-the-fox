@@ -2,60 +2,58 @@
 @use "../mixin/typography";
 
 @mixin component {
-  &-global-header {
+	&-global-header {
+		@include surfaces.deep-black {
+			@include typography.monospace;
 
-      @include surfaces.deep-black;
-      @include typography.monospace;
+			padding: 0 1rem 0 0.5rem;
 
-      padding: 0 1rem 0 0.5rem;
+			display: flex;
+			gap: 0;
+			justify-content: flex-start;
+			align-items: center;
+		}
+		.spacer {
+			flex: 1 100%;
+		}
 
-      display: flex;
-      gap: 0;
-      justify-content: flex-start;
-      align-items: center;
+		img {
+			height: 1.5rem;
+			border-radius: 0.25rem;
+			margin: 0.25rem;
+		}
 
-      .spacer {
-        flex: 1 100%;
-      }
+		a {
+			opacity: 0.666;
+			cursor: pointer;
+			white-space: nowrap;
 
-      img {
-        height: 1.5rem;
-        border-radius: 0.25rem;
-        margin: 0.25rem;
-      }
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
 
+			padding: 0.5rem;
 
-      a {
-        opacity: 0.666;
-        cursor: pointer;
-        white-space: nowrap;
+			font-size: 1rem;
 
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+			&:hover {
+				opacity: 1;
+				background: var(--fbtf-surface-color-hover);
+			}
+		}
 
-        padding: 0.5rem;
+		svg {
+			height: 1rem;
+		}
 
-        font-size: 1rem;
+		@media (pointer: coarse) {
+			img {
+				height: 2.5rem;
+			}
 
-        &:hover {
-            opacity: 1;
-            background: var(--fbtf-surface-color-hover);
-        }
-      }
-
-    svg {
-        height: 1rem;
-    }
-
-  @media (pointer:coarse) {
-    img {
-        height: 2.5rem;
-    }
-
-    a {
-        padding: 0.5rem 0.25rem;
-    }
-  }
-  }
+			a {
+				padding: 0.5rem 0.25rem;
+			}
+		}
+	}
 }
