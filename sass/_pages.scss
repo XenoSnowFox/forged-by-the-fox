@@ -1,0 +1,10 @@
+// PAGES
+@use "page/campaign-factions";
+@use "page/character-sheet";
+
+@mixin component {
+	&-page {
+		@include campaign-factions.component;
+		@include character-sheet.component;
+	}
+}

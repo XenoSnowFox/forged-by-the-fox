@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- View Details Element -->
+<th:block th:fragment="view-factions">
+    <div style="display:grid;grid-template-columns:1fr;gap:0.25rem;">
+        <th:block th:each="faction : ${ctx.factions}">
+            <div class="faction">
+                <span class="tier" th:text="${faction.tierRating}"></span>
+                <span class="name" th:text="${faction.name}"></span>
+                <span class="status" th:text="(${faction.status} > 0 ? '+' : '') + ${faction.status}"></span>
+            </div>
+        </th:block>
+    </div>
+</th:block>
+
+
+
+
+</body>
+</html>

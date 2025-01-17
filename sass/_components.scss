@@ -1,0 +1,16 @@
+// COMPONENTS
+@use "component/attribute-display";
+@use "component/campaign-sidebar";
+@use "component/global-header";
+@use "component/loading-indicator";
+@use "component/welcome";
+
+@mixin component {
+	&-component {
+		@include attribute-display.component;
+		@include campaign-sidebar.component;
+		@include global-header.component;
+		@include loading-indicator.component;
+		@include welcome.component;
+	}
+}

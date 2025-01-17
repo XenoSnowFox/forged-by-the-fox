@@ -1,0 +1,95 @@
+@use "../mixin/surfaces";
+@use "../mixin/typography";
+
+@mixin component {
+	&-campaign-factions {
+		display: grid;
+		grid-template-columns: min-content 1fr min-content;
+
+		justify-content: start;
+		align-items: stretch;
+
+		min-height: calc(100vh - 2.5rem);
+
+		> aside {
+			grid-row: 1 / -1;
+			grid-row-start: 1;
+			grid-row-end: span 1000;
+
+			&:first-of-type {
+				grid-column: 1;
+			}
+
+			&:last-of-type:not(:first-of-type) {
+				grid-column: 3;
+			}
+		}
+
+		> header {
+			grid-column: 2;
+			@include surfaces.foreground {
+				min-height: 8rem;
+				border-bottom: 0.125rem solid var(--fbtf-on-surface-border-default);
+			}
+		}
+
+		> section {
+			grid-column: 2;
+
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 2rem;
+			padding: 1rem;
+		}
+
+		.faction {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+
+			.tier {
+				@include surfaces.background {
+					@include typography.monospace;
+					white-space: nowrap;
+					opacity: 0.666;
+					font-size: 1.75rem;
+					display: block;
+					padding: 0.25rem 0.5rem;
+					border-radius: 0.25rem;
+					min-width: 4rem;
+					text-align: center;
+					border: 1px solid var(--fbtf-on-surface-border-default);
+				}
+			}
+
+			.name {
+				flex: 1 100%;
+			}
+
+			.status,
+			.job-count {
+				@include surfaces.background {
+					@include typography.monospace;
+					white-space: nowrap;
+					font-size: 1.75rem;
+					display: block;
+					padding: 0.25rem 0.5rem;
+					border-radius: 0.25rem;
+					min-width: 4rem;
+					text-align: center;
+					border: 1px solid var(--fbtf-on-surface-border-default);
+				}
+			}
+		}
+
+		@media (max-width: 38rem) {
+			> section {
+				grid-template-columns: 1fr;
+			}
+
+			& > aside {
+				display: none;
+			}
+		}
+	}
+}

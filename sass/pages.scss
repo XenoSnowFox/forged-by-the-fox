@@ -1,6 +1,0 @@
-// PAGES
-@use "page/character-sheet";
-
-.fbtf-page {
-	@include character-sheet.component;
-}

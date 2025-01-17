@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Forged by the Fox</title>
+    <th:block th:replace="~{fragment/core :: meta}" />
+    <th:block th:replace="~{fragment/core :: stylesheets}" />
+    <th:block th:replace="~{fragment/core :: pwa}" />
+</head>
+<body>
+<th:block th:replace="~{component/global-header :: root}" />
+<main class="fbtf-page-campaign-factions">
+    <th:block th:replace="~{component/campaign-sidebar :: root(${ctx.campaign}, ${ctx.account})}" />
+    <section class="campaign-factions">
+
+        <th:block th:each="factionAlignment : ${ctx.campaign.factionAlignments}">
+
+            <th:block th:replace="~{layout/labeled-container :: root(label=${factionAlignment.name} + ' Factions', content=~{:: .faction-alignment})}">
+                <div
+                        class="faction-alignment"
+                        th:hx-get="'/fragments/campaigns/' + ${ctx.campaign.identifier} + '/factions?alignment=' + ${factionAlignment.identifier}"
+                        hx-trigger="load"
+                        hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
+            </th:block>
+
+        </th:block>
+
+    </section>
+</main>
+</body>
+</html>

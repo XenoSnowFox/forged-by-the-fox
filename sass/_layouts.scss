@@ -1,0 +1,8 @@
+// LAYOUTS
+@use "layout/labeled-container";
+
+@mixin component {
+	&-layout {
+		@include labeled-container.component;
+	}
+}

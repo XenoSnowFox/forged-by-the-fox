@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Root Element -->
+<th:block th:fragment="root(campaign, account)">
+    <aside class="fbtf-component-campaign-sidebar">
+
+        <th:block th:replace="~{:: campaign-heading('Your Characters')}" />
+
+        <th:block th:with="characters=${service.characters.query.withAccount(account.identifier).withCampaign(campaign.identifier).orNothing}">
+            <th:block th:each="character: ${characters}">
+                <th:block th:replace="~{:: character-panel(${character})}" />
+            </th:block>
+<!--            <a class="character-panel"  th:href="'/campaigns/' + ${campaign.identifier.value} + '/characters'" style="text-align:center;">-->
+<!--                <span>View All Characters</span>-->
+<!--            </a>-->
+
+        </th:block>
+
+        <hr />
+
+        <th:block th:replace="~{:: campaign-heading(${campaign.name})}" />
+
+        <a class="character-panel"  th:href="'/campaigns/' + ${campaign.identifier.value} + '/factions'">
+            <span>Factions</span>
+        </a>
+
+    </aside>
+</th:block>
+
+<th:block th:fragment="campaign-heading(title)">
+    <div class="heading">
+        <span th:text="${title}"></span>
+    </div>
+</th:block>
+
+<th:block th:fragment="character-panel(character)">
+    <a class="character-panel"  th:href="'/characters/' + ${character.identifier.value}">
+        <span th:text="${character.name}"></span>
+        <span th:text="'&ldquo;' + ${character.alias} + '&rdquo;'"></span>
+        &bull;
+        <span th:text="${character.playbook.label}"></span>
+    </a>
+</th:block>
+
+
+</body>
+</html>

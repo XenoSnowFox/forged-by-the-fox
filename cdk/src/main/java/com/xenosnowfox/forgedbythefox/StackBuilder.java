@@ -125,8 +125,8 @@ public class StackBuilder extends Stack {
 
         Function homepageLambdaFunction = Function.Builder.create(stack, "HomepageLambda")
                 .runtime(Runtime.JAVA_21)
-                .code(Code.fromAsset("./build/modules/lambda-homepage/libs/forged-by-the-fox-homepage.jar"))
-                .handler("com.xenosnowfox.forgedbythefox.ApiGatewayHandler::handleRequest")
+                .code(Code.fromAsset("./build/modules/app/libs/forged-by-the-fox-lambda.jar"))
+                .handler("com.xenosnowfox.forgedbythefox.LambdaHandler::handleRequest")
                 .memorySize(512)
                 .timeout(Duration.minutes(5))
                 .logRetention(RetentionDays.ONE_WEEK)
@@ -246,6 +246,40 @@ public class StackBuilder extends Stack {
                                 .service("s3")
                                 .integrationHttpMethod("GET")
                                 .path("forged-by-the-fox-static-resources/images/{object}")
+                                .options(IntegrationOptions.builder()
+                                        .requestParameters(Map.of(
+                                                "integration.request.path.object",
+                                                "method.request.path.object",
+                                                "integration.request.header.Accept",
+                                                "method.request.header.Accept"))
+                                        .integrationResponses(List.of(IntegrationResponse.builder()
+                                                .statusCode("200")
+                                                .responseParameters(Map.of(
+                                                        "method.response.header.Content-Type",
+                                                        "integration.response.header.Content-Type"))
+                                                .build()))
+                                        .credentialsRole(role)
+                                        .passthroughBehavior(PassthroughBehavior.WHEN_NO_TEMPLATES)
+                                        .build())
+                                .build(),
+                        MethodOptions.builder()
+                                .requestParameters(Map.of(
+                                        "method.request.path.object", true, "method.request.header.Accept", true))
+                                .methodResponses(List.of(MethodResponse.builder()
+                                        .statusCode("200")
+                                        .responseParameters(Map.of("method.response.header.Content-Type", true))
+                                        .build()))
+                                .build());
+
+        apiGateway
+                .getRoot()
+                .addResource("favicon.ico")
+                .addMethod(
+                        "GET",
+                        AwsIntegration.Builder.create()
+                                .service("s3")
+                                .integrationHttpMethod("GET")
+                                .path("forged-by-the-fox-static-resources/favicon.ico")
                                 .options(IntegrationOptions.builder()
                                         .requestParameters(Map.of(
                                                 "integration.request.path.object",
