@@ -1,9 +1,5 @@
 package com.xenosnowfox.forgedbythefox.routes;
 
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -17,6 +13,9 @@ import com.xenosnowfox.forgedbythefox.models.session.Session;
 import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
 import com.xenosnowfox.forgedbythefox.service.identity.IdentityManagementService;
 import com.xenosnowfox.forgedbythefox.service.session.SessionManagementService;
+import io.javalin.http.ContentType;
+import io.javalin.http.HandlerType;
+import io.javalin.http.HttpStatus;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,13 +25,12 @@ import java.net.http.HttpResponse;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import lombok.Builder;
 import lombok.NonNull;
 import org.apache.http.client.utils.URIBuilder;
+import org.jetbrains.annotations.NotNull;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRequest;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
@@ -42,7 +40,7 @@ public record AuthenticationRoute(
         @NonNull AccountManagementService accountManagementService,
         @NonNull IdentityManagementService identityManagementService,
         @NonNull SessionManagementService sessionManagementService)
-        implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+        implements JavalinRoute {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
             .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
@@ -53,107 +51,21 @@ public record AuthenticationRoute(
 
     private static final String GOOGLE_TOKEN_URI = "https://oauth2.googleapis.com/token";
 
-    public record GoogleOAuth2Credentials(
-            @JsonProperty("ClientId") String clientId, @JsonProperty("ClientSecret") String clientSecret) {}
-
     @Override
-    public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent event, final Context context) {
-        return this.handleAuthentication(event)
-                .or(() -> this.redirectToGoogleAuth(event))
-                .orElseGet(this::get500Response);
-    }
+    public void handle(@NotNull final io.javalin.http.Context ctx) throws Exception {
 
-    private APIGatewayProxyResponseEvent get500Response() {
-        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
-        response.setIsBase64Encoded(false);
-        response.setStatusCode(200);
-        HashMap<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "text/html");
-        headers.put("Cache-control", "private, no-cache, no-store, max-age=0, must-revalidate");
-        response.setHeaders(headers);
-        response.setStatusCode(500);
-        response.setBody("Internal Server Error");
-        return response;
-    }
-
-    private GoogleOAuth2Credentials fetchOAuth2Credentials(final APIGatewayProxyRequestEvent event) {
-        // Create a Secrets Manager client
-        SecretsManagerClient client = SecretsManagerClient.builder().build();
-
-        GetSecretValueRequest getSecretValueRequest = GetSecretValueRequest.builder()
-                .secretId(event.getStageVariables().get("GOOGLE_OAUTH2_CREDENTIALS_SECRET_NAME"))
-                .build();
-
-        GetSecretValueResponse getSecretValueResponse = client.getSecretValue(getSecretValueRequest);
-
-        String secret = getSecretValueResponse.secretString();
-
-        try {
-            return OBJECT_MAPPER.readValue(secret, GoogleOAuth2Credentials.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Optional<APIGatewayProxyResponseEvent> redirectToGoogleAuth(final APIGatewayProxyRequestEvent event) {
-
-        if (!event.getHttpMethod().equalsIgnoreCase("GET")) {
-            return Optional.empty();
-        }
-
-        // fetch google properties
-        final GoogleOAuth2Credentials oAuth2Credentials = this.fetchOAuth2Credentials(event);
-
-        final URIBuilder uriBuilder;
-        try {
-            uriBuilder = new URIBuilder(GOOGLE_AUTH_URI);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-        uriBuilder.addParameter("client_id", oAuth2Credentials.clientId());
-        uriBuilder.addParameter(
-                "redirect_uri",
-                "https://"
-                        + event.getRequestContext().getDomainName()
-                        + event.getRequestContext().getPath());
-        uriBuilder.addParameter("response_type", "code");
-        uriBuilder.addParameter(
-                "scope",
-                "https://www.googleapis.com/auth/userinfo.profile" + " https://www.googleapis.com/auth/userinfo.email");
-
-        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
-        response.setIsBase64Encoded(false);
-        response.setStatusCode(307);
-
-        HashMap<String, String> headers = new HashMap<>();
-        headers.put("Cache-control", "private, no-cache, no-store, max-age=0, must-revalidate");
-        try {
-            headers.put("Location", uriBuilder.build().toString());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-        response.setHeaders(headers);
-
-        return Optional.of(response);
-    }
-
-    private Optional<APIGatewayProxyResponseEvent> handleAuthentication(final APIGatewayProxyRequestEvent event) {
-
-        if (event.getQueryStringParameters() == null
-                || event.getQueryStringParameters().isEmpty()) {
-            return Optional.empty();
-        }
-
-        final String code = event.getQueryStringParameters().get("code");
-        final String scope = event.getQueryStringParameters().get("scope");
+        final String code = ctx.queryParam("code");
+        final String scope = ctx.queryParam("scope");
         if (code == null || scope == null || code.isBlank() || scope.isBlank()) {
-            return Optional.empty();
+            this.redirectToGoogleAuth(ctx);
+            return;
         }
 
         // Exchange OAuth token
-        final Map<String, String> oAuthTokens = exchangeToken(event, code);
+        final Map<String, String> oAuthTokens = exchangeToken(ctx, code);
         if (oAuthTokens == null) {
-            return Optional.empty();
+            this.redirectToGoogleAuth(ctx);
+            return;
         }
 
         // Retrieve Profile
@@ -200,40 +112,92 @@ public record AuthenticationRoute(
                         .format(session.timestampExpires());
 
         // redirect url
-        final String redirectUrl = ("https://"
-                        + event.getRequestContext().getDomainName()
-                        + event.getRequestContext().getPath())
-                .split("/auth")[0];
+        final String redirectUrl = ctx.fullUrl().split("/auth")[0];
 
         // success
-        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
-        response.setIsBase64Encoded(false);
-        response.setStatusCode(200);
-        HashMap<String, String> headers = new HashMap<>();
-        headers.put("Set-Cookie", cookieValue);
-        headers.put("Content-Type", "text/html");
-        headers.put("Cache-control", "private, no-cache, no-store, max-age=0, must-revalidate");
-        response.setHeaders(headers);
-        response.setBody("<!DOCTYPE html><html><body><script type='text/javascript'>window.location = '" + redirectUrl
-                + "';</script></body></html>");
-        return Optional.of(response);
+        ctx.status(HttpStatus.OK)
+                .contentType(ContentType.HTML)
+                .header("Cache-control", "private, no-cache, no-store, max-age=0, must-revalidate")
+                .header("Set-Cookie", cookieValue)
+                .result("<!DOCTYPE html><html><body><script type='text/javascript'>window.location = '" + redirectUrl
+                        + "';</script></body></html>");
     }
 
-    private Map<String, String> exchangeToken(final APIGatewayProxyRequestEvent event, final String withCode) {
+    public record GoogleOAuth2Credentials(
+            @JsonProperty("ClientId") String clientId, @JsonProperty("ClientSecret") String clientSecret) {}
+
+    private void get500Response(@NotNull final io.javalin.http.Context ctx) {
+        ctx.status(500)
+                .contentType(ContentType.HTML)
+                .header("Cache-control", "private, no-cache, no-store, max-age=0, must-revalidate")
+                .result("<p>Internal Server Error</p>");
+    }
+
+    private GoogleOAuth2Credentials fetchOAuth2Credentials(@NotNull final io.javalin.http.Context ctx) {
+        // Create a Secrets Manager client
+        SecretsManagerClient client = SecretsManagerClient.builder().build();
+
+        GetSecretValueRequest getSecretValueRequest = GetSecretValueRequest.builder()
+                .secretId("credentials/oauth2/google")
+                .build();
+
+        GetSecretValueResponse getSecretValueResponse = client.getSecretValue(getSecretValueRequest);
+
+        String secret = getSecretValueResponse.secretString();
+
+        try {
+            return OBJECT_MAPPER.readValue(secret, GoogleOAuth2Credentials.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void redirectToGoogleAuth(@NotNull final io.javalin.http.Context ctx) {
+
+        if (ctx.method() != HandlerType.GET) {
+            this.get500Response(ctx);
+            return;
+        }
 
         // fetch google properties
-        final GoogleOAuth2Credentials oAuth2Credentials = this.fetchOAuth2Credentials(event);
+        final GoogleOAuth2Credentials oAuth2Credentials = this.fetchOAuth2Credentials(ctx);
+
+        final URIBuilder uriBuilder;
+        try {
+            uriBuilder = new URIBuilder(GOOGLE_AUTH_URI);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        uriBuilder.addParameter("client_id", oAuth2Credentials.clientId());
+        uriBuilder.addParameter("redirect_uri", ctx.fullUrl().split("\\?")[0]);
+        uriBuilder.addParameter("response_type", "code");
+        uriBuilder.addParameter(
+                "scope",
+                "https://www.googleapis.com/auth/userinfo.profile" + " https://www.googleapis.com/auth/userinfo.email");
+
+        final String redirectUrl;
+        try {
+            redirectUrl = uriBuilder.build().toString();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        ctx.status(HttpStatus.TEMPORARY_REDIRECT)
+                .header("Cache-control", "private, no-cache, no-store, max-age=0, must-revalidate")
+                .redirect(redirectUrl, HttpStatus.TEMPORARY_REDIRECT);
+    }
+
+    private Map<String, String> exchangeToken(@NotNull final io.javalin.http.Context ctx, final String withCode) {
+
+        // fetch google properties
+        final GoogleOAuth2Credentials oAuth2Credentials = this.fetchOAuth2Credentials(ctx);
 
         final Map<String, String> payload = Map.ofEntries(
                 Map.entry("client_id", oAuth2Credentials.clientId()),
                 Map.entry("client_secret", oAuth2Credentials.clientSecret()),
                 Map.entry("code", withCode),
                 Map.entry("grant_type", "authorization_code"),
-                Map.entry(
-                        "redirect_uri",
-                        "https://"
-                                + event.getRequestContext().getDomainName()
-                                + event.getRequestContext().getPath()));
+                Map.entry("redirect_uri", ctx.fullUrl().split("\\?")[0]));
         final String json;
         try {
             json = OBJECT_MAPPER.writeValueAsString(payload);

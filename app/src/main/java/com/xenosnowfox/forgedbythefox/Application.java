@@ -1,5 +1,6 @@
 package com.xenosnowfox.forgedbythefox;
 
+import com.xenosnowfox.forgedbythefox.routes.AuthenticationRoute;
 import com.xenosnowfox.forgedbythefox.routes.CampaignCharactersRoute;
 import com.xenosnowfox.forgedbythefox.routes.CampaignFactionsRoute;
 import com.xenosnowfox.forgedbythefox.routes.CharacterSheetRoute;
@@ -93,6 +94,15 @@ public class Application {
         // PWA Manifest
         PwaManifestRoute.builder().build().applyTo(app::get, "/manifest.json");
 
+        // Auth
+        AuthenticationRoute.builder()
+                .accountManagementService(templateService.accountService())
+                .sessionManagementService(templateService.sessionService())
+                .identityManagementService(identityManagementService)
+                .build()
+                .applyTo(app::get, "/auth")
+                .applyTo(app::post, "/auth");
+
         // Homepage/Dashboard
         HomepageRoute.builder()
                 .templateService(templateService)
@@ -166,120 +176,4 @@ public class Application {
         Application.registerRoutes(app);
         app.start(4567);
     }
-
-    //    private static void handle(Context handler) {
-    //        final APIGatewayProxyRequestEvent event = parseEvent(handler);
-    //        final com.amazonaws.services.lambda.runtime.Context context = parseContext(handler);
-    //        final APIGatewayProxyResponseEvent response = API_GATEWAY_HANDLER.handleRequest(event, context);
-    //
-    //        handler.status(response.getStatusCode());
-    //        handler.result(Optional.ofNullable(response.getBody()).orElse(""));
-    //        response.getHeaders().forEach(handler::header);
-    //    }
-
-    //    private static APIGatewayProxyRequestEvent parseEvent(Context handler) {
-    //        final APIGatewayProxyRequestEvent event = new APIGatewayProxyRequestEvent();
-    //
-    //        event.setHttpMethod(handler.method().name());
-    //        event.setPath(handler.path());
-    //        event.setBody(handler.body());
-    //        event.setHeaders(handler.headerMap());
-    //        event.setIsBase64Encoded(false);
-    //        //        event.setQueryStringParameters(handler.queryParamMap());
-    //        event.setStageVariables(Map.of(
-    //                "GOOGLE_OAUTH2_CREDENTIALS_SECRET_NAME",
-    //                "credentials/oauth2/google",
-    //                "BUGSNAG_CREDENTIALS_SECRET_NAME",
-    //                "credentials/api/bugsnag"));
-    //        event.setRequestContext(parseRequestContext(handler));
-    //        event.setPathParameters(new HashMap<>());
-    //        event.setQueryStringParameters(handler.queryParamMap().entrySet().stream()
-    //                .collect(Collectors.toMap(
-    //                        Map.Entry::getKey, k -> k.getValue().stream().findAny().orElse(""))));
-    //        event.setMultiValueQueryStringParameters(handler.queryParamMap());
-    //
-    //        return event;
-    //    }
-
-    //    private static APIGatewayProxyRequestEvent.ProxyRequestContext parseRequestContext(Context handler) {
-    //        URI domain = URI.create(handler.url());
-    //
-    //        final List<Integer> deaultPorts = List.of(80, 443);
-    //
-    //        final APIGatewayProxyRequestEvent.ProxyRequestContext context =
-    //                new APIGatewayProxyRequestEvent.ProxyRequestContext();
-    //        context.setAccountId("000000000");
-    //        context.setRequestId(UUID.randomUUID().toString());
-    //        context.setPath(handler.path());
-    //        context.setHttpMethod(handler.method().name());
-    //        context.setDomainName(domain.getHost()
-    //                + Optional.of(domain.getPort())
-    //                        .filter(p -> !deaultPorts.contains(p))
-    //                        .map(p -> ":" + p)
-    //                        .orElse(""));
-    //        context.setDomainPrefix("");
-    //        context.setStage("");
-    //
-    //        return context;
-    //    }
-
-    //    private static com.amazonaws.services.lambda.runtime.Context parseContext(Context handler) {
-    //        return new com.amazonaws.services.lambda.runtime.Context() {
-    //
-    //            @Override
-    //            public String getAwsRequestId() {
-    //                return "";
-    //            }
-    //
-    //            @Override
-    //            public String getLogGroupName() {
-    //                return "";
-    //            }
-    //
-    //            @Override
-    //            public String getLogStreamName() {
-    //                return "";
-    //            }
-    //
-    //            @Override
-    //            public String getFunctionName() {
-    //                return "";
-    //            }
-    //
-    //            @Override
-    //            public String getFunctionVersion() {
-    //                return "";
-    //            }
-    //
-    //            @Override
-    //            public String getInvokedFunctionArn() {
-    //                return "";
-    //            }
-    //
-    //            @Override
-    //            public CognitoIdentity getIdentity() {
-    //                return null;
-    //            }
-    //
-    //            @Override
-    //            public ClientContext getClientContext() {
-    //                return null;
-    //            }
-    //
-    //            @Override
-    //            public int getRemainingTimeInMillis() {
-    //                return 0;
-    //            }
-    //
-    //            @Override
-    //            public int getMemoryLimitInMB() {
-    //                return 0;
-    //            }
-    //
-    //            @Override
-    //            public LambdaLogger getLogger() {
-    //                return null;
-    //            }
-    //        };
-    //    }
 }
