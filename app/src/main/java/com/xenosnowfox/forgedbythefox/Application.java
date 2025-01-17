@@ -33,8 +33,6 @@ import java.util.stream.Collectors;
 
 public class Application {
 
-    //    private static ApiGatewayHandler API_GATEWAY_HANDLER = new ApiGatewayHandler();
-
     private static void staticResourceHandler(Context ctx) {
         ctx.header("Cache-Control", "no-store");
 
