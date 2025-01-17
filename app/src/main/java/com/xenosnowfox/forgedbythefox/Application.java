@@ -89,6 +89,9 @@ public class Application {
                 .sessionService(new SessionManagementService())
                 .build();
 
+        app.before(ctx -> ctx.req().setCharacterEncoding(StandardCharsets.UTF_8.toString()));
+        app.before(ctx -> ctx.res().setCharacterEncoding(StandardCharsets.UTF_8.toString()));
+
         // PWA Manifest
         PwaManifestRoute.builder().build().applyTo(app::get, "/manifest.json");
 
