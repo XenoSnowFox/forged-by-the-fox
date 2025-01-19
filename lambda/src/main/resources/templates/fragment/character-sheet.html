@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+    <th:block th:fragment="playbook-title(playbook)">
+        <dl class="fbtf-fragment-character-sheet-playbook-title">
+            <dt th:text="${playbook.label}"></dt>
+            <dd th:text="${playbook.tagline}"></dd>
+        </dl>
+    </th:block>
+
+</body>
+</html>

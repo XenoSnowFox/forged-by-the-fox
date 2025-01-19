@@ -1,0 +1,35 @@
+plugins {
+	id "application"
+	id "java"
+	id "com.github.johnrengelman.shadow" version "7.1.2" // Uber-JAR builder
+}
+
+buildDir(new File(rootProject.projectDir, "build/modules/" + project.name))
+
+jar {
+	enabled = true
+}
+
+shadowJar {
+	archiveBaseName.set('forged-by-the-fox')
+	archiveClassifier.set(project.name)
+	archiveVersion.set('')
+}
+
+application {
+	mainClassName "com.xenosnowfox.forgedbythefox.webserver.Application"
+}
+
+dependencies {
+	implementation project(":lambda")
+	implementation "io.javalin:javalin:6.4.0"
+	implementation "org.slf4j:slf4j-simple:2.0.16"
+
+	// AWS Lambda Handler
+	implementation "com.amazonaws:aws-lambda-java-core:1.2.3"
+	implementation "com.amazonaws:aws-lambda-java-events:3.14.0"
+}
+
+compileJava {
+	dependsOn(":compileSass",":compileJava")
+}

@@ -1,0 +1,66 @@
+@use "../mixin/surfaces";
+@use "../mixin/typography";
+
+@mixin component {
+	&-character-sheet {
+		&-playbook-title {
+			@include surfaces.deep-black {
+				text-align: center;
+				font-variant: small-caps;
+
+				padding: 0.5rem;
+
+				dt {
+					font-size: 2rem;
+					opacity: 0.666;
+				}
+
+				dd {
+					font-size: 0.8rem;
+				}
+			}
+		}
+
+		&-header {
+			@include surfaces.foreground {
+				padding: 2rem 1rem 1rem;
+				display: flex;
+				align-items: stretch;
+
+				.details {
+					flex: 1 100%;
+				}
+
+				.alias {
+					@include typography.monospace;
+					font-size: 1.5rem;
+					margin-bottom: 0.5rem;
+					opacity: 0.666;
+
+					&::before {
+						content: "\00201c";
+						display: inline-block;
+						font-size: 1rem;
+					}
+					&::after {
+						content: "\00201d";
+						display: inline-block;
+						font-size: 1rem;
+					}
+				}
+
+				ul {
+					display: flex;
+					align-items: center;
+					font-size: 1rem;
+
+					li + li::before {
+						content: "\002022";
+						display: inline-block;
+						margin: 0 0.5rem;
+					}
+				}
+			}
+		}
+	}
+}

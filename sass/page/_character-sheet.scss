@@ -27,10 +27,16 @@
 
 		> header {
 			grid-column: 2;
-			@include surfaces.foreground {
-				min-height: 8rem;
-				border-bottom: 0.125rem solid var(--fbtf-on-surface-border-default);
-			}
+			// 			@include surfaces.foreground {
+			// 				min-height: 8rem;
+			// 				border-bottom: 0.125rem solid var(--fbtf-on-surface-border-default);
+			// 			}
+		}
+
+		> hr {
+			grid-column: 2;
+			width: 100%;
+			margin: 0;
 		}
 
 		> section {

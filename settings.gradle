@@ -1,4 +1,6 @@
 rootProject.name = "Forged by the Fox"
 
 // Lambda Functions
-include "app", "cdk"
+include "cdk"
+include "lambda"
+include "webserver"

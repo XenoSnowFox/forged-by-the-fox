@@ -3,6 +3,7 @@
 @use "./layouts";
 @use "./components";
 @use "./pages";
+@use "./fragments";
 
 :root {
 	// HORIZONTAL SPACING
@@ -379,6 +380,7 @@ button {
 
 .fbtf {
 	@include components.component;
+	@include fragments.component;
 	@include layouts.component;
 	@include pages.component;
 }

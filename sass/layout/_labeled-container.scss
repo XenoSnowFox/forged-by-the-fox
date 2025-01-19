@@ -15,15 +15,17 @@
 					background: var(--fbtf-on-surface-border-default);
 				}
 			}
+
+			& .content {
+				border-top-left-radius: 0;
+			}
 		}
 
 		> .content {
 			border: 1px solid var(--fbtf-on-surface-border-default);
 
-			padding: 0.5rem;
-			border-bottom-left-radius: 0.25rem;
-			border-bottom-right-radius: 0.25rem;
-			border-top-right-radius: 0.25rem;
+			border-radius: 0.25rem;
+			overflow: hidden;
 
 			@include surfaces.foreground {
 				// 				border-top: 0.0625rem solid white;

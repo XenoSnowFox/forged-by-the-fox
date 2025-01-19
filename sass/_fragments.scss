@@ -1,0 +1,8 @@
+// LAYOUTS
+@use "fragment/character-sheet";
+
+@mixin component {
+	&-fragment {
+		@include character-sheet.component;
+	}
+}

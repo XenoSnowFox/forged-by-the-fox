@@ -1,0 +1,80 @@
+package com.xenosnowfox.forgedbythefox.models;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+
+@Getter
+@Accessors(fluent = true)
+@RequiredArgsConstructor
+public enum Playbook {
+    MECHANIC("Mechanic", "A gearhead and hacker", Map.of(Action.RIG, 2, Action.STUDY, 1)),
+    MUSCLE("Muscle", "A dangerous and intimidating fighter", Map.of(Action.SCRAP, 2, Action.COMMAND, 1)),
+    MYSTIC("Mystic", "A galactic wanderer in touch with the Way", Map.of(Action.SCRAMBLE, 1, Action.ATTUNE, 2)),
+    PILOT("Pilot", "A ship-handling wizard and danger addict", Map.of(Action.RIG, 1, Action.HELM, 2)),
+    SCOUNDREL("Scoundrel", "A scrappy and lucky survivor", Map.of(Action.SKULK, 1, Action.SWAY, 2)),
+    SPEAKER("Speaker", "A respectable person on the take", Map.of(Action.COMMAND, 1, Action.CONSORT, 2)),
+    STITCH("Stitch", "Spacefaring healer or scientist", Map.of(Action.DOCTOR, 2, Action.STUDY, 1));
+
+    private static Set<Item> commonItems;
+
+    private final String label;
+
+    private final String tagline;
+
+    private final Map<Action, Integer> startingActions;
+
+    private Ability startingAbility;
+
+    private Set<Ability> specialAbilities;
+
+    private Set<Item> exclusiveItems;
+
+    public Ability startingAbility() {
+        if (this.startingAbility == null) {
+            this.startingAbility = Arrays.stream(Ability.values())
+                    .filter(Ability::isStartingAbility)
+                    .filter(x -> x.getPlaybook().equals(this))
+                    .findFirst()
+                    .orElse(null);
+        }
+        return this.startingAbility;
+    }
+
+    public Set<Ability> specialAbilities() {
+        if (this.specialAbilities == null) {
+            this.specialAbilities = Arrays.stream(Ability.values())
+                    .filter(ability -> !ability.isStartingAbility())
+                    .filter(x -> x.getPlaybook().equals(this))
+                    .sorted(Comparator.comparing(Enum::name)) // sort while streaming
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
+        }
+        return this.specialAbilities;
+    }
+
+    public Set<Item> exclusiveItems() {
+        if (this.exclusiveItems == null) {
+            this.exclusiveItems = Arrays.stream(Item.values())
+                    .filter(item -> this.equals(item.playbook()))
+                    .sorted(Comparator.comparing(Item::label)) // sort while streaming
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
+        }
+        return this.exclusiveItems;
+    }
+
+    public static Set<Item> commonItems() {
+        if (Playbook.commonItems == null) {
+            Playbook.commonItems = Arrays.stream(Item.values())
+                    .filter(item -> item.playbook() == null)
+                    .sorted(Comparator.comparing(Item::label)) // sort while streaming
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
+        }
+        return Playbook.commonItems;
+    }
+}
