@@ -27,6 +27,15 @@
 			grid-column: 2;
 		}
 
+		.fbtf-component-stress-meter {
+			grid-column: 2;
+			justify-self: start;
+
+			@media (max-width: 38rem) {
+				justify-self: stretch;
+			}
+		}
+
 		.avatar {
 			@include surfaces.foreground {
 				grid-column: 1;

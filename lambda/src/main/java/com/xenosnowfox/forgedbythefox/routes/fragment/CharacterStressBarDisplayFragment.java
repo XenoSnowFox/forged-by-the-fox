@@ -3,13 +3,16 @@ package com.xenosnowfox.forgedbythefox.routes.fragment;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import com.xenosnowfox.forgedbythefox.http.ApiGatewayProxyResponseEventBuilder;
 import com.xenosnowfox.forgedbythefox.models.account.Account;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.session.Session;
 import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class CharacterStressBarDisplayFragment extends CharacterDisplayFragment {
 
@@ -57,5 +60,20 @@ public class CharacterStressBarDisplayFragment extends CharacterDisplayFragment 
                 .orNull();
 
         return renderPage(event, account, mutatedCharacter);
+    }
+
+    @Override
+    public APIGatewayProxyResponseEvent renderPage(
+            final APIGatewayProxyRequestEvent event, final Account account, final Character character) {
+
+        final Map<String, Object> ctx = new HashMap<>();
+        ctx.put("character", character);
+
+        final String html = this.templateService().parse("component/stress-meter", Set.of("root"), ctx);
+
+        return ApiGatewayProxyResponseEventBuilder.newInstance()
+                .withStatusCode(200)
+                .withHeader("Cache-Control", "private, no-cache, no-store, max-age=0, must-revalidate")
+                .withHtml(html);
     }
 }

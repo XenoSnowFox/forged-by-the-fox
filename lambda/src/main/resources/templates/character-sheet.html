@@ -123,12 +123,6 @@
             <div id="character-details" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/details'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
         </th:block>
 
-        <!-- Stress -->
-        <br />
-        <th:block th:replace="~{layout/labeled-container :: root(label='Stress', content=~{:: #character-stress-bar})}">
-            <th:block id="character-stress-bar" th:replace="~{partial/character-sheet :: view-stress-bar}" />
-        </th:block>
-
         <!-- Trauma -->
         <br />
         <th:block th:replace="~{layout/labeled-container :: root(label='Trauma', content=~{:: #character-stress})}">
