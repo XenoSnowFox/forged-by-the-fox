@@ -31,7 +31,7 @@ public record PwaManifestRoute() implements RequestHandler<APIGatewayProxyReques
         manifestData.put("background_color", "#212529");
         manifestData.put("display", "standalone");
         manifestData.put("scope", "/");
-        manifestData.put("theme_color", "#f48c06");
+        manifestData.put("theme_color", "#000");
         manifestData.put(
                 "description",
                 "Forged by the Fox is a fan-made online character sheet for your Blades in the Dark, Scum & Villainy and potentially other games built upon the Forged in the Dark system.");

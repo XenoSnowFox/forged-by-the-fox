@@ -1,0 +1,13 @@
+@use "../mixin/surfaces";
+@use "../mixin/typography";
+
+@mixin component {
+	&-panel {
+		border: 1px solid var(--fbtf-on-surface-border-default);
+		border-radius: 0.25rem;
+		overflow: hidden;
+
+		@include surfaces.foreground {
+		}
+	}
+}

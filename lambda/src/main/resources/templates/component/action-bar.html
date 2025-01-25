@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Root Element -->
+<th:block th:fragment="root(label, actions)">
+    <fieldset class="fbtf-component-action-bar">
+        <legend th:text="${label}"></legend>
+        <ul th:replace="${actions}"></ul>
+    </fieldset>
+</th:block>
+
+
+</body>
+</html>

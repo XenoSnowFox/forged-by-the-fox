@@ -1,4 +1,4 @@
-package com.xenosnowfox.forgedbythefox.util;
+package com.xenosnowfox.forgedbythefox.http;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -19,9 +19,9 @@ public class Route implements RequestHandler<APIGatewayProxyRequestEvent, APIGat
     private Map<HttpMethod, List<RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>>> handlers =
             new HashMap<>();
 
-    private Map<String, Route> subroutes = new HashMap<>();
+    private final Map<String, Route> subroutes = new HashMap<>();
 
-    private Map<String, Route> wildcardRoutes = new HashMap<>();
+    private final Map<String, Route> wildcardRoutes = new HashMap<>();
 
     public Route register(
             @NonNull final HttpMethod httpMethod,

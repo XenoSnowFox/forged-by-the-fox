@@ -1,0 +1,55 @@
+@use "../mixin/surfaces";
+@use "../mixin/typography";
+
+@mixin component {
+	&-character-sheet-header {
+		display: grid;
+		align-items: center;
+		margin: 1rem;
+		column-gap: 1rem;
+		grid-template-columns: min-content 1fr min-content;
+
+		@media (max-width: 38rem) {
+			margin: 0.5rem 0.25rem;
+			column-gap: 0.5rem;
+		}
+
+		h1 {
+			font-size: 1.75rem;
+			font-weight: bold;
+
+			grid-column: 2;
+			white-space: nowrap;
+			text-overflow: ellipses;
+		}
+
+		.fbtf-component-character-tidbits {
+			grid-column: 2;
+		}
+
+		.avatar {
+			@include surfaces.foreground {
+				grid-column: 1;
+				grid-row: 1 / span 2;
+				display: inline-block;
+				border-radius: 0.25rem;
+				border: max(1px, 0.0625rem) solid var(--fbtf-on-surface-border-default);
+				text-align: center;
+
+				svg {
+					width: 4rem;
+
+					@media (max-width: 38rem) {
+						width: 3.125rem;
+					}
+				}
+			}
+		}
+
+		.action-manage {
+			margin: 0.25rem 0;
+			grid-column: 1;
+			display: none; // temp hide until required
+		}
+	}
+}

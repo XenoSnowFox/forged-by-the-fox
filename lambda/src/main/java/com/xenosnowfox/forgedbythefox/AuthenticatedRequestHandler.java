@@ -69,7 +69,7 @@ public interface AuthenticatedRequestHandler
     default APIGatewayProxyResponseEvent handleUnauthenticatedRequest(
             final APIGatewayProxyRequestEvent event, final Context context) {
 
-        final String cookieValue = "session=; Secure; HttpOnly; SameSite=Strict; Path=/; Expires="
+        final String cookieValue = "session=; Secure; HttpOnly; SameSite=Lax; Path=/; Expires="
                 + DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)
                         .withZone(ZoneId.of("GMT"))
                         .format(Instant.now());

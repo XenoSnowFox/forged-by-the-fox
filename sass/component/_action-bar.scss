@@ -1,0 +1,22 @@
+@use "../mixin/surfaces";
+@use "../mixin/typography";
+
+@mixin component {
+	&-action-bar {
+		overflow: hidden;
+
+		display: flex;
+		justify-content: flex-end;
+
+		legend {
+			float: left;
+			white-space: nowrap;
+			padding: 0.5rem 1rem;
+			flex: 1 100%;
+		}
+
+		ul {
+			display: flex;
+		}
+	}
+}

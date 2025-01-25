@@ -43,8 +43,25 @@
 			}
 		}
 
+		.site-name {
+			@include typography.monospace;
+			text-transform: uppercase;
+			display: block;
+			span {
+				display: block;
+				text-align: left;
+				line-height: 0.9em;
+			}
+		}
+
 		svg {
 			height: 1rem;
+
+			&.fbtf-svg-logo {
+				height: 3rem;
+				flex: none;
+				padding: 0.5rem 0;
+			}
 		}
 
 		@media (pointer: coarse) {

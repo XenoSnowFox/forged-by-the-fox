@@ -6,6 +6,8 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.xenosnowfox.forgedbythefox.http.HttpMethod;
+import com.xenosnowfox.forgedbythefox.http.Route;
 import com.xenosnowfox.forgedbythefox.routes.AuthenticationRoute;
 import com.xenosnowfox.forgedbythefox.routes.CampaignCharactersRoute;
 import com.xenosnowfox.forgedbythefox.routes.CampaignFactionsRoute;
@@ -17,6 +19,7 @@ import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterAbilitiesDisplayF
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterDetailsDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterHarmDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterItemDisplayFragment;
+import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterStressBarDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterStressDisplayFragment;
 import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
 import com.xenosnowfox.forgedbythefox.service.campaign.CampaignService;
@@ -25,8 +28,6 @@ import com.xenosnowfox.forgedbythefox.service.faction.FactionManagementService;
 import com.xenosnowfox.forgedbythefox.service.identity.IdentityManagementService;
 import com.xenosnowfox.forgedbythefox.service.session.SessionManagementService;
 import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
-import com.xenosnowfox.forgedbythefox.util.HttpMethod;
-import com.xenosnowfox.forgedbythefox.util.Route;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -119,6 +120,12 @@ public class ApiGatewayHandler extends Route {
                         HttpMethod.ANY,
                         "/fragments/characters/{character}/stress",
                         CharacterStressDisplayFragment.builder()
+                                .templateService(templateService)
+                                .build())
+                .register(
+                        HttpMethod.ANY,
+                        "/fragments/characters/{character}/stress-bar",
+                        CharacterStressBarDisplayFragment.builder()
                                 .templateService(templateService)
                                 .build())
                 .register(

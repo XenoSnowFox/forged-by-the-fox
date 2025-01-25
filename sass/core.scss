@@ -2,6 +2,7 @@
 @use "./mixin/typography" as typography;
 @use "./layouts";
 @use "./components";
+@use "./compositions";
 @use "./pages";
 @use "./fragments";
 
@@ -68,12 +69,17 @@
 	--fbtf-palette-black-lighter: #292521;
 	--fbtf-palette-black-light: #242a2d;
 	--fbtf-palette-black-regular: #212529;
+	--fbtf-palette-black-dark: #000;
+	--fbtf-palette-black-darker: #000;
 	--fbtf-palette-black-darkest: #000;
 
 	--fbtf-palette-white-lightest: #fff;
 	--fbtf-palette-white-lighter: #f3fbff;
 	--fbtf-palette-white-light: #f2fbff;
 	--fbtf-palette-white-regular: #fcfeff;
+	--fbtf-palette-white-dark: #fdfdfd;
+	--fbtf-palette-white-darker: #fbfdff;
+	--fbtf-palette-white-darkest: #f6fafd;
 
 	--fbtf-palette-gray-light: #d1d1d1;
 	--fbtf-palette-gray-regular: #99a3a3;
@@ -368,18 +374,27 @@ button {
 	}
 }
 
-// .htmx-indicator{
-//     display:none !important;
-// }
-// .htmx-request .htmx-indicator{
-//     display:initial !important;
-// }
-// .htmx-request.htmx-indicator{
-//     display:initial !important;
-// }
+hr {
+	display: block;
+	border: none;
+	background: var(--fbtf-on-surface-border-default);
+	height: max(1px, 0.0625rem);
+	margin: 0;
+}
+
+.htmx-indicator {
+	display: none !important;
+}
+.htmx-request .htmx-indicator {
+	display: block !important;
+}
+.htmx-request.htmx-indicator {
+	display: block !important;
+}
 
 .fbtf {
 	@include components.component;
+	@include compositions.component;
 	@include fragments.component;
 	@include layouts.component;
 	@include pages.component;

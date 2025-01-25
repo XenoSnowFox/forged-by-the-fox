@@ -1,4 +1,4 @@
-package com.xenosnowfox.forgedbythefox.util;
+package com.xenosnowfox.forgedbythefox.http;
 
 public enum HttpMethod {
     GET,

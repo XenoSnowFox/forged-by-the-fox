@@ -3,23 +3,19 @@ package com.xenosnowfox.forgedbythefox.routes.fragment;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.xenosnowfox.forgedbythefox.models.Trauma;
 import com.xenosnowfox.forgedbythefox.models.account.Account;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.session.Session;
 import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
 
-public class CharacterStressDisplayFragment extends CharacterDisplayFragment {
+public class CharacterStressBarDisplayFragment extends CharacterDisplayFragment {
 
     @lombok.Builder(builderClassName = "Builder")
-    public CharacterStressDisplayFragment(final TemplateService templateService) {
-        super("stress", templateService);
+    public CharacterStressBarDisplayFragment(final TemplateService templateService) {
+        super("stress-bar", templateService);
     }
 
     public APIGatewayProxyResponseEvent handlePostRequest(
@@ -36,15 +32,28 @@ public class CharacterStressDisplayFragment extends CharacterDisplayFragment {
 
         Map<String, List<String>> form = this.parseBodyString(event.getBody());
 
-        final Set<Trauma> trauma = new HashSet<>();
-        Arrays.stream(Trauma.values())
-                .filter(t -> form.containsKey("trauma." + t.name().toLowerCase(Locale.ROOT)))
-                .forEach(trauma::add);
+        int stress = character.stress();
+        if (form.containsKey("decrement")) {
+
+            stress -= Optional.ofNullable(form.get("decrement"))
+                    .map(List::getFirst)
+                    .map(Integer::parseInt)
+                    .orElse(0);
+        }
+
+        if (form.containsKey("increment")) {
+            stress += Optional.ofNullable(form.get("increment"))
+                    .map(List::getFirst)
+                    .map(Integer::parseInt)
+                    .orElse(0);
+        }
+
+        stress = Math.clamp(stress, 0, 9);
 
         final Character mutatedCharacter = this.templateService()
                 .characterService()
                 .mutate(character)
-                .withTrauma(trauma)
+                .withStress(stress)
                 .orNull();
 
         return renderPage(event, account, mutatedCharacter);

@@ -217,7 +217,7 @@ public record AuthenticationRoute(
                 .orElseThrow();
         final String cookieValue = "session="
                 + session.identifier().value()
-                + "; Secure; HttpOnly; SameSite=Strict; Path=/; Expires="
+                + "; Secure; HttpOnly; SameSite=Lax; Path=/; Expires="
                 + DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)
                         .withZone(ZoneId.of("GMT"))
                         .format(session.timestampExpires());

@@ -1,0 +1,8 @@
+// COMPONENTS
+@use "composition/character-sheet-header";
+
+@mixin component {
+	&-composition {
+		@include character-sheet-header.component;
+	}
+}

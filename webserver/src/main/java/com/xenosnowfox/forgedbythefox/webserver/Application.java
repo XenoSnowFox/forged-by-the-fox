@@ -65,6 +65,8 @@ public class Application {
 
     public static void main(final String[] args) {
         Javalin.create()
+                .before(ctx -> ctx.res().setCharacterEncoding(StandardCharsets.UTF_8.name()))
+                .before(ctx -> ctx.req().setCharacterEncoding(StandardCharsets.UTF_8.name()))
                 .get("/styles/*", Application::staticResourceHandler)
                 .get("/scripts/*", Application::staticResourceHandler)
                 .get("/images/*", Application::staticResourceHandler)

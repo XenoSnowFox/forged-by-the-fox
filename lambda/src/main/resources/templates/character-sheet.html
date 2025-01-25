@@ -10,31 +10,129 @@
 
     </style>
 </head>
-<body>
+<body th:inline="text">
 <th:block th:replace="~{component/global-header :: root}" />
+<th:block th:replace="~{composition/character-sheet-header :: root}" />
+
 <main class="fbtf-page-character-sheet" th:with="_campaign=${ctx.character.campaignIdentifier ? service.campaigns.fetch.withIdentifier(ctx.character.campaignIdentifier).get : _}">
+
+    <!-- Toggles -->
+    <input type="radio" name="toggle" id="_1" checked="checked" />
+    <input type="radio" name="toggle" id="_2" />
+    <input type="radio" name="toggle" id="_3" />
+    <input type="radio" name="toggle" id="_4" />
+    <input type="radio" name="toggle" id="_5" />
+    <input type="radio" name="toggle" id="_6" />
+    <input type="radio" name="toggle" id="_7" />
+
+    <!-- Header -->
+
+    <!-- Stress & Harm Bar -->
+
+    <!-- Tabs -->
+    <ul class="mobile-tabs">
+        <li>
+            <label for="_1">
+                <th:block th:replace="~{svg/game-icon :: gear-heart}" />
+                <span>Details</span>
+            </label>
+        </li>
+        <li>
+            <label for="_2">
+                <th:block th:replace="~{svg/game-icon :: gear-heart}" />
+                <span>Harm</span>
+            </label>
+        </li>
+        <li>
+            <label for="_3">
+                <th:block th:replace="~{svg/game-icon :: gear-heart}" />
+                <span>Abilities</span>
+            </label>
+        </li>
+        <li>
+            <label for="_4">
+                <th:block th:replace="~{svg/game-icon :: gear-heart}" />
+                <span>Actions</span>
+            </label>
+        </li>
+        <li>
+            <label for="_5">
+                <th:block th:replace="~{svg/game-icon :: gear-heart}" />
+                <span>Items</span>
+            </label>
+        </li>
+        <li>
+            <label for="_6">
+                <th:block th:replace="~{svg/game-icon :: gear-heart}" />
+                <span>Friends</span>
+            </label>
+        </li>
+        <li>
+            <label for="_7">
+                <th:block th:replace="~{svg/game-icon :: gear-heart}" />
+                <span>Exp</span>
+            </label>
+        </li>
+    </ul>
+
+    <!-- Main Content -->
+
+
+
     <th:block th:if="${_campaign}">
         <th:block th:replace="~{component/campaign-sidebar :: root(${_campaign}, ${ctx.account})}" />
     </th:block>
+
+<!--    <article class="fbtf-component-panel">-->
+<!--        <header>-->
+<!--            <th:block th:replace="~{component/action-bar :: root(${ctx.character.playbook.label}, ~{:: #character-sheet-article-actions})}">-->
+<!--                <ul id="character-sheet-article-actions"></ul>-->
+<!--            </th:block>-->
+
+<!--            <div class="details">-->
+<!--                <span class="character-name" th:text="${ctx.character.name}"></span>-->
+<!--                <span class="character-alias" th:text="${ctx.character.alias}"></span>-->
+
+
+
+<!--            </div>-->
+
+<!--            <div class="panels">-->
+
+
+<!--            </div>-->
+
+
+<!--        </header>-->
+
+<!--        <nav>-->
+
+<!--        </nav>-->
+
+
+
+
+<!--    </article>-->
 
 <section class="character-sheet">
 
     <!-- Character details -->
     <div>
-        <th:block th:replace="~{layout/labeled-container :: root(label=${_}, content=~{:: #character-profile})}">
-            <div id="character-profile">
-                <th:block th:replace="~{fragment/character-sheet :: playbook-title(${ctx.character.playbook})}" />
-            </div>
-        </th:block>
 
         <th:block th:replace="~{layout/labeled-container :: root(label=${ctx.character.playbook.label} + ' Playbook', content=~{:: #character-details})}">
             <div id="character-details" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/details'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
         </th:block>
 
-        <!-- Stress & Trauma -->
+        <!-- Stress -->
         <br />
-        <th:block th:replace="~{layout/labeled-container :: root(label='Stress & Trauma', content=~{:: #character-stress})}">
-            <div id="character-stress" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/stress'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
+        <th:block th:replace="~{layout/labeled-container :: root(label='Stress', content=~{:: #character-stress-bar})}">
+            <th:block id="character-stress-bar" th:replace="~{partial/character-sheet :: view-stress-bar}" />
+        </th:block>
+
+        <!-- Trauma -->
+        <br />
+        <th:block th:replace="~{layout/labeled-container :: root(label='Trauma', content=~{:: #character-stress})}">
+            <th:block id="character-stress" th:replace="~{partial/character-sheet :: view-stress}" />
         </th:block>
 
         <!-- Harm -->

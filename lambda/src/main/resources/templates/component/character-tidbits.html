@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Root Element -->
+<th:block th:fragment="root">
+    <div class="fbtf-component-character-tidbits">
+        <span class="playbook">[[${ctx.character.playbook.label}]]</span>
+        <span class="playbook">&ldquo;[[${ctx.character.alias}]]&rdquo;</span>
+    </div>
+</th:block>
+
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.xenosnowfox.forgedbythefox.util;
+package com.xenosnowfox.forgedbythefox.http;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;

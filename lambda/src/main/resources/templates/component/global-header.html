@@ -3,27 +3,25 @@
 <body>
 <!-- Root Element -->
 <th:block th:fragment="root">
-    <header class="fbtf-component-global-header">
+    <nav class="fbtf-component-global-header">
 
-        <th:block th:if="${ctx.account}">
-            <img th:src="${ctx.account.profilePictureUrl}" />
-        </th:block>
+        <th:block th:replace="~{svg/logos :: forged-by-the-fox}" />
 
-        <a th:href="${ctx.url.resolve('/')}"><span>Forged by the Fox</span></a>
+        <a class="site-name" th:href="${ctx.url.resolve('/')}"><span>Forged</span><span>by the</span><span>Fox</span></a>
 
         <!-- TODO MENU -->
 
         <div class="spacer"></div>
 
         <th:block th:if="${ctx.account}">
-            <a href="#" hx-delete="/auth"><span>Sign Out</span> <th:block th:replace="~{svg/icon :: door-open}" /></a>
+            <a href="#" hx-delete="/auth"><span>Sign Out</span><img th:src="${ctx.account.profilePictureUrl}" /></a>
         </th:block>
 
         <th:block th:unless="${ctx.account}">
             <a th:href="${ctx.url.resolve('/auth')}"><span>Sign In</span><th:block th:replace="~{svg/icon :: key}" /></a>
         </th:block>
 
-    </header>
+    </nav>
 </th:block>
 
 

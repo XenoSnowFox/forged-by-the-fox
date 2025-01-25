@@ -1,4 +1,4 @@
-package com.xenosnowfox.forgedbythefox.util;
+package com.xenosnowfox.forgedbythefox.http;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import java.util.HashMap;
