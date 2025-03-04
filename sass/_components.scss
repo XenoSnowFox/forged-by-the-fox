@@ -1,11 +1,11 @@
 // COMPONENTS
 @use "component/action-bar";
 @use "component/attribute-display";
-@use "component/campaign-sidebar";
 @use "component/character-tidbits";
 @use "component/global-header";
 @use "component/loading-indicator";
 @use "component/panel";
+@use "component/sidebar";
 @use "component/stress-meter";
 @use "component/welcome";
 
@@ -13,11 +13,11 @@
 	&-component {
 		@include action-bar.component;
 		@include attribute-display.component;
-		@include campaign-sidebar.component;
 		@include character-tidbits.component;
 		@include global-header.component;
 		@include loading-indicator.component;
 		@include panel.component;
+		@include sidebar.component;
 		@include stress-meter.component;
 		@include welcome.component;
 	}

@@ -38,7 +38,7 @@ public class CharacterItemDisplayFragment extends CharacterDisplayFragment {
 
         final Set<Item> items = new HashSet<>();
         Arrays.stream(Item.values())
-                .filter(t -> !form.containsKey("item." + t.name().toLowerCase(Locale.ROOT)))
+                .filter(t -> form.containsKey("item." + t.name().toLowerCase(Locale.ROOT)))
                 .forEach(items::add);
 
         final Character mutatedCharacter = this.templateService()

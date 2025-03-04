@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "removeComments": true,
+    "sourceMap": false,
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["es5", "es6", "dom", "webworker", "ES2021.String"],
+    "allowJs": true,
+    "jsx": "react",
+    "rootDir": "./typescript",
+    "downlevelIteration": true
+  },
+  "include": [
+    "./typescript/**/*"
+  ]
+}

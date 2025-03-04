@@ -1,6 +1,6 @@
 package com.xenosnowfox.forgedbythefox.models.character;
 
-import java.util.UUID;
+import com.xenosnowfox.forgedbythefox.util.NanoId;
 import lombok.NonNull;
 
 public record CharacterIdentifier(@NonNull String value) {
@@ -22,7 +22,7 @@ public record CharacterIdentifier(@NonNull String value) {
     }
 
     public static CharacterIdentifier random() {
-        return new CharacterIdentifier(UUID.randomUUID().toString());
+        return new CharacterIdentifier(NanoId.random());
     }
 
     @Override

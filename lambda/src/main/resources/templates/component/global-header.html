@@ -3,7 +3,7 @@
 <body>
 <!-- Root Element -->
 <th:block th:fragment="root">
-    <nav class="fbtf-component-global-header">
+    <header class="fbtf-component-global-header">
 
         <th:block th:replace="~{svg/logos :: forged-by-the-fox}" />
 
@@ -21,7 +21,7 @@
             <a th:href="${ctx.url.resolve('/auth')}"><span>Sign In</span><th:block th:replace="~{svg/icon :: key}" /></a>
         </th:block>
 
-    </nav>
+    </header>
 </th:block>
 
 

@@ -5,6 +5,7 @@
     <th:block th:replace="~{fragment/core :: meta}" />
     <th:block th:replace="~{fragment/core :: stylesheets}" />
     <th:block th:replace="~{fragment/core :: pwa}" />
+    <th:block th:replace="~{fragment/core :: web-components}" />
 
     <style>
 
@@ -154,6 +155,8 @@
         <th:block th:each="attribute : ${ctx.attributes}">
             <th:block th:replace="~{component/attribute-display :: root(${ctx.character}, ${attribute})}" />
         </th:block>
+        <br />
+        <br />
         <th:block th:replace="~{layout/labeled-container :: root(label='Bonus Dice', content=~{:: #character-bonus-dice})}">
             <ul id="character-bonus-dice" style="padding: 0.0625rem;">
                 <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">

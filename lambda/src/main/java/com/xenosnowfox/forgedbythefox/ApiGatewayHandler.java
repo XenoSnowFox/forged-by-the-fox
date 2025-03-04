@@ -21,6 +21,8 @@ import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterHarmDisplayFragme
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterItemDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterStressBarDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterStressDisplayFragment;
+import com.xenosnowfox.forgedbythefox.routes.page.CampaignDetailsPageRoute;
+import com.xenosnowfox.forgedbythefox.routes.page.campaign.crew.CharacterPlaybookPageRoute;
 import com.xenosnowfox.forgedbythefox.service.account.AccountManagementService;
 import com.xenosnowfox.forgedbythefox.service.campaign.CampaignService;
 import com.xenosnowfox.forgedbythefox.service.character.CharacterManagementService;
@@ -80,6 +82,12 @@ public class ApiGatewayHandler extends Route {
                         CharacterSheetRoute.builder()
                                 .templateService(templateService)
                                 .build())
+                // Campaign Details Page
+                .register(HttpMethod.GET, "/campaigns/{campaign}", new CampaignDetailsPageRoute(templateService))
+                .register(
+                        HttpMethod.GET,
+                        "/campaigns/{campaign}/crew/{character}",
+                        new CharacterPlaybookPageRoute(templateService))
                 .register(
                         HttpMethod.ANY,
                         "/campaigns/{campaign}/characters",

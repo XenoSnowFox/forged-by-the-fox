@@ -3,7 +3,14 @@
 <body>
 <!-- Root Element -->
 <th:block th:fragment="root(campaign, account)">
-    <aside class="fbtf-component-campaign-sidebar">
+    <aside class="fbtf-component-sidebar">
+
+        <fbtf-layout-centerfold>
+            <img class="system-banner" src="/images/scum-and-villainy-banner.png" />
+            <h2 style="padding: 0.5rem;font-weight:bold;">[[ ${campaign.name} ]]<small style="font-size:0.7em;font-weight:normal;display:block;text-align:center;padding: 0.125rem 0;">Scum &amp; Villainy</small></h2>
+        </fbtf-layout-centerfold>
+
+        <hr />
 
         <th:block th:replace="~{:: campaign-heading('Your Characters')}" />
 

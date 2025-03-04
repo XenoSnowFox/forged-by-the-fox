@@ -57,7 +57,7 @@ public class Application {
                 InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
                 BufferedReader reader = new BufferedReader(inputStreamReader); ) {
 
-            ctx.result(reader.lines().collect(Collectors.joining()) + "\n");
+            ctx.result(reader.lines().collect(Collectors.joining("\n")) + "\n");
         } catch (IOException ex) {
             ctx.status(404);
         }

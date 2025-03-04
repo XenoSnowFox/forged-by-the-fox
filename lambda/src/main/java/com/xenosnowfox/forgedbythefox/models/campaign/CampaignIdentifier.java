@@ -1,6 +1,6 @@
 package com.xenosnowfox.forgedbythefox.models.campaign;
 
-import java.util.UUID;
+import com.xenosnowfox.forgedbythefox.util.NanoId;
 import lombok.Builder;
 import lombok.NonNull;
 
@@ -33,6 +33,6 @@ public record CampaignIdentifier(@NonNull String value) {
     }
 
     public static CampaignIdentifier random() {
-        return new CampaignIdentifier(UUID.randomUUID().toString());
+        return new CampaignIdentifier(NanoId.random());
     }
 }

@@ -117,6 +117,7 @@ public class CharacterSchema {
                             .map(Collection::stream)
                             .map(x -> x.map(Enum::name))
                             .map(x -> x.collect(Collectors.toSet()))
+                            .filter(x -> !x.isEmpty())
                             .orElse(null))
                     .setter((builder, value) ->
                             builder.trauma(value.stream().map(Trauma::valueOf).collect(Collectors.toSet()))))
@@ -138,6 +139,7 @@ public class CharacterSchema {
                             .map(Collection::stream)
                             .map(x -> x.map(Enum::name))
                             .map(x -> x.collect(Collectors.toSet()))
+                            .filter(x -> !x.isEmpty())
                             .orElse(null))
                     .setter((builder, value) ->
                             builder.items(value.stream().map(Item::valueOf).collect(Collectors.toSet()))))

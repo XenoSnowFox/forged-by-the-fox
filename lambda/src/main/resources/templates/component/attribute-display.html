@@ -3,31 +3,11 @@
 <body>
 <!-- Root Element -->
 <th:block th:fragment="root(character, attribute)">
-    <div class="fbtf-component-attribute-display">
-        <figure th:attr="data-experience=${character.experience.experienceForAttribute(attribute)}">
-            <span th:text="${character.dotsForAttribute(attribute)}"></span>
-            <figcaption>
-                <p th:text="${attribute.label}"></p>
-                <div class="exp">
-                    <span>Exp:</span>
-                    <th:block th:replace="~{svg/icon :: bookmark}" />
-                    <th:block th:replace="~{svg/icon :: bookmark}" />
-                    <th:block th:replace="~{svg/icon :: bookmark}" />
-                    <th:block th:replace="~{svg/icon :: bookmark}" />
-                    <th:block th:replace="~{svg/icon :: bookmark}" />
-                    <th:block th:replace="~{svg/icon :: bookmark}" />
-                </div>
-            </figcaption>
-        </figure>
-        <ul>
-            <li th:each="action : ${attribute.actions}" th:attr="data-dots=${character.dotsForAction(action)}">
-                <span th:text="${action.label}"></span>
-                <th:block th:replace="~{svg/icon :: caret-right}" />
-                <th:block th:replace="~{svg/icon :: caret-right}" />
-                <th:block th:replace="~{svg/icon :: caret-right}" />
-            </li>
-        </ul>
-    </div>
+    <fbtf-element-playbook-attribute-display th:label="${attribute.label}" th:value="${character.dotsForAttribute(attribute)}">
+        <th:block th:each="action : ${attribute.actions}" th:attr="data-dots=${character.dotsForAction(action)}">
+            <fbtf-element-playbook-action-display th:value="${character.dotsForAction(action)}">[[${action.label}]]</fbtf-element-playbook-action-display>
+        </th:block>
+    </fbtf-element-playbook-attribute-display>
 </th:block>
 
 

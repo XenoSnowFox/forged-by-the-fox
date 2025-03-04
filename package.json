@@ -1,0 +1,15 @@
+{
+  "name": "forged-by-the-fox",
+  "scripts": {
+    "build": "npm run format && webpack",
+    "clean": "tsc --build --clean",
+    "format": "prettier --write ./typescript"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.1",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  }
+}
