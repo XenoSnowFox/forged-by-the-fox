@@ -8,173 +8,36 @@
     <th:block th:replace="~{fragment/core :: web-components}" />
 
     <style>
+        body {
+            display: grid;
+            grid-template-columns: min-content 1fr;
+        }
+
+        body > header {
+            grid-column: 1 / span 2;
+        }
+
+        body > main {
+            grid-column: 1 / span 2;
+            min-height: calc(100vh - 4rem);
+            margin: 0 1rem;
+        }
+
+        body > *:not(header) + main {
+            grid-column: auto / span 1;
+        }
+
 
     </style>
 </head>
 <body th:inline="text">
-<th:block th:replace="~{component/global-header :: root}" />
-<th:block th:replace="~{composition/character-sheet-header :: root}" />
-
-<main class="fbtf-page-character-sheet" th:with="_campaign=${ctx.character.campaignIdentifier ? service.campaigns.fetch.withIdentifier(ctx.character.campaignIdentifier).get : _}">
-
-    <!-- Toggles -->
-    <input type="radio" name="toggle" id="_1" checked="checked" />
-    <input type="radio" name="toggle" id="_2" />
-    <input type="radio" name="toggle" id="_3" />
-    <input type="radio" name="toggle" id="_4" />
-    <input type="radio" name="toggle" id="_5" />
-    <input type="radio" name="toggle" id="_6" />
-    <input type="radio" name="toggle" id="_7" />
-
-    <!-- Header -->
-
-    <!-- Stress & Harm Bar -->
-
-    <!-- Tabs -->
-    <ul class="mobile-tabs">
-        <li>
-            <label for="_1">
-                <th:block th:replace="~{svg/game-icon :: gear-heart}" />
-                <span>Details</span>
-            </label>
-        </li>
-        <li>
-            <label for="_2">
-                <th:block th:replace="~{svg/game-icon :: gear-heart}" />
-                <span>Harm</span>
-            </label>
-        </li>
-        <li>
-            <label for="_3">
-                <th:block th:replace="~{svg/game-icon :: gear-heart}" />
-                <span>Abilities</span>
-            </label>
-        </li>
-        <li>
-            <label for="_4">
-                <th:block th:replace="~{svg/game-icon :: gear-heart}" />
-                <span>Actions</span>
-            </label>
-        </li>
-        <li>
-            <label for="_5">
-                <th:block th:replace="~{svg/game-icon :: gear-heart}" />
-                <span>Items</span>
-            </label>
-        </li>
-        <li>
-            <label for="_6">
-                <th:block th:replace="~{svg/game-icon :: gear-heart}" />
-                <span>Friends</span>
-            </label>
-        </li>
-        <li>
-            <label for="_7">
-                <th:block th:replace="~{svg/game-icon :: gear-heart}" />
-                <span>Exp</span>
-            </label>
-        </li>
-    </ul>
-
-    <!-- Main Content -->
-
-
-
-    <th:block th:if="${_campaign}">
-        <th:block th:replace="~{component/campaign-sidebar :: root(${_campaign}, ${ctx.account})}" />
+    <th:block th:replace="~{component/global-header :: root}" />
+    <th:block th:if="${ctx.campaign}">
+        <th:block th:replace="~{component/campaign-sidebar :: root(${ctx.campaign}, ${ctx.account})}" />
     </th:block>
 
-<!--    <article class="fbtf-component-panel">-->
-<!--        <header>-->
-<!--            <th:block th:replace="~{component/action-bar :: root(${ctx.character.playbook.label}, ~{:: #character-sheet-article-actions})}">-->
-<!--                <ul id="character-sheet-article-actions"></ul>-->
-<!--            </th:block>-->
-
-<!--            <div class="details">-->
-<!--                <span class="character-name" th:text="${ctx.character.name}"></span>-->
-<!--                <span class="character-alias" th:text="${ctx.character.alias}"></span>-->
-
-
-
-<!--            </div>-->
-
-<!--            <div class="panels">-->
-
-
-<!--            </div>-->
-
-
-<!--        </header>-->
-
-<!--        <nav>-->
-
-<!--        </nav>-->
-
-
-
-
-<!--    </article>-->
-
-<section class="character-sheet">
-
-    <!-- Character details -->
-    <div>
-
-        <th:block th:replace="~{layout/labeled-container :: root(label=${ctx.character.playbook.label} + ' Playbook', content=~{:: #character-details})}">
-            <div id="character-details" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/details'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
-        </th:block>
-
-        <!-- Trauma -->
-        <br />
-        <th:block th:replace="~{layout/labeled-container :: root(label='Trauma', content=~{:: #character-stress})}">
-            <th:block id="character-stress" th:replace="~{partial/character-sheet :: view-stress}" />
-        </th:block>
-
-        <!-- Harm -->
-        <br />
-        <th:block th:replace="~{layout/labeled-container :: root(label='Harm', content=~{:: #character-harm})}">
-            <div id="character-harm" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/harm'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
-        </th:block>
-    </div>
-
-    <!-- Abilities -->
-    <div>
-        <th:block th:replace="~{layout/labeled-container :: root(label='Special Abilities', content=~{:: #character-abilities})}">
-            <div id="character-abilities" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/abilities'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
-        </th:block>
-
-        <!-- Items and Load -->
-        <br />
-        <th:block th:replace="~{layout/labeled-container :: root(label='Items & Load', content=~{:: #character-items})}">
-            <div id="character-items" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/items'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
-        </th:block>
-    </div>
-
-    <!-- Actions & Attributes -->
-    <div class="attributes">
-        <th:block th:each="attribute : ${ctx.attributes}">
-            <th:block th:replace="~{component/attribute-display :: root(${ctx.character}, ${attribute})}" />
-        </th:block>
-        <br />
-        <br />
-        <th:block th:replace="~{layout/labeled-container :: root(label='Bonus Dice', content=~{:: #character-bonus-dice})}">
-            <ul id="character-bonus-dice" style="padding: 0.0625rem;">
-                <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
-                    <p><strong style="text-decoration:underline;font-weight:bolder">Push yourself</strong> (take 2 stress) <strong style="white-space:nowrap;">-or-</strong> accept a <strong style="text-decoration:underline;font-weight:bolder">Devil's Bargain</strong></p>
-                </li>
-
-                <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
-                    <p><strong style="text-decoration:underline;font-weight:bolder">Assist</strong> (they take 1 stress)</p>
-                </li>
-
-                <li style="margin: 0.125rem;border: 1px solid white;padding: 0.5rem 1rem;">
-                    <p><strong style="text-decoration:underline;font-weight:bolder">Spend a Gambit</strong></p>
-                </li>
-            </ul>
-        </th:block>
-    </div>
-</section>
-
-</main>
+    <main>
+        <th:block th:replace="~{article/character-sheet :: root(${ctx.account}, ${ctx.character})}" />
+    </main>
 </body>
 </html>

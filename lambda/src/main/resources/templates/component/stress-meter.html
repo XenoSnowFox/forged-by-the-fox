@@ -20,8 +20,8 @@
                        th:name="${ctx.character.stress >= i} ? 'decrement' : 'increment'"
                        th:value="${ctx.character.stress >= i} ? ${ctx.character.stress - i + 1} : ${i - ctx.character.stress}" />
                 <span type="button"><th:block th:if="${ctx.character.stress >= i}">
-                        <th:block  th:replace="~{svg/icon :: cross}" />
-                </th:block></span>
+                    <th:block  th:replace="~{svg/icon :: cross}" />
+            </th:block></span>
             </li>
         </ul>
     </div>

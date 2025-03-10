@@ -1,6 +1,7 @@
 package com.xenosnowfox.forgedbythefox.service.character;
 
 import com.xenosnowfox.forgedbythefox.models.Ability;
+import com.xenosnowfox.forgedbythefox.models.Attribute;
 import com.xenosnowfox.forgedbythefox.models.Item;
 import com.xenosnowfox.forgedbythefox.models.Trauma;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
@@ -9,6 +10,7 @@ import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
 import com.xenosnowfox.forgedbythefox.models.dynamodb.DynamoDbUpdateExpressionMutator;
 import java.util.Optional;
 import java.util.Set;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -50,6 +52,23 @@ public class CharacterMutationExecutor {
     public CharacterMutationExecutor withStress(final Integer withStress) {
         if (withStress != null) {
             this.mutator.set("stress", AttributeValue.fromS(String.valueOf(withStress)));
+        }
+        return this;
+    }
+
+    public CharacterMutationExecutor withPlaybookExperience(final Integer withExperience) {
+        if (withExperience != null) {
+            this.mutator.set("experience.playbook", AttributeValue.fromN(String.valueOf(withExperience)));
+        }
+        return this;
+    }
+
+    public CharacterMutationExecutor withAttributeExperience(
+            @NonNull final Attribute withAttribute, final Integer withExperience) {
+        if (withExperience != null) {
+            this.mutator.set(
+                    "experience.attributes." + withAttribute.name(),
+                    AttributeValue.fromN(String.valueOf(withExperience)));
         }
         return this;
     }

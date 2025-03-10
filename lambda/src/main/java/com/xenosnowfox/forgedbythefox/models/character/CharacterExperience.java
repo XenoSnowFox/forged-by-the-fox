@@ -24,4 +24,16 @@ public record CharacterExperience(int playbook, @NonNull Map<Attribute, Integer>
                 withAttribute,
                 (attributes, value) -> value == null ? 0 : Math.clamp(value, 0, MAX_ATTRIBUTE_EXPERIENCE));
     }
+
+    public int insight() {
+        return this.experienceForAttribute(Attribute.INSIGHT);
+    }
+
+    public int prowess() {
+        return this.experienceForAttribute(Attribute.PROWESS);
+    }
+
+    public int resolve() {
+        return this.experienceForAttribute(Attribute.RESOLVE);
+    }
 }

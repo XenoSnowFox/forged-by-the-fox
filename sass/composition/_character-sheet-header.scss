@@ -60,5 +60,21 @@
 			grid-column: 1;
 			display: none; // temp hide until required
 		}
+
+		.attributes-and-actions {
+			@include surfaces.foreground {
+				border: 1px solid var(--fbtf-on-surface-border-default);
+				display: flex;
+				gap: 2rem;
+				padding: 0 1rem 1rem;
+				border-radius: 0.25rem;
+				grid-column: 3 / span 1;
+				grid-row: 1 / span 3;
+			}
+			& > * {
+				flex: 1 100%;
+				min-width: 9rem;
+			}
+		}
 	}
 }

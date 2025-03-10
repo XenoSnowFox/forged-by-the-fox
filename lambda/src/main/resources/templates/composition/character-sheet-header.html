@@ -8,8 +8,13 @@
         <span class="avatar"><th:block th:replace="~{svg/icon :: avatar}" /></span>
         <th:block th:replace="~{component/character-tidbits :: root}" />
         <button class="action-manage">Manage</button>
-        <th:block th:replace="~{component/stress-meter :: root}" />
 
+
+        <div class="attributes-and-actions">
+            <th:block th:each="attribute : ${ctx.attributes}">
+                <th:block th:replace="~{component/attribute-display :: root(${ctx.character}, ${attribute})}" />
+            </th:block>
+        </div>
 
     </header>
 </th:block>

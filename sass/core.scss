@@ -1,5 +1,6 @@
 @use "./mixin/surfaces" as surfaces;
 @use "./mixin/typography" as typography;
+@use "./articles";
 @use "./layouts";
 @use "./components";
 @use "./compositions";
@@ -398,4 +399,5 @@ hr {
 	@include fragments.component;
 	@include layouts.component;
 	@include pages.component;
+	@include articles.component;
 }

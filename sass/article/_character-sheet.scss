@@ -1,0 +1,142 @@
+@use "../mixin/surfaces";
+@use "../mixin/typography";
+
+@mixin component {
+	&-character-sheet {
+		display: grid;
+		grid-template-columns: 1fr 38rem;
+		column-gap: 1rem;
+
+		header {
+			h1 {
+				font-size: 1.75rem;
+				font-weight: bolder;
+			}
+
+			.subheading {
+				font-weight: bolder;
+			}
+
+			.overline {
+				font-size: 0.8em;
+			}
+
+			@include surfaces.foreground {
+				border: 1px solid var(--fbtf-on-surface-border-default);
+				padding: 1rem;
+			}
+		}
+
+		.attributes-and-actions {
+			@include surfaces.foreground {
+				border: 1px solid var(--fbtf-on-surface-border-default);
+				display: flex;
+				gap: 2rem;
+				padding: 0 1rem 1rem;
+				border-radius: 0.25rem;
+			}
+			& > * {
+				flex: 1 100%;
+				min-width: 9rem;
+			}
+		}
+
+		#character-sheet-experience {
+			.attribute-exp {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				white-space: nowrap;
+				padding: 0.25rem 1rem;
+
+				> * {
+					flex: none;
+				}
+
+				li:nth-child(4),
+				li:nth-child(7) {
+					margin-left: 0.5rem;
+				}
+			}
+			.playbook-exp {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				white-space: nowrap;
+				padding: 0.25rem 1rem;
+
+				> * {
+					flex: none;
+				}
+
+				li:nth-child(3),
+				li:nth-child(6) {
+					margin-left: 0.5rem;
+				}
+			}
+
+			ul {
+				display: flex;
+				justify-content: space-between;
+				align-items: stretch;
+				gap: 0.25rem;
+				align-self: stretch;
+				flex: 1 100%;
+
+				li {
+					display: flex;
+					flex-direction: column;
+					justify-content: stretch;
+					align-items: stretch;
+					flex: 1 100%;
+					width: 1rem;
+					height: 2rem;
+
+					span {
+						display: block;
+						aspect-ratio: 1 / 1;
+						height: 100%;
+
+						display: flex;
+						flex-direction: column;
+						justify-content: stretch;
+						align-items: stretch;
+						flex: 1 100%;
+
+						text-align: center;
+						border-radius: 0.125rem;
+						border: max(1px, 0.0625rem) solid var(--fbtf-palette-magenta-dense);
+
+						background: var(--fbtf-palette-magenta-regular);
+						fill: var(--fbtf-palette-magenta-dense);
+						cursor: pointer;
+
+						opacity: 0.666;
+
+						&:hover {
+							opacity: 1;
+						}
+
+						&:empty {
+							border-color: var(--fbtf-on-surface-border-default);
+							@include surfaces.background;
+						}
+					}
+
+					@media (pointer: coarse) {
+						width: 2.5rem;
+					}
+
+					@media (max-width: 38rem) {
+						width: auto;
+					}
+
+					svg {
+						display: block;
+						flex: 1 100%;
+					}
+				}
+			}
+		}
+	}
+}

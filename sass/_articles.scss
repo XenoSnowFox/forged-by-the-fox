@@ -1,0 +1,8 @@
+// COMPONENTS
+@use "article/character-sheet";
+
+@mixin component {
+	&-article {
+		@include character-sheet.component;
+	}
+}

@@ -3,6 +3,7 @@
 
 @mixin component {
 	&-global-header {
+		z-index: 1;
 		@include surfaces.deep-black {
 			@include typography.monospace;
 

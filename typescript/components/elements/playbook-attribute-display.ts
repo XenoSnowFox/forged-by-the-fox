@@ -6,6 +6,7 @@ export class PlaybookAttributeDisplayElementComponent extends HTMLElement {
 		const shadowRoot = this.attachShadow({ mode: "open" });
 
 		// Define the inner structure and styles of the component.
+
 		shadowRoot.innerHTML = `
             <style>
               figure {
@@ -13,7 +14,7 @@ export class PlaybookAttributeDisplayElementComponent extends HTMLElement {
                 flex-direction:row;
                 justify-content: space-between;
                 align-items:center;
-                padding: 0.25rem 0;
+                padding: 0.25rem 0 0;
                 margin: 0.5rem 0 0;
                 font-weight: bolder;
               }
@@ -21,7 +22,9 @@ export class PlaybookAttributeDisplayElementComponent extends HTMLElement {
               figure span {
                 display: inline-block;
                 border: 1px solid black;
-                padding: 0.25rem;
+                border-bottom: none;
+                padding: 0.25rem 0.5rem;
+                border-radius: 50% 50% 0 0 ;
               }
 
               hr {

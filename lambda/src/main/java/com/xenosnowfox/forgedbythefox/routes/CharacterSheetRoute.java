@@ -13,10 +13,12 @@ import com.xenosnowfox.forgedbythefox.models.account.Account;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
 import com.xenosnowfox.forgedbythefox.models.session.Session;
+import com.xenosnowfox.forgedbythefox.service.campaign.CampaignRetrievalExecutor;
 import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import lombok.Builder;
 
 @Builder(builderClassName = "Builder")
@@ -52,6 +54,11 @@ public record CharacterSheetRoute(TemplateService templateService) implements Au
         ctx.put("attributes", Attribute.values());
         ctx.put("character", character);
         ctx.put("url", urlResolver);
+
+        Optional.ofNullable(character.campaignIdentifier())
+                .map(templateService.campaignService().fetch()::withIdentifier)
+                .map(CampaignRetrievalExecutor::get)
+                .ifPresent(campaign -> ctx.put("campaign", campaign));
 
         final String html = templateService.parse("character-sheet", ctx);
         return ApiGatewayProxyResponseEventBuilder.newInstance()

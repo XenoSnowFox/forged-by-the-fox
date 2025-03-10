@@ -17,6 +17,7 @@ import com.xenosnowfox.forgedbythefox.routes.PwaManifestRoute;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CampaignFactionDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterAbilitiesDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterDetailsDisplayFragment;
+import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterExperienceDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterHarmDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterItemDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterStressBarDisplayFragment;
@@ -116,6 +117,12 @@ public class ApiGatewayHandler extends Route {
                         HttpMethod.ANY,
                         "/fragments/characters/{character}/abilities",
                         CharacterAbilitiesDisplayFragment.builder()
+                                .templateService(templateService)
+                                .build())
+                .register(
+                        HttpMethod.ANY,
+                        "/fragments/characters/{character}/experience",
+                        CharacterExperienceDisplayFragment.builder()
                                 .templateService(templateService)
                                 .build())
                 .register(

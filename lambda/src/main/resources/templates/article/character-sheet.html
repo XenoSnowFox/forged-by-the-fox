@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Root Element -->
+<th:block th:fragment="root(account, character)">
+    <article class="fbtf-article-character-sheet">
+        <header style="margin-top:1rem">
+
+            <span class="overline">[[${ctx.character.playbook.label}]]</span>
+            <h1>[[${character.name}]]</h1>
+            <span class="subheading">&ldquo;[[${ctx.character.alias}]]&rdquo;</span>
+
+            <br />
+            <th:block th:replace="~{component/stress-meter :: root}" />
+
+        </header>
+
+        <!-- ATTRIBUTES & ACTIONS -->
+        <aside class="attributes-and-actions" style="margin-top:1rem">
+            <th:block th:each="attribute : ${ctx.attributes}">
+                <th:block th:replace="~{component/attribute-display :: root(${character}, ${attribute})}" />
+            </th:block>
+        </aside>
+
+        <!-- DETAILS & HARM -->
+        <section style="margin-top:1rem;display:grid; grid-template-columns: 3fr 5fr;column-gap:1rem;">
+            <div>
+<!--                <th:block th:replace="~{layout/labeled-container :: root(label=${ctx.character.playbook.label} + ' Playbook', content=~{:: #character-details})}">-->
+<!--                    <div id="character-details" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/details'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>-->
+<!--                </th:block>-->
+
+                <!-- Trauma -->
+<!--                <br />-->
+                <th:block th:replace="~{layout/labeled-container :: root(label='Trauma', content=~{:: #character-stress})}">
+                    <th:block id="character-stress" th:replace="~{partial/character-sheet :: view-stress}" />
+                </th:block>
+
+                <!-- Harm -->
+                <br />
+                <th:block th:replace="~{layout/labeled-container :: root(label='Harm', content=~{:: #character-harm})}">
+                    <div id="character-harm" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/harm'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
+                </th:block>
+            </div>
+
+            <!-- ABILITIES -->
+            <div style="margin-top:1rem">
+                <th:block th:replace="~{layout/labeled-container :: root(label='Special Abilities', content=~{:: #character-abilities})}">
+                    <div id="character-abilities" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/abilities'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
+                </th:block>
+            </div>
+        </section>
+
+        <!-- ITEMS & LOAD -->
+        <section style="margin-top:1rem">
+            <th:block th:replace="~{layout/labeled-container :: root(label='Items & Load', content=~{:: #character-items})}">
+                <div id="character-items" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/items'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
+            </th:block>
+
+            <br />
+
+            <th:block th:replace="~{layout/labeled-container :: root(label='Experience', content=~{:: #character-experience})}">
+                <div id="character-experience" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/experience'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
+            </th:block>
+        </section>
+
+    </article>
+</th:block>
+
+
+</body>
+</html>

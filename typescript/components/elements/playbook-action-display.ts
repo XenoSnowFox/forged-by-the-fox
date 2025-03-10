@@ -26,7 +26,7 @@ export class PlaybookActionDisplayElementComponent extends HTMLElement {
 
               svg {
                 height: 1rem;
-                opacity: 0.125;
+                opacity: 0.05;
               }
 
               svg.active {
