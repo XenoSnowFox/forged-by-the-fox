@@ -16,6 +16,10 @@ public class CharacterHarmSchema {
     @Getter
     private final TableSchema<CharacterHarm> tableSchema = StaticTableSchema.builder(CharacterHarm.class)
             .newItemSupplier(CharacterHarm::new)
+            .addAttribute(Integer.class, attributeBuilder -> attributeBuilder
+                    .name("healing")
+                    .getter(CharacterHarm::getHealing)
+                    .setter(CharacterHarm::setHealing))
             .addAttribute(EnhancedType.setOf(String.class), attributeBuilder -> attributeBuilder
                     .name(HarmLevel.LESSER.name())
                     .getter(instance -> Optional.of(HarmLevel.LESSER)

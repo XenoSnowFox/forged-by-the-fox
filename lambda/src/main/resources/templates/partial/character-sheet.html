@@ -192,6 +192,32 @@
         </ul>
 
 
+        <div class="healing">
+
+            <th:block th:replace="~{component/loading-indicator :: root }" />
+
+            <label>Healing:</label>
+            <ul class="toggle-boxes">
+                <li th:each="i:${#numbers.sequence(1, 6)}"
+                    hx-trigger="click"
+                    th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/healing'"
+                    hx-swap="outerHTML"
+                    hx-target="#character-harm"
+                    hx-include="this"
+                    hx-indicator="closest .healing"
+                    th:title="(${ctx.character.harm.healing >= i} ? 'Remove' : 'Add') + ' ' + (${ctx.character.harm.healing >= i} ? ${ctx.character.harm.healing - i + 1} : ${i - ctx.character.harm.healing}) + ' healing.'"
+                >
+                    <input type="hidden"
+                           th:name="${ctx.character.harm.healing >= i} ? 'decrement' : 'increment'"
+                           th:value="${ctx.character.harm.healing >= i} ? ${ctx.character.harm.healing - i + 1} : ${i - ctx.character.harm.healing}" />
+                    <span type="button"><th:block th:if="${ctx.character.harm.healing >= i}">
+                    <th:block  th:replace="~{svg/icon :: heart}" />
+            </th:block></span>
+                </li>
+            </ul>
+        </div>
+
+
         <button type="button" style="margin: 0.5rem 0;"
                 th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/harm?edit'"
                 hx-replace="outerHTML"

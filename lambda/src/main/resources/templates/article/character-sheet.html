@@ -38,14 +38,14 @@
                 <!-- Harm -->
                 <br />
                 <th:block th:replace="~{layout/labeled-container :: root(label='Harm', content=~{:: #character-harm})}">
-                    <div id="character-harm" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/harm'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
+                    <th:block id="character-harm" th:replace="~{partial/character-sheet :: view-harm}" />
                 </th:block>
             </div>
 
             <!-- ABILITIES -->
             <div style="margin-top:1rem">
                 <th:block th:replace="~{layout/labeled-container :: root(label='Special Abilities', content=~{:: #character-abilities})}">
-                    <div id="character-abilities" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/abilities'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
+                    <th:block id="character-abilities" th:replace="~{partial/character-sheet :: view-abilities}" />
                 </th:block>
             </div>
         </section>
@@ -53,13 +53,13 @@
         <!-- ITEMS & LOAD -->
         <section style="margin-top:1rem">
             <th:block th:replace="~{layout/labeled-container :: root(label='Items & Load', content=~{:: #character-items})}">
-                <div id="character-items" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/items'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
+                <th:block id="character-items" th:replace="~{partial/character-sheet :: view-items}" />
             </th:block>
 
             <br />
 
             <th:block th:replace="~{layout/labeled-container :: root(label='Experience', content=~{:: #character-experience})}">
-                <div id="character-experience" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/experience'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
+                <th:block id="character-experience" th:replace="~{partial/character-sheet :: view-experience}" />
             </th:block>
         </section>
 

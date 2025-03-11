@@ -9,6 +9,8 @@ import com.xenosnowfox.forgedbythefox.ApiGatewayHandler;
 import com.xenosnowfox.forgedbythefox.AuthenticatedRequestHandler;
 import com.xenosnowfox.forgedbythefox.http.ApiGatewayProxyResponseEventBuilder;
 import com.xenosnowfox.forgedbythefox.models.Attribute;
+import com.xenosnowfox.forgedbythefox.models.HarmLevel;
+import com.xenosnowfox.forgedbythefox.models.Trauma;
 import com.xenosnowfox.forgedbythefox.models.account.Account;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
@@ -16,9 +18,12 @@ import com.xenosnowfox.forgedbythefox.models.session.Session;
 import com.xenosnowfox.forgedbythefox.service.campaign.CampaignRetrievalExecutor;
 import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.Builder;
 
 @Builder(builderClassName = "Builder")
@@ -54,6 +59,10 @@ public record CharacterSheetRoute(TemplateService templateService) implements Au
         ctx.put("attributes", Attribute.values());
         ctx.put("character", character);
         ctx.put("url", urlResolver);
+        ctx.put(
+                "HarmLevel",
+                Arrays.stream(HarmLevel.values()).collect(Collectors.toMap(HarmLevel::name, Function.identity())));
+        ctx.put("Trauma", Arrays.stream(Trauma.values()).collect(Collectors.toMap(Enum::name, Function.identity())));
 
         Optional.ofNullable(character.campaignIdentifier())
                 .map(templateService.campaignService().fetch()::withIdentifier)
