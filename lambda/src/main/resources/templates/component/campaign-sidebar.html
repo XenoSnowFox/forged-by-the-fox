@@ -32,6 +32,41 @@
 <!--            <span>Factions</span>-->
 <!--        </a>-->
 
+        <div id="campaign-clocks"
+             th:hx-get="'/fragments/campaigns/' + ${ctx.campaign.identifier} + '/clocks'"
+             hx-swap="outerHTML"
+             hx-trigger="load delay: 60s"><th:block th:replace="~{component/loading-indicator :: root }" /></div>
+
+        <th:block th:if="${ctx.campaign.account.equals(ctx.account.identifier)}">
+            <hr />
+            <th:block th:replace="~{:: campaign-heading('Create Clock')}" />
+            <form
+                th:hx-post="'/fragments/campaigns/' + ${ctx.campaign.identifier} + '/clocks'"
+                hx-trigger="submit"
+                hx-target="#campaign-clocks"
+                hx-swap="outerHTML"
+                style="padding:0 1rem;"
+            >
+                <label>Name</label>
+                <input type="text" name="name" />
+                <br /><br />
+
+                <label>Segments</label>
+                <select name="segments">
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                </select>
+                <br /><br />
+
+                <input type="submit" value="Create Clock" />
+            </form>
+
+
+        </th:block>
+
     </aside>
 </th:block>
 
@@ -49,7 +84,6 @@
         <span th:text="${character.playbook.label}"></span>
     </a>
 </th:block>
-
 
 </body>
 </html>

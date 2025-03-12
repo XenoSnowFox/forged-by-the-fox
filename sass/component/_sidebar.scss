@@ -20,7 +20,7 @@
 			width: 100%;
 		}
 
-		> .heading {
+		.heading {
 			@include typography.monospace;
 
 			text-align: center;
@@ -48,6 +48,82 @@
 
 			&:hover {
 				@include surfaces.article {
+				}
+			}
+		}
+
+		.clock {
+			display: block;
+			padding: 0.25rem 1rem;
+
+			.toggle-boxes {
+				margin: 0.125rem 0;
+			}
+		}
+
+		.toggle-boxes {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			white-space: nowrap;
+			gap: 0.125rem;
+
+			> * {
+				flex: none;
+			}
+
+			li {
+				display: flex;
+				flex-direction: column;
+				justify-content: stretch;
+				align-items: stretch;
+				flex: 1 100%;
+				width: 1rem;
+				height: 1.125rem;
+
+				span {
+					display: block;
+					aspect-ratio: 1 / 1;
+					height: 100%;
+
+					display: flex;
+					flex-direction: column;
+					justify-content: stretch;
+					align-items: stretch;
+					flex: 1 100%;
+
+					text-align: center;
+					border-radius: 0.125rem;
+					border: max(1px, 0.0625rem) solid var(--fbtf-palette-magenta-dense);
+
+					background: var(--fbtf-palette-magenta-regular);
+					fill: var(--fbtf-palette-magenta-dense);
+					cursor: pointer;
+
+					opacity: 0.666;
+
+					&:hover {
+						opacity: 1;
+					}
+
+					&:empty {
+						border-color: var(--fbtf-on-surface-border-default);
+						@include surfaces.background;
+					}
+				}
+
+				@media (pointer: coarse) {
+					width: 2.5rem;
+				}
+
+				@media (max-width: 38rem) {
+					width: auto;
+				}
+
+				svg {
+					display: block;
+					flex: 1 100%;
+					margin: 0.125rem;
 				}
 			}
 		}

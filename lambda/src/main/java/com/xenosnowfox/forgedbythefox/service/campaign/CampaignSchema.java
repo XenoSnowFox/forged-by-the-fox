@@ -4,6 +4,7 @@ import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
 import com.xenosnowfox.forgedbythefox.models.campaign.Campaign;
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignName;
+import com.xenosnowfox.forgedbythefox.models.clock.Clock;
 import com.xenosnowfox.forgedbythefox.models.faction.FactionAlignment;
 import com.xenosnowfox.forgedbythefox.service.faction.FactionAlignmentSchema;
 import java.time.Instant;
@@ -54,5 +55,11 @@ public class CampaignSchema {
                             .name("faction-alignments")
                             .getter(Campaign::factionAlignments)
                             .setter(Campaign.Builder::factionAlignments))
+            .addAttribute(
+                    EnhancedType.listOf(EnhancedType.documentOf(Clock.class, ClockSchema.getTableSchema())),
+                    attributeBuilder -> attributeBuilder
+                            .name("clocks")
+                            .getter(Campaign::clocks)
+                            .setter(Campaign.Builder::clocks))
             .build();
 }

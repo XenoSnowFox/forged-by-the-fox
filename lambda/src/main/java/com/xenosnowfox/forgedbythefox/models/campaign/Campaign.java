@@ -1,6 +1,7 @@
 package com.xenosnowfox.forgedbythefox.models.campaign;
 
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
+import com.xenosnowfox.forgedbythefox.models.clock.Clock;
 import com.xenosnowfox.forgedbythefox.models.faction.FactionAlignment;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -15,10 +16,12 @@ public record Campaign(
         @NonNull CampaignName name,
         @NonNull AccountIdentifier account,
         @NonNull Instant timestampCreated,
-        List<FactionAlignment> factionAlignments) {
+        List<FactionAlignment> factionAlignments,
+        List<Clock> clocks) {
 
     public Campaign {
         factionAlignments =
                 Optional.ofNullable(factionAlignments).map(ArrayList::new).orElse(new ArrayList<>());
+        clocks = Optional.ofNullable(clocks).map(ArrayList::new).orElse(new ArrayList<>());
     }
 }

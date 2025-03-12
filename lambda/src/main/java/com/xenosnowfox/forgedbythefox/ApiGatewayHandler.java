@@ -14,6 +14,7 @@ import com.xenosnowfox.forgedbythefox.routes.CampaignFactionsRoute;
 import com.xenosnowfox.forgedbythefox.routes.CharacterSheetRoute;
 import com.xenosnowfox.forgedbythefox.routes.HomepageRoute;
 import com.xenosnowfox.forgedbythefox.routes.PwaManifestRoute;
+import com.xenosnowfox.forgedbythefox.routes.fragment.CampaignClocksDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CampaignFactionDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterAbilitiesDisplayFragment;
 import com.xenosnowfox.forgedbythefox.routes.fragment.CharacterDetailsDisplayFragment;
@@ -100,6 +101,12 @@ public class ApiGatewayHandler extends Route {
                         HttpMethod.ANY,
                         "/campaigns/{campaign}/factions",
                         CampaignFactionsRoute.builder()
+                                .templateService(templateService)
+                                .build())
+                .register(
+                        HttpMethod.ANY,
+                        "/fragments/campaigns/{campaign}/clocks",
+                        CampaignClocksDisplayFragment.builder()
                                 .templateService(templateService)
                                 .build())
                 .register(

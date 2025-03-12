@@ -14,6 +14,52 @@
     </div>
 </th:block>
 
+<!-- View Clocks -->
+<th:block th:fragment="view-clocks">
+    <div id="campaign-clocks" hx-trigger="every 20s" th:hx-get="'/fragments/campaigns/' + ${ctx.campaign.identifier} + '/clocks'" hx-swap="outerHTML">
+        <th:block th:replace="~{component/loading-indicator :: root }" />
+
+        <th:block th:if="${ctx.campaign.clocks.size > 0}">
+            <hr />
+            <div class="heading">
+                <span>Clocks</span>
+            </div>
+        </th:block>
+
+        <th:block th:each="clock : ${ctx.campaign.clocks}">
+            <div class="clock">
+
+                <span th:text="${clock.name}"></span>
+
+
+                <ul class="toggle-boxes">
+                    <li th:each="i:${#numbers.sequence(1, clock.totalSegments)}"
+                     >
+    <!--                    <input type="hidden"-->
+    <!--                           th:name="${ctx.character.harm.healing >= i} ? 'decrement' : 'increment'"-->
+    <!--                           th:value="${ctx.character.harm.healing >= i} ? ${ctx.character.harm.healing - i + 1} : ${i - ctx.character.harm.healing}" />-->
+                        <span><th:block th:if="${clock.markedSegments >= i}">
+                        <th:block  th:replace="~{svg/icon :: triangle-double-right}" />
+                </th:block></span>
+                    </li>
+                </ul>
+            </div>
+        </th:block>
+
+
+
+<!--        <div style="display:grid;grid-template-columns:1fr;gap:0.25rem;">-->
+<!--            <th:block th:each="faction : ${ctx.factions}">-->
+<!--                <div class="faction">-->
+<!--                    <span class="tier" th:text="${faction.tierRating}"></span>-->
+<!--                    <span class="name" th:text="${faction.name}"></span>-->
+<!--                    <span class="status" th:text="(${faction.status} > 0 ? '+' : '') + ${faction.status}"></span>-->
+<!--                </div>-->
+<!--            </th:block>-->
+<!--        </div>-->
+    </div>
+</th:block>
+
 
 
 

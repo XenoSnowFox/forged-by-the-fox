@@ -14,8 +14,13 @@ import com.xenosnowfox.forgedbythefox.models.campaign.Campaign;
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
 import com.xenosnowfox.forgedbythefox.models.session.Session;
 import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -110,5 +115,22 @@ public abstract class CampaignDisplayFragment implements AuthenticatedRequestHan
 
     protected ApiGatewayHandler.UrlResolver urlResolver() {
         return urlPath -> urlPath;
+    }
+
+    protected Map<String, List<String>> parseBodyString(final String withBody) {
+        final Map<String, List<String>> map = new HashMap<>();
+        if (withBody == null || withBody.isBlank()) {
+            return map;
+        }
+
+        final String[] parts = withBody.split("&");
+        for (String part : parts) {
+            final String[] subpart = part.split("=", 2);
+            final String value = subpart.length > 1 ? URLDecoder.decode(subpart[1], StandardCharsets.UTF_8) : null;
+            map.computeIfAbsent(subpart[0].toLowerCase(Locale.ROOT), k -> new ArrayList<>())
+                    .add(value);
+        }
+
+        return map;
     }
 }

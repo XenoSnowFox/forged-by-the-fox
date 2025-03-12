@@ -64,6 +64,14 @@ public class DynamoDbUpdateExpressionMutator implements Consumer<UpdateItemReque
         return this;
     }
 
+    public DynamoDbUpdateExpressionMutator listAppend(final String withKey, final AttributeValue withAttributeValue) {
+        final String key = this.parseKey(withKey);
+        this.updateExpression
+                .computeIfAbsent(UpdateExpressionClause.SET, k -> new ArrayList<>())
+                .add(key + " = list_append(" + key + ", " + this.parseAttributeValue(withAttributeValue) + ")");
+        return this;
+    }
+
     @Override
     public void accept(@NonNull final UpdateItemRequest.Builder builder) {
         // compile the update expression
