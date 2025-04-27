@@ -15,4 +15,8 @@ public record SessionIdentifier(@NonNull String value) {
     public static SessionIdentifier random() {
         return new SessionIdentifier(UUID.randomUUID().toString());
     }
+
+    public String toUrn() {
+        return "SESSION:" + this.value;
+    }
 }

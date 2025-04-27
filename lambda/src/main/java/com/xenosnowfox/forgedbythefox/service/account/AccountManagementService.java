@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+
+import com.xenosnowfox.forgedbythefox.persistence.AccountRepository;
+import com.xenosnowfox.forgedbythefox.persistence.dynamodb.DynamodbAccountRepository;
 import lombok.NonNull;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
@@ -22,10 +25,14 @@ public class AccountManagementService {
 
     private final DynamoDbTable<Account> table;
 
+    private final AccountRepository accountRepository;
+
     public AccountManagementService() {
 
         this.enhancedClient = DynamoDbEnhancedClient.create();
         this.table = enhancedClient.table("forged-by-the-fox", AccountSchema.getTableSchema());
+
+        this.accountRepository = new DynamodbAccountRepository(this.enhancedClient);
     }
 
     public Optional<Account> create(@NonNull final CreateAccountRequest withRequest) {
@@ -73,10 +80,6 @@ public class AccountManagementService {
     }
 
     public Account retrieve(@NonNull final AccountIdentifier withIdentifier) {
-        final Key key = Key.builder()
-                .partitionValue("ACCOUNT:" + withIdentifier.value())
-                .sortValue("details")
-                .build();
-        return table.getItem(key);
+        return this.accountRepository.retrieve(withIdentifier);
     }
 }

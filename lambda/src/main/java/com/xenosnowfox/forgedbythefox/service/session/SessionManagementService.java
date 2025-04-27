@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+
+import com.xenosnowfox.forgedbythefox.persistence.SessionRepository;
+import com.xenosnowfox.forgedbythefox.persistence.dynamodb.DynamodbSessionRepository;
 import lombok.NonNull;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
@@ -18,12 +21,13 @@ import software.amazon.awssdk.services.dynamodb.model.ConditionalCheckFailedExce
 
 public class SessionManagementService {
 
-    private final DynamoDbEnhancedClient enhancedClient;
-    private final DynamoDbTable<Session> table;
+	private final DynamoDbTable<Session> table;
+    private final SessionRepository sessionRepository;
 
     public SessionManagementService() {
-        this.enhancedClient = DynamoDbEnhancedClient.create();
+	    final DynamoDbEnhancedClient enhancedClient = DynamoDbEnhancedClient.create();
         this.table = enhancedClient.table("forged-by-the-fox", SessionSchema.getTableSchema());
+        this.sessionRepository = new DynamodbSessionRepository(enhancedClient);
     }
 
     public Optional<Session> create(@NonNull final CreateSessionRequest withRequest) {
@@ -73,10 +77,10 @@ public class SessionManagementService {
     }
 
     public Session retrieve(@NonNull final SessionIdentifier withIdentifier) {
-        final Key key = Key.builder()
-                .partitionValue("SESSION:" + withIdentifier.value())
-                .sortValue("session")
-                .build();
-        return table.getItem(key);
+        final Session session = this.sessionRepository.retrieve(withIdentifier);
+        if (!session.identifier().equals(withIdentifier)) {
+            throw new IllegalStateException("Repository returned a Session instance containing an incorrect identifier.");
+        }
+        return session;
     }
 }

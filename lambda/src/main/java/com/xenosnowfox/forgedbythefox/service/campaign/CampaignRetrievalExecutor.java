@@ -3,6 +3,8 @@ package com.xenosnowfox.forgedbythefox.service.campaign;
 import com.xenosnowfox.forgedbythefox.models.campaign.Campaign;
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
 import java.util.Optional;
+
+import com.xenosnowfox.forgedbythefox.persistence.CampaignRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -13,7 +15,7 @@ import software.amazon.awssdk.enhanced.dynamodb.Key;
 @RequiredArgsConstructor
 public class CampaignRetrievalExecutor {
 
-    private final DynamoDbTable<Campaign> dynamoDbTable;
+    private final CampaignRepository campaignRepository;
 
     @Setter
     private CampaignIdentifier withIdentifier;
@@ -23,7 +25,7 @@ public class CampaignRetrievalExecutor {
                 .partitionValue(withIdentifier.toUrn())
                 .sortValue("details")
                 .build();
-        return dynamoDbTable.getItem(key);
+        return this.campaignRepository.retrieve(this.withIdentifier);
     }
 
     public Campaign orElse(final Campaign withAlternativeCampaign) {
