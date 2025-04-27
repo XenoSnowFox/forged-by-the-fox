@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+
+import com.xenosnowfox.forgedbythefox.persistence.CharacterRepository;
+import com.xenosnowfox.forgedbythefox.persistence.dynamodb.DynamodbCharacterRepository;
 import lombok.NonNull;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbIndex;
@@ -30,12 +33,15 @@ public class CharacterManagementService {
     private final DynamoDbEnhancedClient enhancedClient;
     private final DynamoDbTable<Character> table;
     private final DynamoDbIndex<Character> documentsByAccount;
+    private final CharacterRepository characterRepository;
 
     public CharacterManagementService() {
         this.client = DynamoDbClient.create();
         this.enhancedClient = DynamoDbEnhancedClient.create();
         this.table = enhancedClient.table("forged-by-the-fox", CharacterSchema.getTableSchema());
         this.documentsByAccount = this.table.index("documents-by-account");
+
+        this.characterRepository = new DynamodbCharacterRepository(this.enhancedClient);
     }
 
     public Character create(@NonNull final CreateCharacterRequest withRequest) {
@@ -89,11 +95,11 @@ public class CharacterManagementService {
     }
 
     public Character retrieve(@NonNull final CharacterIdentifier withIdentifier) {
-        final Key key = Key.builder()
-                .partitionValue(withIdentifier.toUrn())
-                .sortValue("CHARACTER")
-                .build();
-        return table.getItem(key);
+        final Character character = this.characterRepository.retrieve(withIdentifier);
+        if (!character.identifier().equals(withIdentifier)) {
+            throw new IllegalStateException("Repository returned a Character instance that does not contain the requested identifier.");
+        }
+        return character;
     }
 
     public Set<Character> query(@NonNull final QueryCharacterRequest withRequest) {
