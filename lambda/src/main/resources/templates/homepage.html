@@ -12,12 +12,12 @@
         <th:block th:replace="~{svg/logos :: forged-by-the-fox}" />
         <h1><span>Forged</span><span>by the</span><span>Fox</span></h1>
     </div>
-    <div style="max-width: 32rem;margin:1rem;padding: 1rem 0.5rem;" class="blurb fbtf-component-panel">
+    <div style="max-width: 40rem;margin:1rem;padding: 1rem 0.5rem;" class="blurb fbtf-component-panel">
         <p style="margin:0.25rem 1rem;font-size: 1.25em;font-weight:bold;">Welcome.</p>
         <br />
         <p style="margin:0.25rem 1rem;">Forged by the Fox is a fan-made online character sheet for your <a href="https://bladesinthedark.com/">Blades in the Dark</a>, <a href="https://evilhat.com/product/scum-and-villainy/">Scum &amp; Villainy</a> and potentially other games built upon the <a href="https://bladesinthedark.com/forged-dark">Forged in the Dark</a> system.</p>
         <p style="margin:0.25rem 1rem;">This site is in no way affiliated with the aforementioned games.</p>
-        <p style="text-align:center;"><a style="border:1px solid grey;padding:1rem;border-radius:0.25rem;display:inline-block;margin:1rem;" th:href="${ctx.url.resolve('/auth')}">Sign In To Continue</a></p>
+        <p style="text-align:center;"><a class="fbtf-component-button" th:href="${ctx.url.resolve('/auth')}">Sign In To Continue</a></p>
     </div>
 </body>
 </html>

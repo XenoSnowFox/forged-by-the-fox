@@ -8,9 +8,9 @@ import com.xenosnowfox.forgedbythefox.persistence.dynamodb.DynamodbCharacterRepo
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import lombok.NonNull;
@@ -103,7 +103,7 @@ public class CharacterManagementService {
     }
 
     public Set<Character> query(@NonNull final QueryCharacterRequest withRequest) {
-        final Set<Character> characterSet = new HashSet<>();
+        final Set<Character> characterSet = new TreeSet<>();
 
         final Key key = Key.builder()
                 .partitionValue(withRequest.accountIdentifier().toUrn())

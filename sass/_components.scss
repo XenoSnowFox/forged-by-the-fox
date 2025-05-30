@@ -1,6 +1,7 @@
 // COMPONENTS
 @use "component/action-bar";
 @use "component/attribute-display";
+@use "component/button";
 @use "component/character-tidbits";
 @use "component/global-header";
 @use "component/loading-indicator";
@@ -13,6 +14,7 @@
 	&-component {
 		@include action-bar.component;
 		@include attribute-display.component;
+		@include button.component;
 		@include character-tidbits.component;
 		@include global-header.component;
 		@include loading-indicator.component;

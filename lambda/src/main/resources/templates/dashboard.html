@@ -8,19 +8,11 @@
     <th:block th:replace="~{fragment/core :: web-components}" />
 
     <style>
-        main {
-            padding: 1rem;
-            display:grid;
-            grid-template-columns:5fr 3fr;
-            gap:2rem;
-            max-width: 110rem;
-            margin: auto;
-        }
 
         #character-content {
             margin: 0.5rem 0;
             display:grid;
-            grid-template-columns:1fr 1fr;
+            grid-template-columns:1fr;
             gap:0.25rem;
         }
 
@@ -46,50 +38,57 @@
 <body>
     <th:block th:replace="~{component/global-header :: root}" />
 
-    <main style="">
-        <th:block th:replace="~{layout/labeled-container :: root(label='Characters', content=~{:: #character-content})}">
-            <ul id="character-content" style="">
-                <th:block th:if="${ctx.characters}">
-                    <th:block th:each="character: ${ctx.characters}">
-                        <li>
-                            <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}"
-                               th:text="${character.name} ?: 'Unnamed Character'"
-                                style="text-decoration:underline;font-weight:bolder;display:inline-block;font-size:1rem;"></a>
-                            <br />
-                            <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}" th:text="${character.alias}" style="font-family:monospace;" ></a>
-                            &nbsp;
-                            <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}" th:text="${character.playbook.label}" style="font-family:monospace;" ></a>
-                        </li>
-                    </th:block>
+    <main class="fbtf-layout-dual-centerfold-columns">
+        <div class="fbtf-component-welcome">
+            <th:block th:replace="~{svg/logos :: forged-by-the-fox}" />
+            <h1><span>Forged</span><span>by the</span><span>Fox</span></h1>
+        </div>
 
+        <div style="width:100%; max-width: 40rem;margin:1rem;padding: 1rem 0.5rem;display:flex;flex-direction:column;gap:1rem;">
 
-                </th:block>
-            </ul>
-        </th:block>
+            <th:block th:if="${ctx.characters}">
+                <div class="fbtf-component-panel">
+                    <h2 style="padding:0.5rem 1rem; font-size: 1.15rem; font-weight: bold;">Your characters</h2>
+                    <ul id="character-content" style="">
+                        <th:block th:each="character: ${ctx.characters}">
+                            <li>
+                                <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}"
+                                   th:text="${character.name} ?: 'Unnamed Character'"
+                                   style="text-decoration:underline;font-weight:bolder;display:inline-block;font-size:1rem;"></a>
+                                <br />
+                                <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}" th:text="${character.alias}" style="font-family:monospace;" ></a>
+                                &nbsp;
+                                <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}" th:text="${character.playbook.label}" style="font-family:monospace;" ></a>
+                            </li>
+                        </th:block>
+                    </ul>
+                </div>
+            </th:block>
 
+            <div class="fbtf-component-panel">
+                <h2 style="padding:0.5rem 1rem; font-size: 1.15rem; font-weight: bold;">Start a new character</h2>
 
-        <th:block th:replace="~{layout/labeled-container :: root(label='New Character', content=~{:: #create-content})}">
-            <form id="create-content" method="post" th:action="${ctx.url.resolve('./')}" style="padding: 0.0625rem;display:grid;grid-template-columns:1fr;">
-                <fieldset style="margin: 0.5rem 0;">
-                    <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;">Playbook</legend>
-                    <select name="playbook">
-                        <option value=""></option>
-                        <option value="MECHANIC">Mechanic</option>
-                        <option value="MUSCLE">Muscle</option>
-                        <option value="MYSTIC">Mystic</option>
-                        <option value="PILOT">Pilot</option>
-                        <option value="SCOUNDREL">Scoundrel</option>
-                        <option value="SPEAKER">Speaker</option>
-                        <option value="STITCH">Stitch</option>
-                    </select>
-                </fieldset>
+               <form id="create-content" method="post" th:action="${ctx.url.resolve('./')}" style="padding: 0 1rem;display:grid;grid-template-columns:1fr;">
+                    <fieldset style="margin: 0.5rem 0;">
+                        <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;">Playbook</legend>
+                        <select name="playbook">
+                            <option value=""></option>
+                            <option value="MECHANIC">Mechanic</option>
+                            <option value="MUSCLE">Muscle</option>
+                            <option value="MYSTIC">Mystic</option>
+                            <option value="PILOT">Pilot</option>
+                            <option value="SCOUNDREL">Scoundrel</option>
+                            <option value="SPEAKER">Speaker</option>
+                            <option value="STITCH">Stitch</option>
+                        </select>
+                    </fieldset>
 
-                <button type="submit" style="margin: 0.5rem 0;">Create Character</button>
+                    <button type="submit" class="fbtf-component-button" style="margin: 0.5rem 0;">Create Character</button>
 
-            </form>
-        </th:block>
+                </form>
+            </div>
 
+        </div>
     </main>
-
 </body>
 </html>

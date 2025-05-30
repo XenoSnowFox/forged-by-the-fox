@@ -42,9 +42,12 @@ public record Character(
         Set<Trauma> trauma,
         CharacterHarm harm,
         Load load,
-        Set<Item> items) {
+        Set<Item> items)
+        implements Comparable<Character> {
 
     public static Duration TIME_TO_LIVE = Duration.ofDays(31);
+
+    public static String UNNAMED_CHARACTER = "Unnamed Character";
 
     public Character {
         actionDots = new HashMap<>(actionDots == null ? playbook.startingActions() : actionDots);
@@ -84,5 +87,12 @@ public record Character(
 
     public int currentLoadAmount() {
         return this.items.stream().map(Item::loadCost).reduce(Integer::sum).orElse(0);
+    }
+
+    @Override
+    public int compareTo(final Character o) {
+        return Optional.ofNullable(this.name)
+                .orElse(UNNAMED_CHARACTER)
+                .compareTo(Optional.ofNullable(o.name).orElse(UNNAMED_CHARACTER));
     }
 }

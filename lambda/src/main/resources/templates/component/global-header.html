@@ -14,7 +14,11 @@
         <div class="spacer"></div>
 
         <th:block th:if="${ctx.account}">
-            <a href="#" hx-delete="/auth"><span>Sign Out</span><img th:src="${ctx.account.profilePictureUrl}" /></a>
+            <a href="#" hx-delete="/auth" class="logout-button fbtf-component-button">
+                <img th:src="${ctx.account.profilePictureUrl}" />
+                <span>Sign Out</span>
+                <th:block th:replace="~{svg/material-design-icons :: exit-run}" />
+            </a>
         </th:block>
 
         <th:block th:unless="${ctx.account}">

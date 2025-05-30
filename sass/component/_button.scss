@@ -2,13 +2,17 @@
 @use "../mixin/typography";
 
 @mixin component {
-	&-panel {
+	&-button {
 		border: 0.0625rem solid var(--fbtf-on-surface-border-default);
 		box-shadow: 0 0 0 0.0625rem var(--fbtf-palette-black-lightest);
 		border-radius: 0.125rem;
 		overflow: hidden;
 
-		@include surfaces.foreground {
+		display: inline-block;
+		padding: 0.5rem 1rem;
+
+		&:hover {
+			background: var(--fbtf-surface-color-hover);
 		}
 	}
 }
