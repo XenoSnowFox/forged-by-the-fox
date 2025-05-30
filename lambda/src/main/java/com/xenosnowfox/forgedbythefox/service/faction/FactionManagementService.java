@@ -6,10 +6,10 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 
 public class FactionManagementService {
 
-	private final DynamoDbTable<Faction> table;
+    private final DynamoDbTable<Faction> table;
 
     public FactionManagementService() {
-	    DynamoDbEnhancedClient enhancedClient = DynamoDbEnhancedClient.create();
+        DynamoDbEnhancedClient enhancedClient = DynamoDbEnhancedClient.create();
         this.table = enhancedClient.table("forged-by-the-fox", FactionSchema.getTableSchema());
     }
 

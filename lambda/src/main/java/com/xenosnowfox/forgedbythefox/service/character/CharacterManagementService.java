@@ -3,6 +3,8 @@ package com.xenosnowfox.forgedbythefox.service.character;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterExperience;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
+import com.xenosnowfox.forgedbythefox.persistence.CharacterRepository;
+import com.xenosnowfox.forgedbythefox.persistence.dynamodb.DynamodbCharacterRepository;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,9 +13,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-
-import com.xenosnowfox.forgedbythefox.persistence.CharacterRepository;
-import com.xenosnowfox.forgedbythefox.persistence.dynamodb.DynamodbCharacterRepository;
 import lombok.NonNull;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbIndex;
@@ -97,7 +96,8 @@ public class CharacterManagementService {
     public Character retrieve(@NonNull final CharacterIdentifier withIdentifier) {
         final Character character = this.characterRepository.retrieve(withIdentifier);
         if (!character.identifier().equals(withIdentifier)) {
-            throw new IllegalStateException("Repository returned a Character instance that does not contain the requested identifier.");
+            throw new IllegalStateException(
+                    "Repository returned a Character instance that does not contain the requested identifier.");
         }
         return character;
     }

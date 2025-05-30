@@ -6,16 +6,14 @@ import com.xenosnowfox.forgedbythefox.persistence.SessionRepository;
 import com.xenosnowfox.forgedbythefox.service.session.SessionSchema;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 
-public class DynamodbSessionRepository extends AbstractDynamodbRepository<SessionIdentifier, Session> implements
-		SessionRepository {
-	public DynamodbSessionRepository(
-			final DynamoDbEnhancedClient withDynamoDbEnhancedClient
-	) {
-		super(withDynamoDbEnhancedClient, SessionSchema.getTableSchema());
-	}
+public class DynamodbSessionRepository extends AbstractDynamodbRepository<SessionIdentifier, Session>
+        implements SessionRepository {
+    public DynamodbSessionRepository(final DynamoDbEnhancedClient withDynamoDbEnhancedClient) {
+        super(withDynamoDbEnhancedClient, SessionSchema.getTableSchema());
+    }
 
-	@Override
-	public Session retrieve(final SessionIdentifier withIdentifier) {
-		return super.retrieve(withIdentifier.toUrn(), "session");
-	}
+    @Override
+    public Session retrieve(final SessionIdentifier withIdentifier) {
+        return super.retrieve(withIdentifier.toUrn(), "session");
+    }
 }

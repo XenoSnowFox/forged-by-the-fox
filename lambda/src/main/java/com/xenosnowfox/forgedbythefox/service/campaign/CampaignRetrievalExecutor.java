@@ -2,13 +2,11 @@ package com.xenosnowfox.forgedbythefox.service.campaign;
 
 import com.xenosnowfox.forgedbythefox.models.campaign.Campaign;
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
-import java.util.Optional;
-
 import com.xenosnowfox.forgedbythefox.persistence.CampaignRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 
 @Accessors(fluent = true, chain = true)

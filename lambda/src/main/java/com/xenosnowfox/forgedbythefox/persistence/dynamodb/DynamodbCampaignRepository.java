@@ -6,16 +6,14 @@ import com.xenosnowfox.forgedbythefox.persistence.CampaignRepository;
 import com.xenosnowfox.forgedbythefox.service.campaign.CampaignSchema;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 
-public class DynamodbCampaignRepository extends AbstractDynamodbRepository<CampaignIdentifier, Campaign> implements
-		CampaignRepository {
-	public DynamodbCampaignRepository(
-			final DynamoDbEnhancedClient withDynamoDbEnhancedClient
-	) {
-		super(withDynamoDbEnhancedClient, CampaignSchema.getTableSchema());
-	}
+public class DynamodbCampaignRepository extends AbstractDynamodbRepository<CampaignIdentifier, Campaign>
+        implements CampaignRepository {
+    public DynamodbCampaignRepository(final DynamoDbEnhancedClient withDynamoDbEnhancedClient) {
+        super(withDynamoDbEnhancedClient, CampaignSchema.getTableSchema());
+    }
 
-	@Override
-	public Campaign retrieve(final CampaignIdentifier withIdentifier) {
-		return super.retrieve(withIdentifier.toUrn(), "details");
-	}
+    @Override
+    public Campaign retrieve(final CampaignIdentifier withIdentifier) {
+        return super.retrieve(withIdentifier.toUrn(), "details");
+    }
 }

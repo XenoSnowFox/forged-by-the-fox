@@ -5,5 +5,5 @@ import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
 
 public interface AccountRepository {
 
-	Account retrieve(AccountIdentifier withIdentifier);
+    Account retrieve(AccountIdentifier withIdentifier);
 }

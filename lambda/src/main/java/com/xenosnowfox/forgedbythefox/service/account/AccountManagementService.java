@@ -2,19 +2,17 @@ package com.xenosnowfox.forgedbythefox.service.account;
 
 import com.xenosnowfox.forgedbythefox.models.account.Account;
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
+import com.xenosnowfox.forgedbythefox.persistence.AccountRepository;
+import com.xenosnowfox.forgedbythefox.persistence.dynamodb.DynamodbAccountRepository;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-
-import com.xenosnowfox.forgedbythefox.persistence.AccountRepository;
-import com.xenosnowfox.forgedbythefox.persistence.dynamodb.DynamodbAccountRepository;
 import lombok.NonNull;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Expression;
-import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.model.PutItemEnhancedRequest;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.ConditionalCheckFailedException;
