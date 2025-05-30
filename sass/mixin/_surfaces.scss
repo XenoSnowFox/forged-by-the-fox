@@ -14,7 +14,7 @@
 
 @mixin textured {
   background: url("/images/background-texture.png"),  var(--fbtf-surface-color-default);
-  background-blend-mode: color-burn;
+  background-blend-mode: difference;
 }
 
 @mixin deep-black {

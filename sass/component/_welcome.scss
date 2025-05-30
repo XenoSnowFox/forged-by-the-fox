@@ -6,7 +6,7 @@
 		@include typography.monospace;
 
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
 		justify-content: center;
 		align-items: center;
 
@@ -19,14 +19,14 @@
 		}
 
 		h1 {
-			font-size: 3rem;
+			font-size: 4rem;
 			text-transform: uppercase;
 
 			span {
 				display: block;
 				text-align: left;
-				line-height: 2.75rem;
-				font-size: 3rem;
+				line-height: 3.25rem;
+				font-size: 4rem;
 			}
 		}
 	}
