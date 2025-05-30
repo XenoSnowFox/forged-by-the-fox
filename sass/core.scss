@@ -93,7 +93,9 @@
 	// d1c7b8
 
 	// SURFACE TOKENS
-	@include surfaces.background;
+	@include surfaces.background {
+	@include surfaces.textured;
+	}
 	//     --fbtf-surface-color-default: var(--fbtf-palette-white);
 	//     --fbtf-surface-color-muted: var(--fbtf-palette-gray10);
 	//     --fbtf-on-surface-color-default: var(--fbtf-palette-black);
@@ -200,10 +202,12 @@ video {
 	background-clip: padding-box;
 }
 
-html {
+html {@include surfaces.background {
 	font-size: 81.25%;
 	-webkit-text-size-adjust: 81.25%;
 	-ms-text-size-adjust: 81.25%;
+	@include surfaces.textured;
+	}
 }
 
 body {
@@ -212,7 +216,7 @@ body {
 
 html,
 body {
-	@include surfaces.background {
+
 		font-family: sans-serif;
 		font-weight: normal;
 		font-style: normal;
@@ -225,7 +229,7 @@ body {
 		@media print {
 			font-size: 10pt;
 		}
-	}
+
 }
 
 article,

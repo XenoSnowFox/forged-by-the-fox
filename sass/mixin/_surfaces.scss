@@ -12,6 +12,11 @@
 	}
 }
 
+@mixin textured {
+  background: url("/images/background-texture.png"),  var(--fbtf-surface-color-default);
+  background-blend-mode: color-burn;
+}
+
 @mixin deep-black {
 	/* background */
 	--fbtf-surface-color-default: var(--fbtf-palette-black-darkest);
