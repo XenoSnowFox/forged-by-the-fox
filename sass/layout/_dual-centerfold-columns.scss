@@ -1,0 +1,13 @@
+@use "../mixin/surfaces";
+@use "../mixin/typography";
+
+@mixin component {
+	&-dual-centerfold-columns {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		min-height: 90vh;
+		gap: 2rem;
+	}
+}

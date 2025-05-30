@@ -4,6 +4,7 @@
 @mixin component {
 	&-panel {
 		border: 1px solid var(--fbtf-on-surface-border-default);
+		box-shadow: 0 0 0 1px var(--fbtf-palette-black-lightest);
 		border-radius: 0.25rem;
 		overflow: hidden;
 

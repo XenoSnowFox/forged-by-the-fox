@@ -13,8 +13,8 @@
 }
 
 @mixin textured {
-  background: url("/images/background-texture.png"),  var(--fbtf-surface-color-default);
-  background-blend-mode: difference;
+	background: url("/images/background-texture.png"), var(--fbtf-surface-color-default);
+	background-blend-mode: difference;
 }
 
 @mixin deep-black {

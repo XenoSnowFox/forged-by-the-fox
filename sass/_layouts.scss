@@ -1,8 +1,10 @@
 // LAYOUTS
+@use "layout/dual-centerfold-columns";
 @use "layout/labeled-container";
 
 @mixin component {
 	&-layout {
+		@include dual-centerfold-columns.component;
 		@include labeled-container.component;
 	}
 }
