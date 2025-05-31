@@ -26,7 +26,7 @@
         <section style="margin-top:1rem;display:grid; grid-template-columns: 3fr 5fr;column-gap:1rem;">
             <div>
                 <!-- Character Info -->
-                <div class="fbtf-component-panel" style="margin-bottom: 1rem;">
+                <div class="fbtf-component-panel" style="margin-bottom: 1rem;margin-top:1.875rem;">
                     <!-- Heritage -->
                     <fieldset style="padding: 0.5rem;">
                         <strong>Heritage</strong>
@@ -66,18 +66,19 @@
                 </th:block>
             </div>
 
-            <!-- ABILITIES -->
-            <div style="margin-top:1rem">
-                <th:block th:replace="~{layout/labeled-container :: root(label='Special Abilities', content=~{:: #character-abilities})}">
-                    <th:block id="character-abilities" th:replace="~{partial/character-sheet :: view-abilities}" />
+            <!-- ITEMS & LOAD -->
+            <div>
+                <th:block th:replace="~{layout/labeled-container :: root(label='Items & Load', content=~{:: #character-items})}">
+                    <th:block id="character-items" th:replace="~{partial/character-sheet :: view-items}" />
                 </th:block>
             </div>
         </section>
 
-        <!-- ITEMS & LOAD -->
         <section style="margin-top:1rem">
-            <th:block th:replace="~{layout/labeled-container :: root(label='Items & Load', content=~{:: #character-items})}">
-                <th:block id="character-items" th:replace="~{partial/character-sheet :: view-items}" />
+
+            <!-- ABILITIES -->
+            <th:block th:replace="~{layout/labeled-container :: root(label='Special Abilities', content=~{:: #character-abilities})}">
+                <th:block id="character-abilities" th:replace="~{partial/character-sheet :: view-abilities}" />
             </th:block>
 
             <br />

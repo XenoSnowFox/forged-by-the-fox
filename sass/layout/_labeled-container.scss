@@ -5,19 +5,11 @@
 	&-labeled-container {
 		> .label {
 			span {
-				@include surfaces.foreground {
-					@include typography.monospace;
-					display: inline-block;
-					padding: 0.25rem 0.5rem;
-					border-top-left-radius: 0.25rem;
-					border-top-right-radius: 0.25rem;
-
-					background: var(--fbtf-on-surface-border-default);
-				}
-			}
-
-			+ .content {
-				border-top-left-radius: 0;
+				@include typography.monospace;
+				display: inline-block;
+				font-size: 1.125em;
+				font-weight: bolder;
+				padding: 0.25rem 0;
 			}
 		}
 

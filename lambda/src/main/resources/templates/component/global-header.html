@@ -5,10 +5,11 @@
 <th:block th:fragment="root">
     <header class="fbtf-component-global-header">
 
-        <th:block th:replace="~{svg/logos :: forged-by-the-fox}" />
+        <a class="logo fbtf-component-button" th:href="${ctx.url.resolve('/')}" >
+            <th:block th:replace="~{svg/logos :: forged-by-the-fox}" />
 
-        <a class="site-name" th:href="${ctx.url.resolve('/')}"><span>Forged</span><span>by the</span><span>Fox</span></a>
-
+            <div class="site-name" ><span>Forged</span><span>by the</span><span>Fox</span></div>
+        </a>
         <!-- TODO MENU -->
 
         <div class="spacer"></div>
