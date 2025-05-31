@@ -143,5 +143,20 @@ public class CharacterSchema {
                             .orElse(null))
                     .setter((builder, value) ->
                             builder.items(value.stream().map(Item::valueOf).collect(Collectors.toSet()))))
+            // Heritage
+            .addAttribute(String.class, attributeBuilder -> attributeBuilder
+                    .name("heritage")
+                    .getter(Character::heritage)
+                    .setter(Character.Builder::heritage))
+            // Background
+            .addAttribute(String.class, attributeBuilder -> attributeBuilder
+                    .name("background")
+                    .getter(Character::background)
+                    .setter(Character.Builder::background))
+            // Vice
+            .addAttribute(String.class, attributeBuilder -> attributeBuilder
+                    .name("vice")
+                    .getter(Character::vice)
+                    .setter(Character.Builder::vice))
             .build();
 }

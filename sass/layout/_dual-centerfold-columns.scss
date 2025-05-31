@@ -9,5 +9,10 @@
 		justify-content: center;
 		min-height: 90vh;
 		gap: 2rem;
+
+		@media (max-width: 40rem) {
+			flex-direction: column;
+			padding: 0 1rem;
+		}
 	}
 }

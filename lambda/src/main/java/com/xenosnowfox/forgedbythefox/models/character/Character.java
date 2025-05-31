@@ -69,6 +69,10 @@ public record Character(
         load = load == null ? Load.NORMAL : load;
 
         items = Optional.ofNullable(items).map(HashSet::new).orElse(new HashSet<>());
+
+        heritage = Optional.ofNullable(heritage).map(String::trim).orElse("");
+        background = Optional.ofNullable(background).map(String::trim).orElse("");
+        vice = Optional.ofNullable(vice).map(String::trim).orElse("");
     }
 
     public int dotsForAttribute(final Attribute withAttribute) {

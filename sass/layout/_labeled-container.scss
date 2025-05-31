@@ -22,13 +22,9 @@
 		}
 
 		> .content {
-			border: 1px solid var(--fbtf-on-surface-border-default);
-
-			border-radius: 0.25rem;
 			overflow: hidden;
 
 			@include surfaces.foreground {
-				// 				border-top: 0.0625rem solid white;
 			}
 		}
 	}

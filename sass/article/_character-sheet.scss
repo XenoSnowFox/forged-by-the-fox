@@ -22,18 +22,15 @@
 			}
 
 			@include surfaces.foreground {
-				border: 1px solid var(--fbtf-on-surface-border-default);
 				padding: 1rem;
 			}
 		}
 
 		.attributes-and-actions {
 			@include surfaces.foreground {
-				border: 1px solid var(--fbtf-on-surface-border-default);
 				display: flex;
 				gap: 2rem;
 				padding: 0 1rem 1rem;
-				border-radius: 0.25rem;
 			}
 			& > * {
 				flex: 1 100%;

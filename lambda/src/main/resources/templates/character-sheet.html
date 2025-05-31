@@ -32,9 +32,9 @@
 </head>
 <body th:inline="text">
     <th:block th:replace="~{component/global-header :: root}" />
-    <th:block th:if="${ctx.campaign}">
-        <th:block th:replace="~{component/campaign-sidebar :: root(${ctx.campaign}, ${ctx.account})}" />
-    </th:block>
+<!--    <th:block th:if="${ctx.campaign}">-->
+<!--        <th:block th:replace="~{component/campaign-sidebar :: root(${ctx.campaign}, ${ctx.account})}" />-->
+<!--    </th:block>-->
 
     <main>
         <th:block th:replace="~{article/character-sheet :: root(${ctx.account}, ${ctx.character})}" />
