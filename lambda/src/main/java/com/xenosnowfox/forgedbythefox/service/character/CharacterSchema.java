@@ -10,6 +10,7 @@ import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterExperience;
+import com.xenosnowfox.forgedbythefox.models.character.CharacterFriends;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterHarm;
 import com.xenosnowfox.forgedbythefox.models.character.CharacterIdentifier;
 import java.time.Instant;
@@ -109,6 +110,13 @@ public class CharacterSchema {
                             .name("harm")
                             .getter(Character::harm)
                             .setter(Character.Builder::harm))
+            // Character Friends
+            .addAttribute(
+                    EnhancedType.documentOf(CharacterFriends.class, CharacterFriendsSchema.getTableSchema()),
+                    attributeBuilder -> attributeBuilder
+                            .name("friends")
+                            .getter(Character::friends)
+                            .setter(Character.Builder::friends))
             // Trauma
             .addAttribute(EnhancedType.setOf(String.class), attributeBuilder -> attributeBuilder
                     .name("trauma")

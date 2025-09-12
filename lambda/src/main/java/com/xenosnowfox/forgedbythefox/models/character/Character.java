@@ -42,7 +42,8 @@ public record Character(
         Set<Trauma> trauma,
         CharacterHarm harm,
         Load load,
-        Set<Item> items)
+        Set<Item> items,
+        CharacterFriends friends)
         implements Comparable<Character> {
 
     public static Duration TIME_TO_LIVE = Duration.ofDays(31);
@@ -73,6 +74,8 @@ public record Character(
         heritage = Optional.ofNullable(heritage).map(String::trim).orElse("");
         background = Optional.ofNullable(background).map(String::trim).orElse("");
         vice = Optional.ofNullable(vice).map(String::trim).orElse("");
+
+        friends = Optional.ofNullable(friends).orElse(new CharacterFriends(playbook.initialFriends()));
     }
 
     public int dotsForAttribute(final Attribute withAttribute) {

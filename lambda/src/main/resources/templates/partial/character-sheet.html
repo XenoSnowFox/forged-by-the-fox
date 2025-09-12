@@ -584,6 +584,25 @@
     </fieldset>
 </th:block>
 
+<th:block th:fragment="view-friends">
+    <ul id="character-friends">
+        <li th:each="friend:${ctx.character.friends.asSortedList}">
+            <th:block th:if="${friend.isCloseFriend}">
+                <th:block th:replace="~{svg/material-design-icons :: menu-up}" title="Close Friend"></th:block>
+            </th:block>
+            <th:block th:if="${friend.isFriend}">
+                <th:block th:replace="~{svg/material-design-icons :: minus}" title="Friend"></th:block>
+            </th:block>
+            <th:block th:if="${friend.isRival}">
+                <th:block th:replace="~{svg/material-design-icons :: menu-down}" title="Rival"></th:block>
+            </th:block>
+
+            <strong>[[${friend.name}]]</strong>
+            <em>, [[${friend.description}]].</em>
+        </li>
+    </ul>
+</th:block>
+
 
 </body>
 </html>

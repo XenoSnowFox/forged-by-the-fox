@@ -214,5 +214,22 @@
 				}
 			}
 		}
+
+  #character-friends {
+
+    li {
+      padding: 0 0.5rem;
+      display: flex;
+      align-items: center;
+      svg {
+          height: 2.5rem;
+
+          margin-right:0.5rem;
+        }
+      &+ li {
+             border-top: 1px solid var(--fbtf-on-surface-border-default);
+             }
+      }
+  }
 	}
 }

@@ -83,6 +83,12 @@
 
             <br />
 
+            <th:block th:replace="~{layout/labeled-container :: root(label=${ctx.character.friends.type} + ' Friends', content=~{:: #character-friends})}">
+                <th:block id="character-friends" th:replace="~{partial/character-sheet :: view-friends}" />
+            </th:block>
+
+            <br />
+
             <th:block th:replace="~{layout/labeled-container :: root(label='Experience', content=~{:: #character-experience})}">
                 <th:block id="character-experience" th:replace="~{partial/character-sheet :: view-experience}" />
             </th:block>

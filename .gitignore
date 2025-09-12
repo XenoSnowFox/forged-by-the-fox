@@ -12,3 +12,4 @@ build/
 node_modules/
 src/main/resources/webroot/
 volume/
+bin/
