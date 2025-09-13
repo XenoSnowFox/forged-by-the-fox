@@ -89,6 +89,12 @@
 
             <br />
 
+            <th:block th:replace="~{layout/labeled-container :: root(label='Currency', content=~{:: #character-currency})}">
+                <th:block id="character-currency" th:replace="~{partial/character-sheet :: view-currency}" />
+            </th:block>
+
+            <br />
+
             <th:block th:replace="~{layout/labeled-container :: root(label='Experience', content=~{:: #character-experience})}">
                 <th:block id="character-experience" th:replace="~{partial/character-sheet :: view-experience}" />
             </th:block>

@@ -56,6 +56,20 @@ public class CharacterMutationExecutor {
         return this;
     }
 
+    public CharacterMutationExecutor withCredits(final Integer withAmount) {
+        if (withAmount != null) {
+            this.mutator.set("credits", AttributeValue.fromS(String.valueOf(withAmount)));
+        }
+        return this;
+    }
+
+    public CharacterMutationExecutor withStash(final Integer withAmount) {
+        if (withAmount != null) {
+            this.mutator.set("stash", AttributeValue.fromS(String.valueOf(withAmount)));
+        }
+        return this;
+    }
+
     public CharacterMutationExecutor withPlaybookExperience(final Integer withExperience) {
         if (withExperience != null) {
             this.mutator.set("experience.playbook", AttributeValue.fromN(String.valueOf(withExperience)));

@@ -43,7 +43,9 @@ public record Character(
         CharacterHarm harm,
         Load load,
         Set<Item> items,
-        CharacterFriends friends)
+        CharacterFriends friends,
+        int credits,
+        int stash)
         implements Comparable<Character> {
 
     public static Duration TIME_TO_LIVE = Duration.ofDays(31);

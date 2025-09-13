@@ -134,6 +134,16 @@ public class CharacterSchema {
                     .name("stress")
                     .getter(Character::stress)
                     .setter(Character.Builder::stress))
+            // Credits
+            .addAttribute(Integer.class, attributeBuilder -> attributeBuilder
+                    .name("credits")
+                    .getter(Character::credits)
+                    .setter(Character.Builder::credits))
+            // Stash
+            .addAttribute(Integer.class, attributeBuilder -> attributeBuilder
+                    .name("stash")
+                    .getter(Character::stash)
+                    .setter(Character.Builder::stash))
             // Load
             .addAttribute(String.class, attributeBuilder -> attributeBuilder
                     .name("load")
