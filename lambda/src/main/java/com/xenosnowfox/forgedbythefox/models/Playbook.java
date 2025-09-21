@@ -39,7 +39,8 @@ public enum Playbook {
                                     new CharacterFriend("Len", "a black market dealer", FriendDisposition.FRIEND)),
                             Map.entry(
                                     UUID.randomUUID().toString(),
-                                    new CharacterFriend("Kenn", "a family member", FriendDisposition.FRIEND))))),
+                                    new CharacterFriend("Kenn", "a family member", FriendDisposition.FRIEND)))),
+            Set.of("You addressed a tough challenge with technical skill or ingenuity.")),
     MUSCLE(
             "Muscle",
             "A dangerous and intimidating fighter",
@@ -61,7 +62,8 @@ public enum Playbook {
                                     new CharacterFriend("Yazu", "a crooked cop", FriendDisposition.FRIEND)),
                             Map.entry(
                                     UUID.randomUUID().toString(),
-                                    new CharacterFriend("Aya", "an assassin", FriendDisposition.FRIEND))))),
+                                    new CharacterFriend("Aya", "an assassin", FriendDisposition.FRIEND)))),
+            Set.of("You addressed a tough challenge with force or threats.")),
     MYSTIC(
             "Mystic",
             "A galactic wanderer in touch with the Way",
@@ -83,7 +85,8 @@ public enum Playbook {
                                     new CharacterFriend("Rye", "an unrequited love", FriendDisposition.FRIEND)),
                             Map.entry(
                                     UUID.randomUUID().toString(),
-                                    new CharacterFriend("Blish", "a fellow mystic", FriendDisposition.FRIEND))))),
+                                    new CharacterFriend("Blish", "a fellow mystic", FriendDisposition.FRIEND)))),
+            Set.of("You addressed a tough challenge with wisdom or the Way.")),
     PILOT(
             "Pilot",
             "A ship-handling wizard and danger addict",
@@ -105,7 +108,8 @@ public enum Playbook {
                                     new CharacterFriend("Meris", "a scoundrel", FriendDisposition.FRIEND)),
                             Map.entry(
                                     UUID.randomUUID().toString(),
-                                    new CharacterFriend("Mav", "a former mentor", FriendDisposition.FRIEND))))),
+                                    new CharacterFriend("Mav", "a former mentor", FriendDisposition.FRIEND)))),
+            Set.of("You addressed a tough challenge with speed or flair.")),
     SCOUNDREL(
             "Scoundrel",
             "A scrappy and lucky survivor",
@@ -127,7 +131,8 @@ public enum Playbook {
                                     new CharacterFriend("Rhin", "a smuggler", FriendDisposition.FRIEND)),
                             Map.entry(
                                     UUID.randomUUID().toString(),
-                                    new CharacterFriend("Battro", "a bounty hunter", FriendDisposition.FRIEND))))),
+                                    new CharacterFriend("Battro", "a bounty hunter", FriendDisposition.FRIEND)))),
+            Set.of("You addressed a tough challenge with charm or audacity.")),
     SPEAKER(
             "Speaker",
             "A respectable person on the take",
@@ -146,7 +151,8 @@ public enum Playbook {
                                     new CharacterFriend("Kerry", "a doctor", FriendDisposition.FRIEND)),
                             Map.entry(
                                     UUID.randomUUID().toString(),
-                                    new CharacterFriend("Je-zee", "a diplomat", FriendDisposition.FRIEND))))),
+                                    new CharacterFriend("Je-zee", "a diplomat", FriendDisposition.FRIEND)))),
+            Set.of("You addressed a tough challenge with deception or influence.")),
     STITCH(
             "Stitch",
             "Spacefaring healer or scientist",
@@ -168,7 +174,8 @@ public enum Playbook {
                                     new CharacterFriend("Juda", "a doctor", FriendDisposition.FRIEND)),
                             Map.entry(
                                     UUID.randomUUID().toString(),
-                                    new CharacterFriend("Lynie", "a hospital admin", FriendDisposition.FRIEND)))));
+                                    new CharacterFriend("Lynie", "a hospital admin", FriendDisposition.FRIEND)))),
+            Set.of("You addressed a tough challenge with insight or compassion."));
 
     private static Set<Item> commonItems;
 
@@ -184,7 +191,9 @@ public enum Playbook {
 
     private Set<Item> exclusiveItems;
 
-    private @NonNull CharacterFriends initialFriends;
+    private final @NonNull CharacterFriends initialFriends;
+
+    private final Set<String> xpTriggers;
 
     public Ability startingAbility() {
         if (this.startingAbility == null) {

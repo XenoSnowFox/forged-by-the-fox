@@ -118,6 +118,8 @@
 		}
 
 		#character-sheet-experience {
+			margin-bottom: 1rem;
+
 			.attribute-exp {
 				display: flex;
 				justify-content: space-between;
@@ -210,6 +212,25 @@
 					svg {
 						display: block;
 						flex: 1 100%;
+					}
+				}
+			}
+
+			.exp-triggers {
+				padding-top: 0.25rem;
+
+				p {
+					padding: 0.25rem 1rem;
+				}
+
+				ul {
+					display: block;
+
+					li {
+						display: block;
+						width: auto;
+						height: auto;
+						padding: 0.125rem 1rem 0.125rem 1.25rem;
 					}
 				}
 			}

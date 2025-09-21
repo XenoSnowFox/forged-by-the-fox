@@ -578,6 +578,19 @@
             </ul>
         </div>
 
+        <hr />
+
+        <div class="exp-triggers">
+
+            <p>At the end of each session, for each item below, <strong>mark 1xp</strong> (in your playbook or an attribute) or <strong>2xp</strong> if that item occurred multiple times.</p>
+
+            <ul>
+                <li th:each="trigger : ${ctx.character.playbook.xpTriggers}">&bull; [[ ${trigger} ]]</li>
+                <li>&bull; You expressed your beliefs, drives, heritage or background.</li>
+                <li>&bull; You struggled with issues from your vice or traumas during the session.</li>
+            </ul>
+        </div>
+
 <!--        <div th:if="${ctx.character.stress} >= 9" class="warning">-->
 <!--            <p><strong>Stress Limit Reached</strong><br />Your character has reached their limit of stress and must gain a new trauma. Mark a new trauma on your character sheet and then reset your stress back to zero.</p>-->
 <!--        </div>-->
