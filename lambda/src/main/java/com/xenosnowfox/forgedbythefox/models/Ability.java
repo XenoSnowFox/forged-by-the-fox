@@ -324,8 +324,17 @@ public enum Ability {
             "Book Learning",
             Playbook.STITCH,
             "You speak a multitude of languages and are broadly educated. Gain +1d when using study during a downtime activity.",
-            false);
+            false),
 
+    // SHIP: Mastodon
+    LABOR_UNION("So long as you don't have a wanted you can freely enter and blend in with any location with active construction going on.", null, "", false),
+    DEMOLITION("Demolition", null, "You gain potency when you attempt to violently destroy inanimate objects. Take +1d to the engagement roll if your plan involves blowing something up.", false),
+    DUCTAPE_AND_CHEWING_GUM("Ductape & Chewing Gum", null, "When you would lose access to a ship system due to it taking damage you may spend a gambit to have it remain operational until you're out of danger.", false),
+    JUNK_DOGS("Junk Dogs", null, "You have a keen eye for salvage. When on a salvaging job take +1d to all rolls towards looking for salvageable items.", false),
+    DAY_JOB("Day Job", null, "As a downtime action you can choose to work a day job and collect 1 cred and take 1 stress.", false),
+    TOOLS_OF_THE_TRADE("Tools of the Trade", null, "You may treat Communicators, Repair Tools and Plasma Cutters as if they cost 0 load.", false),
+    BUILDERS_AND_SHAPERS("Builders & Shapers", null, "Each PC may add +1 action rating to Rig, Scramble or Scrap." ,false)
+    ;
     private final String label;
     private final Playbook playbook;
     private final String markdown;
