@@ -76,7 +76,12 @@ public interface AuthenticatedRequestHandler
 
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         response.setIsBase64Encoded(false);
-        response.setStatusCode(401);
+
+        if (event.getPath().toLowerCase(Locale.ROOT).startsWith("/fragments/")) {
+            response.setStatusCode(401);
+        } else {
+            response.setStatusCode(307);
+        }
 
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Location", "/");

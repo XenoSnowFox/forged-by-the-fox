@@ -55,15 +55,15 @@
 <th:block th:fragment="view-abilities(ship)">
     <div id="ship-abilities" style="display:grid;grid-template-columns:1fr;">
 
-    <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
 
-        <th:block th:each="ability: ${ship.abilities}">
-            <li style="border-top:1px solid var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
-                <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
-                <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${ability.markdown}"></p>
-            </li>
-        </th:block>
-    </ul>
+            <th:block th:each="ability: ${ship.abilities}">
+                <li style="border-top:1px solid var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                    <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${ability.markdown}"></p>
+                </li>
+            </th:block>
+        </ul>
 
     </div>
 </th:block>
@@ -105,6 +105,91 @@
 
         <button type="submit" style="margin: 0.5rem;">Save Selection</button>
     </form>
+</th:block>
+
+<!-- View Comms Modules Element -->
+<th:block th:fragment="view-comms-modules(ship)">
+    <div id="modules-comms" style="display:grid;grid-template-columns:1fr;">
+
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
+
+            <th:block th:each="ability: ${ship.commsModules}">
+                <li style="border-top:1px solid var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                    <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${ability.markdown}"></p>
+                </li>
+            </th:block>
+        </ul>
+
+    </div>
+</th:block>
+
+<!-- View Engines Modules Element -->
+<th:block th:fragment="view-engine-modules(ship)">
+    <div id="modules-engines" style="display:grid;grid-template-columns:1fr;">
+
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
+
+            <th:block th:each="ability: ${ship.engineModules}">
+                <li style="border-top:1px solid var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                    <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${ability.markdown}"></p>
+                </li>
+            </th:block>
+        </ul>
+
+    </div>
+</th:block>
+
+<!-- View Weapon Modules Element -->
+<th:block th:fragment="view-weapon-modules(ship)">
+    <div id="modules-weapons" style="display:grid;grid-template-columns:1fr;">
+
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
+
+            <th:block th:each="ability: ${ship.weaponModules}">
+                <li style="border-top:1px solid var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                    <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${ability.markdown}"></p>
+                </li>
+            </th:block>
+        </ul>
+
+    </div>
+</th:block>
+
+<!-- View Hull Modules Element -->
+<th:block th:fragment="view-hull-modules(ship)">
+    <div id="modules-hull" style="display:grid;grid-template-columns:1fr;">
+
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
+
+            <th:block th:each="ability: ${ship.hullModules}">
+                <li style="border-top:1px solid var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                    <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${ability.markdown}"></p>
+                </li>
+            </th:block>
+        </ul>
+
+    </div>
+</th:block>
+
+<!-- View Auxiliary Modules Element -->
+<th:block th:fragment="view-auxiliary-modules(ship)">
+    <div id="modules-auxiliary" style="display:grid;grid-template-columns:1fr;">
+
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
+
+            <th:block th:each="ability: ${ship.auxiliaryModules}">
+                <li style="border-top:1px solid var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                    <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${ability.markdown}"></p>
+                </li>
+            </th:block>
+        </ul>
+
+    </div>
 </th:block>
 
 

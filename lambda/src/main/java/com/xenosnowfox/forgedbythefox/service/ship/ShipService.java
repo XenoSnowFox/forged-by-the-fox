@@ -1,6 +1,7 @@
 package com.xenosnowfox.forgedbythefox.service.ship;
 
 import com.xenosnowfox.forgedbythefox.models.Ability;
+import com.xenosnowfox.forgedbythefox.models.ShipModule;
 import com.xenosnowfox.forgedbythefox.models.ShipSheet;
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
@@ -129,5 +130,15 @@ public class ShipService {
                             data == null
                                     ? new HashSet<>()
                                     : data.stream().map(Ability::valueOf).collect(Collectors.toSet()))))
+            // Modules
+            .addAttribute(EnhancedType.setOf(String.class), builder -> builder.name("modules")
+                    .getter(character -> Optional.of(
+                                    character.modules().stream().map(Enum::name).collect(Collectors.toSet()))
+                            .filter(x -> !x.isEmpty())
+                            .orElse(null))
+                    .setter((b, data) -> b.modules(
+                            data == null
+                                    ? new HashSet<>()
+                                    : data.stream().map(ShipModule::valueOf).collect(Collectors.toSet()))))
             .build();
 }
