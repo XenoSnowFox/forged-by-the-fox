@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- View Details Element -->
+<th:block th:fragment="view-details">
+    <div id="character-details" style="display:grid;grid-template-columns:1fr;">
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr 1fr;gap:0.25rem">
+            <li style="padding: 0.5rem 1rem;">
+                <strong style="text-decoration:underline;font-weight:bolder">Name</strong>
+                <p th:text="${ctx.character.name}"></p>
+            </li>
+
+            <li style="padding: 0.5rem 1rem;">
+                <strong style="text-decoration:underline;font-weight:bolder">Alias</strong>
+                <p th:text="${ctx.character.alias}"></p>
+            </li>
+        </ul>
+
+        <button type="button" style="margin: 0.5rem 0;"
+             th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/details?edit'"
+             hx-replace="outerHTML"
+             hx-target="#character-details"
+            >
+            <span>Edit Details</span>
+        </button>
+    </div>
+</th:block>
+
+
+<!-- Edit Details Element -->
+<th:block th:fragment="edit-details">
+    <form
+        style="display:grid;grid-template-columns:1fr;"
+        th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/details'"
+        hx-replace="outerHTML"
+        >
+        <fieldset style="margin: 0.5rem 0;">
+            <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;">Name</legend>
+            <input type="text" name="name" th:value="${ctx.character.name}" />
+        </fieldset>
+
+        <fieldset style="margin: 0.5rem 0;">
+            <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;">Alias</legend>
+            <input type="text" name="alias" th:value="${ctx.character.alias}" />
+        </fieldset>
+
+        <button type="button" style="margin: 0.5rem 0;" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/details'" hx-replace="outerHTML" hx-target="closest form"
+                hx-indicator="closest .fbtf-component-loading-indicator">Cancel</button>
+
+        <button type="submit" style="margin: 0.5rem 0;">Save Changes</button>
+    </form>
+</th:block>
+
+<!-- View Abilities Element -->
+<th:block th:fragment="view-abilities(ship)">
+    <div id="ship-abilities" style="display:grid;grid-template-columns:1fr;">
+
+    <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
+
+        <th:block th:each="ability: ${ship.abilities}">
+            <li style="border-top:1px solid var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${ability.markdown}"></p>
+            </li>
+        </th:block>
+    </ul>
+
+    </div>
+</th:block>
+
+
+<!-- Abilities Edit Element -->
+<th:block th:fragment="edit-abilities">
+    <form
+            style="display:grid;grid-template-columns:1fr;"
+            th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/abilities'"
+            hx-replace="outerHTML"
+    >
+        <div style="padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);margin:0 0 0.25rem;width:auto;">Starting Ability</div>
+        <ul style="margin: 0.5rem;display:grid;grid-template-columns:1fr;gap:0.25rem">
+            <th:block th:with="ability = ${ctx.character.playbook.startingAbility}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                    <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${ability.markdown}"></p>
+                </li>
+            </th:block>
+        </ul>
+
+
+        <div style="padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);margin:0.25rem 0;width:auto;">Special Abilities</div>
+        <ul style="margin: 0.5rem;display:grid;grid-template-columns:1fr;gap:0.25rem">
+            <th:block th:each="ability : ${ctx.character.playbook.specialAbilities}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <label>
+                        <input type="checkbox" th:name="'ability.' + ${ability.name}" th:checked="${ctx.character.abilities.contains(ability)}" style="display:inline;width:auto;" />
+                        <strong th:text="${ability.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                        <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${ability.markdown}"></p>
+                    </label>
+                </li>
+            </th:block>
+        </ul>
+
+        <button type="button" style="margin: 0.5rem;" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/abilities'" hx-replace="outerHTML" hx-target="closest form"
+                hx-indicator="closest .fbtf-component-loading-indicator">Cancel</button>
+
+        <button type="submit" style="margin: 0.5rem;">Save Selection</button>
+    </form>
+</th:block>
+
+
+<!-- Harm View Element -->
+<th:block th:fragment="view-harm">
+    <div id="character-harm" style="display:grid;grid-template-columns:1fr;">
+
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:3rem 1fr 1fr 5rem;gap:0.25rem;font-family:monospace">
+
+            <!-- Fatal Harm -->
+            <th:block th:with="harmLevel = ${ctx.HarmLevel.FATAL}">
+                <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                    <th:block th:if="${harm.size > 0}">
+                        <li style="background: var(--fbtf-palette-magenta-regular);padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;">
+                            <span th:text="${harmLevel.level}"></span>
+                        </li>
+                        <li style="background: var(--fbtf-palette-magenta-regular);padding: 0.5rem 1rem;grid-column: span 2;font-size:1rem;display:flex;align-items:center;justify-content:start;">
+                            <span th:text="${harm.size > 0 ? harm.get(0) : ''}"></span>
+                        </li>
+                        <li style="background: var(--fbtf-palette-magenta-regular);padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;">
+                            <span th:text="${harmLevel.effect}"></span>
+                        </li>
+                    </th:block>
+                </th:block>
+            </th:block>
+
+
+            <!-- Severe Harm -->
+            <th:block th:with="harmLevel = ${ctx.HarmLevel.SEVERE}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;">
+                    <span th:text="${harmLevel.level}"></span>
+                </li>
+                <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                    <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;grid-column: span 2;font-size:1rem;display:flex;align-items:center;justify-content:start;">
+                        <span th:text="${harm.size > 0 ? harm.get(0) : ''}"></span>
+                    </li>
+                    <li th:style="${harm.size > 0 ? 'background: var(--fbtf-palette-magenta-regular);' : 'background: var(--fbtf-surface-color-muted);'} + 'padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;'">
+                        <span th:text="${harmLevel.effect}"></span>
+                    </li>
+                </th:block>
+            </th:block>
+
+            <!-- Moderate Harm -->
+            <th:block th:with="harmLevel = ${ctx.HarmLevel.MODERATE}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;">
+                    <span th:text="${harmLevel.level}"></span>
+                </li>
+                <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                    <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;font-size:1rem;display:flex;align-items:center;justify-content:start;">
+                        <span th:text="${harm.size > 0 ? harm.get(0) : ''}"></span>
+                    </li>
+                    <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;font-size:1rem;display:flex;align-items:center;justify-content:start;">
+                        <span th:text="${harm.size > 1 ? harm.get(1) : ''}"></span>
+                    </li>
+                    <li th:style="${harm.size > 0 ? 'background: var(--fbtf-palette-magenta-regular);' : 'background: var(--fbtf-surface-color-muted);'} + 'padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;'">
+                        <span th:text="${harmLevel.effect}"></span>
+                    </li>
+                </th:block>
+            </th:block>
+
+            <!-- Lesser Harm -->
+            <th:block th:with="harmLevel = ${ctx.HarmLevel.LESSER}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;">
+                    <span th:text="${harmLevel.level}"></span>
+                </li>
+                <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                    <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;font-size:1rem;display:flex;align-items:center;justify-content:start;">
+                        <span th:text="${harm.size > 0 ? harm.get(0) : ''}"></span>
+                    </li>
+                    <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;font-size:1rem;display:flex;align-items:center;justify-content:start;">
+                        <span th:text="${harm.size > 1 ? harm.get(1) : ''}"></span>
+                    </li>
+                    <li th:style="${harm.size > 0 ? 'background: var(--fbtf-palette-magenta-regular);' : 'background: var(--fbtf-surface-color-muted);'} + 'padding: 0.5rem 1rem;text-align:center;display:flex;align-items:center;justify-content:center;'">
+                        <span th:text="${harmLevel.effect}"></span>
+                    </li>
+                </th:block>
+            </th:block>
+        </ul>
+
+
+        <div class="healing">
+
+            <th:block th:replace="~{component/loading-indicator :: root }" />
+
+            <label>Healing:</label>
+            <ul class="toggle-boxes">
+                <li th:each="i:${#numbers.sequence(1, 6)}"
+                    hx-trigger="click"
+                    th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/healing'"
+                    hx-swap="outerHTML"
+                    hx-target="#character-harm"
+                    hx-include="this"
+                    hx-indicator="closest .healing"
+                    th:title="(${ctx.character.harm.healing >= i} ? 'Remove' : 'Add') + ' ' + (${ctx.character.harm.healing >= i} ? ${ctx.character.harm.healing - i + 1} : ${i - ctx.character.harm.healing}) + ' healing.'"
+                >
+                    <input type="hidden"
+                           th:name="${ctx.character.harm.healing >= i} ? 'decrement' : 'increment'"
+                           th:value="${ctx.character.harm.healing >= i} ? ${ctx.character.harm.healing - i + 1} : ${i - ctx.character.harm.healing}" />
+                    <span type="button"><th:block th:if="${ctx.character.harm.healing >= i}">
+                    <th:block  th:replace="~{svg/icon :: heart}" />
+            </th:block></span>
+                </li>
+            </ul>
+        </div>
+
+
+        <button type="button" style="margin: 0.5rem 0;"
+                th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/harm?edit'"
+                hx-replace="outerHTML"
+                hx-target="#character-harm"
+        >
+            <span>Edit Harm</span>
+        </button>
+    </div>
+</th:block>
+
+
+<!-- Harm Edit Element -->
+<th:block th:fragment="edit-harm">
+    <form
+            style="display:grid;grid-template-columns:1fr;"
+            th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/harm'"
+            hx-replace="outerHTML"
+    >
+        <!-- Fatal Harm -->
+        <th:block th:with="harmLevel = ${ctx.HarmLevel.FATAL}">
+            <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                <fieldset style="margin: 0.5rem 0;">
+                    <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;" th:text="'Level ' + ${harmLevel.level} + ' - ' + ${harmLevel.label} + ' Harm'"></legend>
+                    <input type="text" th:name="${harmLevel.name}" th:value="${harm.size > 0 ? harm.get(0) : ''}" />
+                </fieldset>
+            </th:block>
+        </th:block>
+
+
+        <!-- Severe Harm -->
+        <th:block th:with="harmLevel = ${ctx.HarmLevel.SEVERE}">
+            <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                <fieldset style="margin: 0.5rem 0;">
+                    <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;" th:text="'Level ' + ${harmLevel.level} + ' - ' + ${harmLevel.label} + ' Harm'"></legend>
+                    <input type="text" th:name="${harmLevel.name}" th:value="${harm.size > 0 ? harm.get(0) : ''}" />
+                </fieldset>
+            </th:block>
+        </th:block>
+
+
+        <th:block th:with="harmLevel = ${ctx.HarmLevel.MODERATE}">
+            <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                <fieldset style="margin: 0.5rem 0;">
+                    <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;" th:text="'Level ' + ${harmLevel.level} + ' - ' + ${harmLevel.label} + ' Harm'"></legend>
+                    <input type="text" th:name="${harmLevel.name}" th:value="${harm.size > 0 ? harm.get(0) : ''}" />
+                    <br />
+                    <br />
+                    <input type="text" th:name="${harmLevel.name}" th:value="${harm.size > 1 ? harm.get(1) : ''}" />
+                </fieldset>
+            </th:block>
+        </th:block>
+
+
+        <th:block th:with="harmLevel = ${ctx.HarmLevel.LESSER}">
+            <th:block th:with="harm = ${ctx.character.harm.get(harmLevel)}">
+                <fieldset style="margin: 0.5rem 0;">
+                    <legend style="text-decoration:underline;font-weight:bolder;padding-bottom: 0.25rem;" th:text="'Level ' + ${harmLevel.level} + ' - ' + ${harmLevel.label} + ' Harm'"></legend>
+                    <input type="text" th:name="${harmLevel.name}" th:value="${harm.size > 0 ? harm.get(0) : ''}" />
+                    <br />
+                    <br />
+                    <input type="text" th:name="${harmLevel.name}" th:value="${harm.size > 1 ? harm.get(1) : ''}" />
+                </fieldset>
+            </th:block>
+        </th:block>
+
+
+
+
+        <button type="button" style="margin: 1.5rem 0 0.5rem;" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/harm'" hx-replace="outerHTML" hx-target="closest form"
+                hx-indicator="closest .fbtf-component-loading-indicator">Cancel</button>
+
+        <button type="submit" style="margin: 0.5rem 0;">Save Changes</button>
+    </form>
+</th:block>
+
+
+<!-- Stress View Element -->
+<th:block th:fragment="view-stress">
+    <div id="character-stress" style="display:grid;grid-template-columns:1fr;">
+        <!-- Trauma -->
+        <th:block th:if="${ctx.character.trauma.size > 0}">
+            <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
+
+                <th:block th:each="trauma: ${ctx.character.trauma}">
+                    <li style="border-top:1px solid var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                        <strong th:text="${trauma.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                        <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${trauma.description}"></p>
+                    </li>
+                </th:block>
+            </ul>
+        </th:block>
+
+        <button type="button" style="margin: 0.5rem 0;"
+                th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/stress?edit'"
+                hx-replace="outerHTML"
+                hx-target="#character-stress"
+        >
+            <span>Edit Trauma</span>
+        </button>
+    </div>
+</th:block>
+
+
+
+<!-- Stress Edit Element -->
+<th:block th:fragment="edit-stress">
+    <form
+            style="display:grid;grid-template-columns:1fr;"
+            th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/stress'"
+            hx-replace="outerHTML"
+    >
+
+        <div style="padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);margin:0.25rem 0;width:auto;">Trauma</div>
+        <ul style="margin: 0.5rem;display:grid;grid-template-columns:1fr;gap:0.25rem">
+            <th:block th:each="trauma : ${ctx.Trauma.values}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <label>
+                        <input type="checkbox" th:name="'trauma.' + ${trauma.name}" th:checked="${ctx.character.trauma.contains(trauma)}" style="display:inline;width:auto;" />
+                        <strong th:text="${trauma.label}" style="text-decoration:underline;font-weight:bolder"></strong>
+                        <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${trauma.description}"></p>
+                    </label>
+                </li>
+            </th:block>
+        </ul>
+
+        <button type="button" style="margin: 0.5rem;" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/abilities'" hx-replace="outerHTML" hx-target="closest form"
+                hx-indicator="closest .fbtf-component-loading-indicator">Cancel</button>
+
+        <button type="submit" style="margin: 0.5rem;">Save Selection</button>
+    </form>
+</th:block>
+
+
+<!-- View Abilities Element -->
+<th:block th:fragment="view-items">
+    <div id="character-items" style="display:grid;grid-template-columns:1fr;">
+        <!-- Stress -->
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:min-content 1fr 1fr 1fr 1px 1fr 1fr 1px 1fr 1fr 1fr;gap:0.25rem">
+
+            <li></li>
+            <li style="background: var(--fbtf-surface-color-muted);font-family:monospace;text-align:center;padding: 0.125rem 0.5rem;grid-column:span 3;">Light</li>
+            <li style="border-left:1px dashed var(--fbtf-palette-gray-dark); border-right:1px dashed var(--fbtf-palette-gray-dark); grid-row: span 2;"></li>
+            <li style="background: var(--fbtf-surface-color-muted);font-family:monospace;text-align:center;padding: 0.125rem 0.5rem;grid-column:span 2;">Normal</li>
+            <li style="border-left:1px dashed var(--fbtf-palette-gray-dark); border-right:1px dashed var(--fbtf-palette-gray-dark); grid-row: span 2;"></li>
+            <li style="background: var(--fbtf-surface-color-muted);font-family:monospace;text-align:center;padding: 0.125rem 0.5rem;grid-column:span 3;">Heavy</li>
+
+            <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">Load:</li>
+            <th:block th:if="${ctx.character.currentLoadAmount > 0}" th:each="i : ${#numbers.sequence(1, ctx.character.currentLoadAmount)}">
+                <li style="background: var(--fbtf-palette-magenta-regular);" >&nbsp;</li>
+            </th:block>
+            <th:block th:if="${ctx.character.currentLoadAmount < 8}" th:each="i : ${#numbers.sequence(ctx.character.currentLoadAmount, 7)}">
+                <li style="background: var(--fbtf-surface-color-muted);" >&nbsp;</li>
+            </th:block>
+        </ul>
+
+        <ul style="margin: 0.5rem 0;display:grid;grid-template-columns:1fr;gap:0.25rem">
+
+            <th:block th:each="item: ${ctx.character.items}">
+                <li style="border-top:1px solid var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <div style="display:flex;align-items:center;gap:0.25rem;flex-wrap:nowrap;">
+                        <strong th:text="${item.label}" style="text-decoration:underline;font-weight:bolder;flex: 1 100%;"></strong>
+                        <span style="display:inline-block;white-space:nowrap;padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);" th:text="${item.loadCost > 0 ? ('Load: ' + item.loadCost) : 'No Cost'}"></span>
+                    </div>
+                    <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${item.description}"></p>
+                </li>
+            </th:block>
+        </ul>
+
+        <button type="button" style="margin: 0.5rem 0;"
+                th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/items?edit'"
+                hx-replace="outerHTML"
+                hx-target="#character-items"
+        >
+            <span>Select Items</span>
+        </button>
+    </div>
+</th:block>
+
+
+<!-- Items Edit Element -->
+<th:block th:fragment="edit-items">
+    <form
+            style="display:grid;grid-template-columns:1fr;"
+            th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/items'"
+            hx-replace="outerHTML"
+    >
+        <div style="padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);margin:0 0 0.25rem;width:auto;">Playbook Items</div>
+        <ul style="margin: 0.5rem;display:grid;grid-template-columns:1fr;gap:0.25rem">
+            <th:block th:each="item : ${ctx.character.playbook.exclusiveItems}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <label>
+                        <div style="display:flex;align-items:center;gap:0.25rem;flex-wrap:nowrap;">
+                            <input type="checkbox" th:name="'item.' + ${item.name}" th:checked="${ctx.character.items.contains(item)}" style="display:inline;width:auto;" />
+                            <strong th:text="${item.label}" style="text-decoration:underline;font-weight:bolder;flex: 1 100%;"></strong>
+                            <span style="display:inline-block;white-space:nowrap;padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);" th:text="${item.loadCost > 0 ? ('Load: ' + item.loadCost) : 'No Cost'}"></span>
+                        </div>
+                        <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${item.description}"></p>
+                    </label>
+                </li>
+            </th:block>
+        </ul>
+
+
+        <div style="padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);margin:0.25rem 0;width:auto;">Common Items</div>
+        <ul style="margin: 0.5rem;display:grid;grid-template-columns:1fr;gap:0.25rem">
+            <th:block th:each="item : ${ctx.character.playbook.commonItems}">
+                <li style="background: var(--fbtf-surface-color-muted);padding: 0.5rem 1rem;">
+                    <label>
+                        <div style="display:flex;align-items:center;gap:0.25rem;flex-wrap:nowrap;">
+                            <input type="checkbox" th:name="'item.' + ${item.name}" th:checked="${ctx.character.items.contains(item)}" style="display:inline;width:auto;" />
+                            <strong th:text="${item.label}" style="text-decoration:underline;font-weight:bolder;flex: 1 100%;"></strong>
+                            <span style="display:inline-block;white-space:nowrap;padding:.25rem .5rem;background:var(--fbtf-palette-white-regular);color:var(--fbtf-palette-gray60);" th:text="${item.loadCost > 0 ? ('Load: ' + item.loadCost) : 'No Cost'}"></span>
+                        </div>
+                        <p style="color:var(--fbtf-on-surface-color-muted);padding-top:0.25rem;" th:text="${item.description}"></p>
+                    </label>
+                </li>
+            </th:block>
+        </ul>
+
+        <button type="button" style="margin: 0.5rem;" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/items'" hx-replace="outerHTML" hx-target="closest form"
+                hx-indicator="closest .fbtf-component-loading-indicator">Cancel</button>
+
+        <button type="submit" style="margin: 0.5rem;">Save Selection</button>
+    </form>
+</th:block>
+
+<th:block th:fragment="view-stress-bar">
+    <fieldset id="character-sheet-stress-bar">
+        <!--        <label>Stress</label>-->
+
+        <th:block th:replace="~{component/loading-indicator :: root }" />
+
+        <ul>
+            <li th:each="i:${#numbers.sequence(1, 9)}"
+                hx-trigger="click"
+                th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/stress-bar'"
+                hx-swap="outerHTML"
+                hx-target="#character-sheet-stress-bar"
+                hx-include="this"
+                hx-indicator="#character-sheet-stress-bar .htmx-indicator"
+            >
+                <input type="hidden"
+                       th:name="${ctx.character.stress >= i} ? 'decrement' : 'increment'"
+                       th:value="${ctx.character.stress >= i} ? ${ctx.character.stress - i + 1} : ${i - ctx.character.stress}" />
+                <span type="button"><th:block th:if="${ctx.character.stress >= i}">
+                        <th:block  th:replace="~{svg/icon :: cross}" />
+                </th:block></span>
+            </li>
+        </ul>
+
+        <div th:if="${ctx.character.stress} >= 9" class="warning">
+            <p><strong>Stress Limit Reached</strong><br />Your character has reached their limit of stress and must gain a new trauma. Mark a new trauma on your character sheet and then reset your stress back to zero.</p>
+        </div>
+    </fieldset>
+</th:block>
+
+<th:block th:fragment="view-experience">
+    <fieldset id="character-sheet-experience">
+        <!--        <label>Stress</label>-->
+
+        <th:block th:replace="~{component/loading-indicator :: root }" />
+
+        <!-- INSIGHT -->
+        <div class="attribute-exp">
+            <span>Insight</span>
+            <ul>
+                <li th:each="i:${#numbers.sequence(1, 6)}"
+                    hx-trigger="click"
+                    th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/experience'"
+                    hx-swap="outerHTML"
+                    hx-target="#character-sheet-experience"
+                    hx-include="this"
+                    hx-indicator="#character-sheet-experience .htmx-indicator"
+                >
+                    <input type="hidden" name="attribute" value="insight" />
+                    <input type="hidden"
+                           th:name="${ctx.character.experience.insight >= i} ? 'decrement' : 'increment'"
+                           th:value="${ctx.character.experience.insight >= i} ? ${ctx.character.experience.insight - i + 1} : ${i - ctx.character.experience.insight}" />
+                    <span type="button"><th:block th:if="${ctx.character.experience.insight >= i}">
+                    <th:block  th:replace="~{svg/icon :: cross}" />
+            </th:block></span>
+                </li>
+            </ul>
+        </div>
+
+        <hr />
+
+        <!-- PROWESS -->
+        <div class="attribute-exp">
+            <span>Prowess</span>
+            <ul>
+                <li th:each="i:${#numbers.sequence(1, 6)}"
+                    hx-trigger="click"
+                    th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/experience'"
+                    hx-swap="outerHTML"
+                    hx-target="#character-sheet-experience"
+                    hx-include="this"
+                    hx-indicator="#character-sheet-experience .htmx-indicator"
+                >
+                    <input type="hidden" name="attribute" value="prowess" />
+                    <input type="hidden"
+                           th:name="${ctx.character.experience.prowess >= i} ? 'decrement' : 'increment'"
+                           th:value="${ctx.character.experience.prowess >= i} ? ${ctx.character.experience.prowess - i + 1} : ${i - ctx.character.experience.prowess}" />
+                    <span type="button"><th:block th:if="${ctx.character.experience.prowess >= i}">
+                    <th:block  th:replace="~{svg/icon :: cross}" />
+            </th:block></span>
+                </li>
+            </ul>
+        </div>
+
+        <hr />
+
+        <!-- RESOLVE -->
+        <div class="attribute-exp">
+            <span>Resolve</span>
+            <ul>
+                <li th:each="i:${#numbers.sequence(1, 6)}"
+                    hx-trigger="click"
+                    th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/experience'"
+                    hx-swap="outerHTML"
+                    hx-target="#character-sheet-experience"
+                    hx-include="this"
+                    hx-indicator="#character-sheet-experience .htmx-indicator"
+                >
+                    <input type="hidden" name="attribute" value="resolve" />
+                    <input type="hidden"
+                           th:name="${ctx.character.experience.resolve >= i} ? 'decrement' : 'increment'"
+                           th:value="${ctx.character.experience.resolve >= i} ? ${ctx.character.experience.resolve - i + 1} : ${i - ctx.character.experience.resolve}" />
+                    <span type="button"><th:block th:if="${ctx.character.experience.resolve >= i}">
+                    <th:block  th:replace="~{svg/icon :: cross}" />
+            </th:block></span>
+                </li>
+            </ul>
+        </div>
+
+        <hr />
+
+        <!-- PLAYBOOK -->
+        <div class="playbook-exp">
+            <span>Playbook</span>
+            <ul>
+                <li th:each="i:${#numbers.sequence(1, 8)}"
+                    hx-trigger="click"
+                    th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/experience'"
+                    hx-swap="outerHTML"
+                    hx-target="#character-sheet-experience"
+                    hx-include="this"
+                    hx-indicator="#character-sheet-experience .htmx-indicator"
+                >
+                    <input type="hidden" name="attribute" value="playbook" />
+                    <input type="hidden"
+                           th:name="${ctx.character.experience.playbook >= i} ? 'decrement' : 'increment'"
+                           th:value="${ctx.character.experience.playbook >= i} ? ${ctx.character.experience.playbook - i + 1} : ${i - ctx.character.experience.playbook}" />
+                    <span type="button"><th:block th:if="${ctx.character.experience.playbook >= i}">
+                    <th:block  th:replace="~{svg/icon :: cross}" />
+            </th:block></span>
+                </li>
+            </ul>
+        </div>
+
+        <hr />
+
+        <div class="exp-triggers">
+
+            <p>At the end of each session, for each item below, <strong>mark 1xp</strong> (in your playbook or an attribute) or <strong>2xp</strong> if that item occurred multiple times.</p>
+
+            <ul>
+                <li th:each="trigger : ${ctx.character.playbook.xpTriggers}">&bull; [[ ${trigger} ]]</li>
+                <li>&bull; You expressed your beliefs, drives, heritage or background.</li>
+                <li>&bull; You struggled with issues from your vice or traumas during the session.</li>
+            </ul>
+        </div>
+
+<!--        <div th:if="${ctx.character.stress} >= 9" class="warning">-->
+<!--            <p><strong>Stress Limit Reached</strong><br />Your character has reached their limit of stress and must gain a new trauma. Mark a new trauma on your character sheet and then reset your stress back to zero.</p>-->
+<!--        </div>-->
+    </fieldset>
+</th:block>
+
+<th:block th:fragment="view-friends">
+    <ul id="character-friends">
+        <li th:each="friend:${ctx.character.friends.asSortedList}">
+            <th:block th:if="${friend.isCloseFriend}">
+                <th:block th:replace="~{svg/material-design-icons :: menu-up}" title="Close Friend"></th:block>
+            </th:block>
+            <th:block th:if="${friend.isFriend}">
+                <th:block th:replace="~{svg/material-design-icons :: minus}" title="Friend"></th:block>
+            </th:block>
+            <th:block th:if="${friend.isRival}">
+                <th:block th:replace="~{svg/material-design-icons :: menu-down}" title="Rival"></th:block>
+            </th:block>
+
+            <strong>[[${friend.name}]]</strong>
+            <em>, [[${friend.description}]].</em>
+        </li>
+    </ul>
+</th:block>
+
+<th:block th:fragment="view-currency">
+    <fieldset id="character-sheet-currency">
+        <!--        <label>Stress</label>-->
+
+        <th:block th:replace="~{component/loading-indicator :: root }" />
+
+        <!-- Credits -->
+        <div class="currency">
+            <span>Creds</span>
+            <ul>
+                <li th:each="i:${#numbers.sequence(1, 4)}"
+                    hx-trigger="click"
+                    th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/currency'"
+                    hx-swap="outerHTML"
+                    hx-target="#character-sheet-currency"
+                    hx-include="this"
+                    hx-indicator="#character-sheet-currency .htmx-indicator"
+                    th:title="(${ctx.character.credits >= i} ? 'Remove' : 'Add') + ' ' + (${ctx.character.credits >= i} ? ${ctx.character.credits - i + 1} : ${i - ctx.character.credits}) + ' creds.'"
+                >
+                    <input type="hidden" name="attribute" value="credits" />
+                    <input type="hidden"
+                           th:name="${ctx.character.credits >= i} ? 'decrement' : 'increment'"
+                           th:value="${ctx.character.credits >= i} ? ${ctx.character.credits - i + 1} : ${i - ctx.character.credits}" />
+                    <span type="button"><th:block th:if="${ctx.character.credits >= i}">
+                    <th:block  th:replace="~{svg/icon :: cross}" />
+            </th:block></span>
+                </li>
+            </ul>
+        </div>
+
+        <hr />
+
+        <!-- PROWESS -->
+        <div th:each="m:${#numbers.sequence(0, 3)}" class="currency">
+            <span>[[${m == 0 ? "Stash" : ""}]]</span>
+            <ul>
+                <li th:each="i:${#numbers.sequence((m * 10) + 1, (m * 10) + 10)}"
+                    hx-trigger="click"
+                    th:hx-post="'/fragments/characters/' + ${ctx.character.identifier} + '/currency'"
+                    hx-swap="outerHTML"
+                    hx-target="#character-sheet-currency"
+                    hx-include="this"
+                    hx-indicator="#character-sheet-currency .htmx-indicator"
+                    th:title="(${ctx.character.stash >= i} ? 'Remove' : 'Add') + ' ' + (${ctx.character.stash >= i} ? ${ctx.character.stash - i + 1} : ${i - ctx.character.stash}) + ' stash.'"
+                >
+                    <input type="hidden" name="attribute" value="stash" />
+                    <input type="hidden"
+                           th:name="${ctx.character.stash >= i} ? 'decrement' : 'increment'"
+                           th:value="${ctx.character.stash >= i} ? ${ctx.character.stash - i + 1} : ${i - ctx.character.stash}" />
+                    <span type="button"><th:block th:if="${ctx.character.stash >= i}">
+                    <th:block  th:replace="~{svg/icon :: cross}" />
+            </th:block></span>
+                </li>
+            </ul>
+        </div>
+    </fieldset>
+</th:block>
+
+</body>
+</html>

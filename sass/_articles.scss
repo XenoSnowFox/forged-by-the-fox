@@ -1,8 +1,10 @@
 // COMPONENTS
 @use "article/character-sheet";
+@use "article/ship-sheet";
 
 @mixin component {
 	&-article {
 		@include character-sheet.component;
+		@include ship-sheet.component;
 	}
 }

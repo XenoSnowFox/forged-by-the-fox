@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Root Element -->
+<th:block th:fragment="root(account, ship)">
+    <article class="fbtf-article-ship-sheet">
+        <header class=" fbtf-component-panel" style="margin-top:1rem">
+
+            <span class="overline">[[${ship.playbook().label}]]</span>
+            <h1>[[${ship.name}]]</h1>
+            <br />
+
+        </header>
+
+        <!-- ATTRIBUTES & ACTIONS -->
+        <aside></aside>
+<!--        <aside class="attributes-and-actions fbtf-component-panel" style="margin-top:1rem">-->
+<!--            <th:block th:each="attribute : ${ctx.attributes}">-->
+<!--                <th:block th:replace="~{component/attribute-display :: root(${character}, ${attribute})}" />-->
+<!--            </th:block>-->
+<!--        </aside>-->
+
+        <!-- DETAILS & HARM -->
+        <section style="margin-top:1rem;display:grid; grid-template-columns: 3fr 5fr;column-gap:1rem;">
+            <div>
+                <!-- Character Info -->
+                <div class="fbtf-component-panel" style="margin-bottom: 1rem;margin-top:1.875rem;">
+                    <!-- Heritage -->
+                    <fieldset style="padding: 0.5rem;">
+                        <strong>Designation</strong>
+                        <div style="line-height: 1.5rem; min-height: 1.5rem">[[${ship.playbook.designation}]]</div>
+                    </fieldset>
+                    <hr />
+
+                    <!-- Background -->
+                    <fieldset style="padding: 0.5rem;">
+                        <strong>Size</strong>
+                        <div style="line-height: 1.5rem; min-height: 1.5rem">[[${ship.playbook.size.label}]]</div>
+                    </fieldset>
+
+                </div>
+
+<!--                <th:block th:replace="~{layout/labeled-container :: root(label=${ctx.character.playbook.label} + ' Playbook', content=~{:: #character-details})}">-->
+<!--                    <div id="character-details" th:hx-get="'/fragments/characters/' + ${ctx.character.identifier} + '/details'" hx-trigger="load" hx-replace="outerHTML"><th:block th:replace="~{component/loading-indicator :: root }" /></div>-->
+<!--                </th:block>-->
+
+                <!-- Trauma -->
+<!--                <br />-->
+<!--                <th:block th:replace="~{layout/labeled-container :: root(label='Trauma', content=~{:: #character-stress})}">-->
+<!--                    <th:block id="character-stress" th:replace="~{partial/character-sheet :: view-stress}" />-->
+<!--                </th:block>-->
+
+                <!-- Harm -->
+<!--                <br />-->
+<!--                <th:block th:replace="~{layout/labeled-container :: root(label='Harm', content=~{:: #character-harm})}">-->
+<!--                    <th:block id="character-harm" th:replace="~{partial/character-sheet :: view-harm}" />-->
+<!--                </th:block>-->
+            </div>
+
+            <!-- ITEMS & LOAD -->
+            <div>
+<!--                <th:block th:replace="~{layout/labeled-container :: root(label='Items & Load', content=~{:: #character-items})}">-->
+<!--                    <th:block id="character-items" th:replace="~{partial/character-sheet :: view-items}" />-->
+<!--                </th:block>-->
+            </div>
+        </section>
+
+        <section style="margin-top:1rem">
+
+            <!-- ABILITIES -->
+            <th:block th:replace="~{layout/labeled-container :: root(label='Special Abilities', content=~{:: #special-abilities})}">
+                <th:block id="special-abilities" th:replace="~{partial/ship-sheet :: view-abilities(${ship})}" />
+            </th:block>
+
+<!--            <br />-->
+
+<!--            <th:block th:replace="~{layout/labeled-container :: root(label=${ctx.character.friends.type} + ' Friends', content=~{:: #character-friends})}">-->
+<!--                <th:block id="character-friends" th:replace="~{partial/character-sheet :: view-friends}" />-->
+<!--            </th:block>-->
+
+<!--            <br />-->
+
+<!--            <th:block th:replace="~{layout/labeled-container :: root(label='Currency', content=~{:: #character-currency})}">-->
+<!--                <th:block id="character-currency" th:replace="~{partial/character-sheet :: view-currency}" />-->
+<!--            </th:block>-->
+
+<!--            <br />-->
+
+<!--            <th:block th:replace="~{layout/labeled-container :: root(label='Experience', content=~{:: #character-experience})}">-->
+<!--                <th:block id="character-experience" th:replace="~{partial/character-sheet :: view-experience}" />-->
+<!--            </th:block>-->
+
+            <br />
+        </section>
+
+    </article>
+</th:block>
+
+
+</body>
+</html>

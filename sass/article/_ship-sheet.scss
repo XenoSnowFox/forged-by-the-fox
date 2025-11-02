@@ -1,0 +1,336 @@
+@use "../mixin/surfaces";
+@use "../mixin/typography";
+
+@mixin component {
+	&-ship-sheet {
+		display: grid;
+		grid-template-columns: 1fr 38rem;
+		column-gap: 1rem;
+
+		header {
+			h1 {
+				font-size: 1.75rem;
+				font-weight: bolder;
+			}
+
+			.subheading {
+				font-weight: bolder;
+			}
+
+			.overline {
+				font-size: 0.8em;
+			}
+
+			@include surfaces.foreground {
+				padding: 1rem;
+			}
+		}
+
+		.attributes-and-actions {
+			@include surfaces.foreground {
+				display: flex;
+				gap: 2rem;
+				padding: 0 1rem 1rem;
+			}
+			& > * {
+				flex: 1 100%;
+				min-width: 9rem;
+			}
+		}
+
+		.toggle-boxes {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			white-space: nowrap;
+			gap: 0.125rem;
+
+			> * {
+				flex: none;
+			}
+
+			li:nth-child(4),
+			li:nth-child(7) {
+				margin-left: 0.5rem;
+			}
+
+			li {
+				display: flex;
+				flex-direction: column;
+				justify-content: stretch;
+				align-items: stretch;
+				flex: 1 100%;
+				width: 1rem;
+				height: 2rem;
+
+				span {
+					display: block;
+					aspect-ratio: 1 / 1;
+					height: 100%;
+
+					display: flex;
+					flex-direction: column;
+					justify-content: stretch;
+					align-items: stretch;
+					flex: 1 100%;
+
+					text-align: center;
+					border-radius: 0.125rem;
+					border: max(1px, 0.0625rem) solid var(--fbtf-palette-magenta-dense);
+
+					background: var(--fbtf-palette-magenta-regular);
+					fill: var(--fbtf-palette-magenta-dense);
+					cursor: pointer;
+
+					opacity: 0.666;
+
+					&:hover {
+						opacity: 1;
+					}
+
+					&:empty {
+						border-color: var(--fbtf-on-surface-border-default);
+						@include surfaces.background;
+					}
+				}
+
+				@media (pointer: coarse) {
+					width: 2.5rem;
+				}
+
+				@media (max-width: 38rem) {
+					width: auto;
+				}
+
+				svg {
+					display: block;
+					flex: 1 100%;
+				}
+			}
+		}
+
+		#character-harm .healing {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			padding: 0.5rem 1rem;
+			gap: 0.5rem;
+		}
+
+		#character-sheet-experience {
+			margin-bottom: 1rem;
+
+			.attribute-exp {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				white-space: nowrap;
+				padding: 0.25rem 1rem;
+
+				> * {
+					flex: none;
+				}
+
+				li:nth-child(4),
+				li:nth-child(7) {
+					margin-left: 0.5rem;
+				}
+			}
+			.playbook-exp {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				white-space: nowrap;
+				padding: 0.25rem 1rem;
+
+				> * {
+					flex: none;
+				}
+
+				li:nth-child(3),
+				li:nth-child(6) {
+					margin-left: 0.5rem;
+				}
+			}
+
+			ul {
+				display: flex;
+				justify-content: space-between;
+				align-items: stretch;
+				gap: 0.25rem;
+				align-self: stretch;
+				flex: 1 100%;
+
+				li {
+					display: flex;
+					flex-direction: column;
+					justify-content: stretch;
+					align-items: stretch;
+					flex: 1 100%;
+					width: 1rem;
+					height: 2rem;
+
+					span {
+						display: block;
+						aspect-ratio: 1 / 1;
+						height: 100%;
+
+						display: flex;
+						flex-direction: column;
+						justify-content: stretch;
+						align-items: stretch;
+						flex: 1 100%;
+
+						text-align: center;
+						border-radius: 0.125rem;
+						border: max(1px, 0.0625rem) solid var(--fbtf-palette-magenta-dense);
+
+						background: var(--fbtf-palette-magenta-regular);
+						fill: var(--fbtf-palette-magenta-dense);
+						cursor: pointer;
+
+						opacity: 0.666;
+
+						&:hover {
+							opacity: 1;
+						}
+
+						&:empty {
+							border-color: var(--fbtf-on-surface-border-default);
+							@include surfaces.background;
+						}
+					}
+
+					@media (pointer: coarse) {
+						width: 2.5rem;
+					}
+
+					@media (max-width: 38rem) {
+						width: auto;
+					}
+
+					svg {
+						display: block;
+						flex: 1 100%;
+					}
+				}
+			}
+
+			.exp-triggers {
+				padding-top: 0.25rem;
+
+				p {
+					padding: 0.25rem 1rem;
+				}
+
+				ul {
+					display: block;
+
+					li {
+						display: block;
+						width: auto;
+						height: auto;
+						padding: 0.125rem 1rem 0.125rem 1.25rem;
+					}
+				}
+			}
+		}
+
+		#character-sheet-currency {
+			.currency {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				white-space: nowrap;
+				padding: 0.25rem 1rem;
+
+				> * {
+					flex: none;
+				}
+
+				li:nth-child(6) {
+					margin-left: 0.5rem;
+				}
+			}
+
+			ul {
+				display: flex;
+				justify-content: space-between;
+				align-items: stretch;
+				gap: 0.25rem;
+				align-self: stretch;
+				flex: 1 100%;
+
+				li {
+					display: flex;
+					flex-direction: column;
+					justify-content: stretch;
+					align-items: stretch;
+					flex: 1 100%;
+					width: 1rem;
+					height: 2rem;
+
+					span {
+						display: block;
+						aspect-ratio: 1 / 1;
+						height: 100%;
+
+						display: flex;
+						flex-direction: column;
+						justify-content: stretch;
+						align-items: stretch;
+						flex: 1 100%;
+
+						text-align: center;
+						border-radius: 0.125rem;
+						border: max(1px, 0.0625rem) solid var(--fbtf-palette-magenta-dense);
+
+						background: var(--fbtf-palette-magenta-regular);
+						fill: var(--fbtf-palette-magenta-dense);
+						cursor: pointer;
+
+						opacity: 0.666;
+
+						&:hover {
+							opacity: 1;
+						}
+
+						&:empty {
+							border-color: var(--fbtf-on-surface-border-default);
+							@include surfaces.background;
+						}
+					}
+
+					@media (pointer: coarse) {
+						width: 2.5rem;
+					}
+
+					@media (max-width: 38rem) {
+						width: auto;
+					}
+
+					svg {
+						display: block;
+						flex: 1 100%;
+					}
+				}
+			}
+		}
+
+		#character-friends {
+			li {
+				padding: 0 0.5rem;
+				display: flex;
+				align-items: center;
+				svg {
+					height: 2.5rem;
+
+					margin-right: 0.5rem;
+				}
+				& + li {
+					border-top: 1px solid var(--fbtf-on-surface-border-default);
+				}
+			}
+		}
+	}
+}

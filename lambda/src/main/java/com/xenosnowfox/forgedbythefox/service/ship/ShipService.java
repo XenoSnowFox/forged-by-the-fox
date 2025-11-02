@@ -1,5 +1,6 @@
 package com.xenosnowfox.forgedbythefox.service.ship;
 
+import com.xenosnowfox.forgedbythefox.models.Ability;
 import com.xenosnowfox.forgedbythefox.models.ShipSheet;
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
@@ -12,11 +13,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.NonNull;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbIndex;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.EnhancedType;
 import software.amazon.awssdk.enhanced.dynamodb.Expression;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.StaticAttributeTags;
@@ -43,7 +46,7 @@ public class ShipService {
     }
 
     public Ship retrieve(@NonNull final ShipIdentifier withIdentifier) {
-        final Ship ship = this.shipRepository.retrieve(withIdentifier.value(), "SHIP");
+        final Ship ship = this.shipRepository.retrieve(withIdentifier.toUrn(), "details");
         if (!ship.identifier().equals(withIdentifier)) {
             throw new IllegalStateException(
                     "Repository returned a Character instance that does not contain the requested identifier.");
@@ -115,5 +118,16 @@ public class ShipService {
             .addAttribute(String.class, builder -> builder.name("ship-sheet")
                     .getter(record -> record.shipSheet().toString())
                     .setter((b, i) -> b.shipSheet(ShipSheet.valueOf(i))))
+            // Abilities
+            .addAttribute(EnhancedType.setOf(String.class), builder -> builder.name("abilities")
+                    .getter(character -> Optional.of(character.abilities().stream()
+                                    .map(Enum::name)
+                                    .collect(Collectors.toSet()))
+                            .filter(x -> !x.isEmpty())
+                            .orElse(null))
+                    .setter((b, data) -> b.abilities(
+                            data == null
+                                    ? new HashSet<>()
+                                    : data.stream().map(Ability::valueOf).collect(Collectors.toSet()))))
             .build();
 }
