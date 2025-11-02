@@ -327,13 +327,75 @@ public enum Ability {
             false),
 
     // SHIP: Mastodon
-    LABOR_UNION("So long as you don't have a wanted you can freely enter and blend in with any location with active construction going on.", null, "", false),
-    DEMOLITION("Demolition", null, "You gain potency when you attempt to violently destroy inanimate objects. Take +1d to the engagement roll if your plan involves blowing something up.", false),
-    DUCTAPE_AND_CHEWING_GUM("Ductape & Chewing Gum", null, "When you would lose access to a ship system due to it taking damage you may spend a gambit to have it remain operational until you're out of danger.", false),
-    JUNK_DOGS("Junk Dogs", null, "You have a keen eye for salvage. When on a salvaging job take +1d to all rolls towards looking for salvageable items.", false),
-    DAY_JOB("Day Job", null, "As a downtime action you can choose to work a day job and collect 1 cred and take 1 stress.", false),
-    TOOLS_OF_THE_TRADE("Tools of the Trade", null, "You may treat Communicators, Repair Tools and Plasma Cutters as if they cost 0 load.", false),
-    BUILDERS_AND_SHAPERS("Builders & Shapers", null, "Each PC may add +1 action rating to Rig, Scramble or Scrap." ,false)
+    LABOR_UNION(
+            "So long as you don't have a wanted you can freely enter and blend in with any location with active construction going on.",
+            null,
+            "",
+            false),
+    DEMOLITION(
+            "Demolition",
+            null,
+            "You gain potency when you attempt to violently destroy inanimate objects. Take +1d to the engagement roll if your plan involves blowing something up.",
+            false),
+    DUCTAPE_AND_CHEWING_GUM(
+            "Ductape & Chewing Gum",
+            null,
+            "When you would lose access to a ship system due to it taking damage you may spend a gambit to have it remain operational until you're out of danger.",
+            false),
+    JUNK_DOGS(
+            "Junk Dogs",
+            null,
+            "You have a keen eye for salvage. When on a salvaging job take +1d to all rolls towards looking for salvageable items.",
+            false),
+    DAY_JOB(
+            "Day Job",
+            null,
+            "As a downtime action you can choose to work a day job and collect 1 cred and take 1 stress.",
+            false),
+    TOOLS_OF_THE_TRADE(
+            "Tools of the Trade",
+            null,
+            "You may treat Communicators, Repair Tools and Plasma Cutters as if they cost 0 load.",
+            false),
+    BUILDERS_AND_SHAPERS(
+            "Builders & Shapers", null, "Each PC may add +1 action rating to Rig, Scramble or Scrap.", false),
+
+    // SHIP: Firedrake
+    OLD_HANDS(
+            "Old Hands",
+            null,
+            "When you're at War (-3) with a Hegemony faction, all crew members get +1 to vice rolls and still get two downtime activities instead of just one.",
+            false),
+    FORGED_IN_FIRE(
+            "Forged in Fire",
+            null,
+            "Your crew has been toughened by cruel experience. You each get +1d to all resistance rolls.",
+            false),
+    SYMPATHIZERS(
+            "Sympathizers",
+            null,
+            "Your ideology is especially appealing. When you deal with a crew or faction, the GM will tell you who among them believes in your cause (one, a few, many, or all).",
+            false),
+    NATURAL_ENEMIES(
+            "Natural Enemies",
+            null,
+            "When you run a job against Hegemony factions, take +1d to the engagement roll.",
+            false),
+    SPARK_OF_REBELLION(
+            "Spark of Rebellion",
+            null,
+            "If you leave a calling card or highly visible symbol of resistance on your job, gain +2 heat. Your crew gains +1d to vice during the next downtime, and cannot overindulge.",
+            false),
+    JUST_CAUSE(
+            "Just Cause",
+            null,
+            "When your crew does the right thing at cost to themselves, you may mark a crew xp.",
+            false),
+    HEARTS_AND_MINDS(
+            "Hearts & Minds",
+            null,
+            "Each crew member may add 1 action rating to command, consort, or sway (up to a max of 3).",
+            false),
     ;
     private final String label;
     private final Playbook playbook;

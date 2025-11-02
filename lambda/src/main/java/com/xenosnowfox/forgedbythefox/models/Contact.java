@@ -4,9 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.util.Map;
-import java.util.UUID;
-
 @Getter
 @Accessors(fluent = true)
 @RequiredArgsConstructor
@@ -65,9 +62,14 @@ public enum Contact {
     TKAL("T'kal", "a dock master"),
     MASON_RIDICK("Mason Ridick", "a lane-mapper"),
     WALTER_SINSTRO("Walter Sinstro", "a businessman"),
-    STACY_WEATHERS("Stacy Weathers", "ace reporter")
+    STACY_WEATHERS("Stacy Weathers", "ace reporter"),
 
-    ;
+    // Ship: Firedrake
+    GARIN("Garin", "a Guild weapons engineer"),
+    TYURA("Tyura", "a legendary assassin"),
+    ADA_BLACK("Ada Black", "a famous performer"),
+    TIKO_LUX("Tiko Lux", "a hotshot pilot"),
+    IBO_ONE("Ibo-one", "an ancient Cult mystic");
 
     private final String name;
     private final String descriptor;
