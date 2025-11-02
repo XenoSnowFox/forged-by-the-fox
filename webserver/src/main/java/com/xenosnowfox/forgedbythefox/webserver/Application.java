@@ -9,10 +9,8 @@ import com.xenosnowfox.forgedbythefox.ApiGatewayHandler;
 import io.javalin.Javalin;
 import io.javalin.http.ContentType;
 import io.javalin.http.Context;
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -53,11 +51,8 @@ public class Application {
             ctx.contentType(ContentType.IMAGE_ICO);
         }
 
-        try (FileInputStream fileInputStream = new FileInputStream(p.toFile());
-                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
-                BufferedReader reader = new BufferedReader(inputStreamReader); ) {
-
-            ctx.result(reader.lines().collect(Collectors.joining("\n")) + "\n");
+        try {
+            ctx.result(new FileInputStream(p.toFile()));
         } catch (IOException ex) {
             ctx.status(404);
         }
