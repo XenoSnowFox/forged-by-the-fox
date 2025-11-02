@@ -3,10 +3,9 @@ package com.xenosnowfox.forgedbythefox.models.ship;
 import com.xenosnowfox.forgedbythefox.models.ShipSheet;
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
+import java.time.Instant;
 import lombok.Builder;
 import lombok.NonNull;
-
-import java.time.Instant;
 
 @Builder(builderClassName = "Builder", toBuilder = true)
 public record Ship(

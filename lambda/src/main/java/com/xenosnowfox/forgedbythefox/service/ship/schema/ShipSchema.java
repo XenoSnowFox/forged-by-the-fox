@@ -1,15 +1,13 @@
 package com.xenosnowfox.forgedbythefox.service.ship.schema;
 
-import com.xenosnowfox.forgedbythefox.models.Playbook;
 import com.xenosnowfox.forgedbythefox.models.ShipSheet;
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
-
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
 import com.xenosnowfox.forgedbythefox.models.ship.Ship;
 import com.xenosnowfox.forgedbythefox.models.ship.ShipIdentifier;
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
@@ -20,8 +18,7 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.StaticImmutableTableSchem
 public class ShipSchema {
 
     @Getter
-    private final TableSchema<Ship> tableSchema = StaticImmutableTableSchema.builder(
-                    Ship.class, Ship.Builder.class)
+    private final TableSchema<Ship> tableSchema = StaticImmutableTableSchema.builder(Ship.class, Ship.Builder.class)
             .newItemBuilder(Ship::builder, Ship.Builder::build)
             .addAttribute(String.class, attributeBuilder -> attributeBuilder
                     .name("partition-key")
@@ -52,10 +49,10 @@ public class ShipSchema {
                     .getter(Ship::timestampCreated)
                     .setter(Ship.Builder::timestampCreated))
             // Name
-            .addAttribute(String.class, attributeBuilder -> attributeBuilder
-                    .name("name")
-                    .getter(Ship::name)
-                    .setter(Ship.Builder::name))
+            .addAttribute(
+                    String.class,
+                    attributeBuilder ->
+                            attributeBuilder.name("name").getter(Ship::name).setter(Ship.Builder::name))
             // Ship Sheet
             .addAttribute(String.class, builder -> builder.name("ship-sheet")
                     .getter(record -> record.shipSheet().toString())

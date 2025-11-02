@@ -22,7 +22,16 @@ public enum Playbook {
             "Mechanic",
             "A gearhead and hacker",
             Map.of(Action.RIG, 2, Action.STUDY, 1),
-            Set.of(Ability.TINKER, Ability.BAILING_WIRE_AND_MECHTAPE, Ability.CONSTRUCT_WHISPERER, Ability.JUNKYARD_HUNTER, Ability.HACKER, Ability.FIXED, Ability.MECHANICS_HEART, Ability.OVERCLOCK, Ability.ANALYST),
+            Set.of(
+                    Ability.TINKER,
+                    Ability.BAILING_WIRE_AND_MECHTAPE,
+                    Ability.CONSTRUCT_WHISPERER,
+                    Ability.JUNKYARD_HUNTER,
+                    Ability.HACKER,
+                    Ability.FIXED,
+                    Ability.MECHANICS_HEART,
+                    Ability.OVERCLOCK,
+                    Ability.ANALYST),
             Set.of(Contact.SLICE, Contact.NISA, Contact.STEV, Contact.LEN, Contact.KENN),
             new CharacterFriends(
                     "Colorful",
@@ -47,7 +56,13 @@ public enum Playbook {
             "Muscle",
             "A dangerous and intimidating fighter",
             Map.of(Action.SCRAP, 2, Action.COMMAND, 1),
-            Set.of(Ability.UNSTOPPABLE, Ability.WRECKING_CREW, Ability.BACKUP, Ability.BATTLEBORN, Ability.BODYGUARD, Ability.FLESH_WOUND),
+            Set.of(
+                    Ability.UNSTOPPABLE,
+                    Ability.WRECKING_CREW,
+                    Ability.BACKUP,
+                    Ability.BATTLEBORN,
+                    Ability.BODYGUARD,
+                    Ability.FLESH_WOUND),
             Set.of(Contact.KRIEGER, Contact.SHOD, Contact.CHON_ZEK, Contact.YAZU, Contact.AYA),
             new CharacterFriends(
                     "Deadly",

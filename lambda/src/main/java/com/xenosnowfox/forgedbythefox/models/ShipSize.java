@@ -1,6 +1,5 @@
 package com.xenosnowfox.forgedbythefox.models;
 
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
