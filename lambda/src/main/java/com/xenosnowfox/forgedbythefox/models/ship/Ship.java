@@ -1,5 +1,7 @@
 package com.xenosnowfox.forgedbythefox.models.ship;
 
+import com.xenosnowfox.forgedbythefox.models.Identifiable;
+import com.xenosnowfox.forgedbythefox.models.Nameable;
 import com.xenosnowfox.forgedbythefox.models.ShipSheet;
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
@@ -14,7 +16,8 @@ public record Ship(
         CampaignIdentifier campaignIdentifier,
         @NonNull Instant timestampCreated,
         String name,
-        ShipSheet shipSheet) {
+        ShipSheet shipSheet)
+        implements Identifiable<ShipIdentifier>, Nameable {
 
     public Ship {
         if (name != null) {

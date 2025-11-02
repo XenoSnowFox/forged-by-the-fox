@@ -12,9 +12,11 @@ import com.xenosnowfox.forgedbythefox.models.Playbook;
 import com.xenosnowfox.forgedbythefox.models.account.Account;
 import com.xenosnowfox.forgedbythefox.models.character.Character;
 import com.xenosnowfox.forgedbythefox.models.session.Session;
+import com.xenosnowfox.forgedbythefox.schema.ShipSchema;
 import com.xenosnowfox.forgedbythefox.service.character.CreateCharacterRequest;
 import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -41,6 +43,9 @@ public record HomepageRoute(TemplateService templateService) implements Authenti
             return createNewCharacter(event, context, account, urlResolver);
         }
 
+        System.out.println("Account:");
+        System.out.println(account);
+
         final Map<String, Object> contextData = new HashMap<>();
         contextData.put("url", urlResolver);
         contextData.put("account", account);
@@ -50,6 +55,12 @@ public record HomepageRoute(TemplateService templateService) implements Authenti
         final Set<Character> characterSet =
                 templateService.characterService().query(b -> b.accountIdentifier(account.identifier()));
         contextData.put("characters", characterSet);
+
+        final Collection<ShipSchema> shipSet =
+                templateService.shipService().stream().map(ShipSchema::new).toList();
+        if (!shipSet.isEmpty()) {
+            contextData.put("ships", shipSet);
+        }
 
         final String html = templateService.parse("dashboard", contextData);
 

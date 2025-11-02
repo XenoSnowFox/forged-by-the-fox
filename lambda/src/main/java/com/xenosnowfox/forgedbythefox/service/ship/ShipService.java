@@ -1,24 +1,82 @@
-package com.xenosnowfox.forgedbythefox.service.ship.schema;
+package com.xenosnowfox.forgedbythefox.service.ship;
 
 import com.xenosnowfox.forgedbythefox.models.ShipSheet;
 import com.xenosnowfox.forgedbythefox.models.account.AccountIdentifier;
 import com.xenosnowfox.forgedbythefox.models.campaign.CampaignIdentifier;
 import com.xenosnowfox.forgedbythefox.models.ship.Ship;
 import com.xenosnowfox.forgedbythefox.models.ship.ShipIdentifier;
+import com.xenosnowfox.forgedbythefox.persistence.dynamodb.DynamodbRepository;
 import java.time.Instant;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import lombok.Getter;
-import lombok.experimental.UtilityClass;
+import java.util.Set;
+import java.util.stream.Stream;
+import lombok.NonNull;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbIndex;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.Expression;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.StaticAttributeTags;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.StaticImmutableTableSchema;
+import software.amazon.awssdk.enhanced.dynamodb.model.Page;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
-@UtilityClass
-public class ShipSchema {
+public class ShipService {
 
-    @Getter
-    private final TableSchema<Ship> tableSchema = StaticImmutableTableSchema.builder(Ship.class, Ship.Builder.class)
+    private final DynamoDbClient client;
+    private final DynamoDbEnhancedClient enhancedClient;
+    private final DynamoDbTable<Ship> table;
+    private final DynamoDbIndex<Ship> documentsByAccount;
+    private final DynamodbRepository<Ship> shipRepository;
+
+    public ShipService() {
+        this.client = DynamoDbClient.create();
+        this.enhancedClient = DynamoDbEnhancedClient.create();
+        this.table = enhancedClient.table("forged-by-the-fox", ShipService.TABLE_SCHEMA);
+        this.documentsByAccount = this.table.index("documents-by-account");
+
+        this.shipRepository = new DynamodbRepository<Ship>(this.enhancedClient, ShipService.TABLE_SCHEMA);
+    }
+
+    public Ship retrieve(@NonNull final ShipIdentifier withIdentifier) {
+        final Ship ship = this.shipRepository.retrieve(withIdentifier.value(), "SHIP");
+        if (!ship.identifier().equals(withIdentifier)) {
+            throw new IllegalStateException(
+                    "Repository returned a Character instance that does not contain the requested identifier.");
+        }
+        return ship;
+    }
+
+    public Set<Ship> query() {
+        final Set<Ship> resultSet = new HashSet<>();
+
+        this.documentsByAccount
+                .scan(b -> {
+                    final Expression expression = Expression.builder()
+                            .expression("begins_with(#key, :value)")
+                            .putExpressionName("#key", "partition-key")
+                            .putExpressionValue(":value", AttributeValue.fromS("SHIP:"))
+                            .build();
+                    b.filterExpression(expression);
+                })
+                .stream()
+                .map(Page::items)
+                .flatMap(Collection::stream)
+                .forEach(resultSet::add);
+
+        return resultSet;
+    }
+
+    public Stream<Ship> stream() {
+        return this.query().stream();
+    }
+
+    private static final TableSchema<Ship> TABLE_SCHEMA = StaticImmutableTableSchema.builder(
+                    Ship.class, Ship.Builder.class)
             .newItemBuilder(Ship::builder, Ship.Builder::build)
             .addAttribute(String.class, attributeBuilder -> attributeBuilder
                     .name("partition-key")

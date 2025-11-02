@@ -230,9 +230,8 @@ public enum Playbook {
 
     public Ability startingAbility() {
         if (this.startingAbility == null) {
-            this.startingAbility = Arrays.stream(Ability.values())
+            this.startingAbility = this.abilities.stream()
                     .filter(Ability::isStartingAbility)
-                    .filter(x -> x.getPlaybook().equals(this))
                     .findFirst()
                     .orElse(null);
         }
@@ -241,9 +240,8 @@ public enum Playbook {
 
     public Set<Ability> specialAbilities() {
         if (this.specialAbilities == null) {
-            this.specialAbilities = Arrays.stream(Ability.values())
+            this.specialAbilities = this.abilities.stream()
                     .filter(ability -> !ability.isStartingAbility())
-                    .filter(x -> x.getPlaybook().equals(this))
                     .sorted(Comparator.comparing(Enum::name)) // sort while streaming
                     .collect(Collectors.toCollection(LinkedHashSet::new));
         }

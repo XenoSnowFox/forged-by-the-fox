@@ -33,6 +33,7 @@ import com.xenosnowfox.forgedbythefox.service.character.CharacterManagementServi
 import com.xenosnowfox.forgedbythefox.service.faction.FactionManagementService;
 import com.xenosnowfox.forgedbythefox.service.identity.IdentityManagementService;
 import com.xenosnowfox.forgedbythefox.service.session.SessionManagementService;
+import com.xenosnowfox.forgedbythefox.service.ship.ShipService;
 import com.xenosnowfox.forgedbythefox.service.template.TemplateService;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -62,6 +63,7 @@ public class ApiGatewayHandler extends Route {
                 .characterService(new CharacterManagementService())
                 .factionService(new FactionManagementService())
                 .sessionService(new SessionManagementService())
+                .shipService(new ShipService())
                 .build();
 
         this.register(

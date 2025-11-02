@@ -1,9 +1,10 @@
 package com.xenosnowfox.forgedbythefox.models.ship;
 
+import com.xenosnowfox.forgedbythefox.models.Identifer;
 import com.xenosnowfox.forgedbythefox.util.NanoId;
 import lombok.NonNull;
 
-public record ShipIdentifier(@NonNull String value) {
+public record ShipIdentifier(@NonNull String value) implements Identifer<String> {
     private static final String URN_PREFIX = "SHIP";
 
     public static ShipIdentifier fromUrn(final String withUrn) {

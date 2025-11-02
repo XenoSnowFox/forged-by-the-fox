@@ -9,7 +9,7 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 
-public abstract class AbstractDynamodbRepository<IDENTIFIER, MODEL> {
+public abstract class AbstractDynamodbRepository<MODEL> {
 
     @NonNull @Getter(AccessLevel.PROTECTED)
     private final DynamoDbEnhancedClient dynamoDbEnhancedClient;

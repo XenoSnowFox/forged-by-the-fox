@@ -5,6 +5,7 @@ import com.xenosnowfox.forgedbythefox.service.campaign.CampaignService;
 import com.xenosnowfox.forgedbythefox.service.character.CharacterManagementService;
 import com.xenosnowfox.forgedbythefox.service.faction.FactionManagementService;
 import com.xenosnowfox.forgedbythefox.service.session.SessionManagementService;
+import com.xenosnowfox.forgedbythefox.service.ship.ShipService;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -25,7 +26,8 @@ public record TemplateService(
         @NonNull CampaignService campaignService,
         @NonNull CharacterManagementService characterService,
         @NonNull FactionManagementService factionService,
-        @NonNull SessionManagementService sessionService) {
+        @NonNull SessionManagementService sessionService,
+        @NonNull ShipService shipService) {
 
     public static final ITemplateEngine TEMPLATE_ENGINE = buildTemplateEngine();
 

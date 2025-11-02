@@ -9,14 +9,15 @@
 
     <style>
 
-        #character-content {
+        #character-content, #ship-content {
             margin: 0.5rem 0;
             display:grid;
             grid-template-columns:1fr;
             gap:0.25rem;
         }
 
-        #character-content > li {
+        #character-content > li,
+        #ship-content > li {
             cursor:pointer;
             font-size: 0.8rem;
             display: block;
@@ -29,7 +30,7 @@
                 grid-template-columns:1fr;
             }
 
-            #character-content
+            #character-content, #ship-content
                 grid-template-columns:1fr;
             }
         }
@@ -59,6 +60,25 @@
                                 <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}" th:text="${character.alias}" style="font-family:monospace;" ></a>
                                 &nbsp;
                                 <a th:href="${ctx.url.resolve('/characters/' + character.identifier.value)}" th:text="${character.playbook.label}" style="font-family:monospace;" ></a>
+                            </li>
+                        </th:block>
+                    </ul>
+                </div>
+            </th:block>
+
+            <th:block th:if="${ctx.ships}">
+                <div class="fbtf-component-panel">
+                    <h2 style="padding:0.5rem 1rem; font-size: 1.15rem; font-weight: bold;">Your ships</h2>
+                    <ul id="ship-content" style="">
+                        <th:block th:each="ship: ${ctx.ships}">
+                            <li>
+                                <a th:href="${ctx.url.resolve('/ships/' + ship.identifier)}"
+                                   th:text="${ship.name} ?: 'Unnamed Ship'"
+                                   style="text-decoration:underline;font-weight:bolder;display:inline-block;font-size:1rem;"></a>
+                                <br />
+
+                                <a th:href="${ctx.url.resolve('/ships/' + ship.identifier)}" th:text="${ship.playbook.label}" style="font-family:monospace;" ></a>
+                                <a th:href="${ctx.url.resolve('/ships/' + ship.identifier)}" th:text="${ship.playbook.size.label}" style="font-family:monospace;" ></a>
                             </li>
                         </th:block>
                     </ul>

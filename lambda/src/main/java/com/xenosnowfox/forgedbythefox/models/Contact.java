@@ -71,6 +71,6 @@ public enum Contact {
     TIKO_LUX("Tiko Lux", "a hotshot pilot"),
     IBO_ONE("Ibo-one", "an ancient Cult mystic");
 
-    private final String name;
+    private final String label;
     private final String descriptor;
 }

@@ -6,8 +6,7 @@ import com.xenosnowfox.forgedbythefox.persistence.AccountRepository;
 import com.xenosnowfox.forgedbythefox.service.account.AccountSchema;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 
-public class DynamodbAccountRepository extends AbstractDynamodbRepository<AccountIdentifier, Account>
-        implements AccountRepository {
+public class DynamodbAccountRepository extends AbstractDynamodbRepository<Account> implements AccountRepository {
 
     public DynamodbAccountRepository(final DynamoDbEnhancedClient withDynamoDbEnhancedClient) {
         super(withDynamoDbEnhancedClient, AccountSchema.getTableSchema());
